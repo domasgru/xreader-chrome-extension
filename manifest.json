@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "AIReaderExtension",
+    "version": "1.0.0",
+    "action": {
+      "default_title": "Open Persistent Window",
+      "default_icon": "ai-reader-icon.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://x.com/*"],
+        "js": ["src/main.tsx"]
+      }
+    ]
+}
