@@ -1,15 +1,26 @@
 {
-    "manifest_version": 3,
-    "name": "AIReaderExtension",
-    "version": "1.0.0",
-    "action": {
-      "default_title": "Open Persistent Window",
-      "default_icon": "ai-reader-icon.png"
-    },
-    "content_scripts": [
-      {
-        "matches": ["https://x.com/*"],
-        "js": ["src/main.tsx"]
-      }
-    ]
+  "manifest_version": 3,
+  "name": "AIReaderExtension",
+  "version": "1.0.0",
+  "action": {
+    "default_title": "Open AIReader",
+    "default_icon": "ai-reader-icon.png"
+  },
+  "background": {
+    "service_worker": "background.ts"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/main.tsx"
+      ]
+    }
+  ]
 }
