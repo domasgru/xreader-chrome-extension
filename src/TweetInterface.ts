@@ -13,9 +13,10 @@ export interface TweetInterface {
   } | undefined;
   quotedTweet: TweetInterface | null;
   tweetTime: string;
-  profileName: string | undefined,
-  profileTag: string | undefined,
+  profileName: string | undefined;
+  profileTag: string | undefined;
   profileImage: string | undefined;
+  hasReplies: boolean;
   id: string;
   debugData: {
     nodeHtml: string;

@@ -34,10 +34,9 @@ const styles = {
     padding: '20px 24px',
     borderRadius: 0,
     width: '100%',
-    borderTop: '1px solid #2F3336',
     borderBottom: '1px solid #2F3336',
     cursor: 'pointer',
-    gap: '12px',
+    gap: '8px',
     fontSize: '16px',
     display: 'flex',
     flexDirection: 'column',
@@ -96,7 +95,7 @@ const styles = {
     flexDirection: 'column',
     flexGrow: 1,
     marginTop: '4px',
-    paddingRight: '48px',
+    paddingRight: '40px',
   } as const,
 
   tweetText: {
@@ -224,7 +223,8 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
       id={tweet.id}
       css={{
         ...styles.tweetContainer,
-        ...(isQuote && { padding: '16px', border: 'none' })
+        ...(isQuote && { padding: '16px', border: 'none' }),
+        ...(tweet.hasReplies && { borderBottom: 'none' })
       }}
       onClick={handleClick}
       data-debug={debugData}

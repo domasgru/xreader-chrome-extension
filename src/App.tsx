@@ -115,6 +115,8 @@ function parseTweetNode(node: Element): TweetInterface | null {
     const profileName = profileTextNodes?.[0]?.textContent?.trim();
     const profileTag = profileTextNodes?.[1]?.textContent?.trim();
 
+    const hasReplies = window.getComputedStyle(node.firstChild as HTMLElement).borderBottom[0] === '0' ? true : false;
+
     const id = node.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || '');
 
     if (id === '2024-09-26T03:00:13.000Zinteriorstellar') {
@@ -134,6 +136,7 @@ function parseTweetNode(node: Element): TweetInterface | null {
       profileName,
       profileTag,
       profileImage,
+      hasReplies,
       id: node.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || ''),
       debugData: {
         nodeHtml: node.innerHTML,
@@ -394,7 +397,6 @@ function App() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 4px;
         `}>
           {filteredTweets.map((tweet) => (
             <Tweet key={tweet.id} tweet={tweet} isQuote={false} />
