@@ -49,7 +49,7 @@ const styles = {
 
   profileContainer: {
     width: '100%',
-    gap: '16px',
+    gap: '10px',
     display: 'flex',
   } as const,
 
@@ -100,7 +100,7 @@ const styles = {
 
   tweetText: {
     whiteSpace: 'pre-wrap',
-    color: '#E7E9EA',
+    color: '#C9CDCF',
     lineHeight: 1.5,
   } as const,
 
