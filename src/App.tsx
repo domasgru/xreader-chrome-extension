@@ -1,19 +1,9 @@
 /// <reference types="chrome"/>
 import { useState, useEffect, useRef } from 'react';
-import { css } from '@emotion/react';
-
-interface Tweet {
-  isRetweet: boolean;
-  tweetText?: string;
-  tweetLink: string;
-  tweetImages: string[];
-  tweetVideos: string[];
-  tweetTime: string;
-  profileName?: string,
-  profileTag?: string,
-  profileImage?: string;
-  id: string;
-}
+import { Global, css } from '@emotion/react';
+import emotionReset from 'emotion-reset';
+import Tweet from './Tweet';
+import { TweetInterface } from './TweetInterface';
 
 function getTimeLineElementNode() {
   const timelineElement = document.querySelector<HTMLElement>('[aria-label="Timeline: Your Home Timeline"]');
@@ -57,29 +47,100 @@ function getAllTextNodes(node: HTMLElement) {
   return textNodes;
 }
 
-function parseTweetNode(node: Element): Tweet | null {
+function parseTweetNode(node: Element): TweetInterface | null {
   try {
-    const allLinks = getAllHrefs(node as HTMLElement);
-    const allTextNodes = getAllTextNodes(node as HTMLElement);
-
     const tweetTime = node.querySelector<HTMLTimeElement>('time')?.dateTime;
+
+    // Not a tweet element, but inside a timeline
     if (!tweetTime) {
       return null;
     }
 
-    const tweetData: Tweet = {
-      // TODO: handle retweets which have multiple texts
-      isRetweet: allTextNodes[1]?.nodeValue?.includes('reposted') || false,
-      tweetText: node.querySelector<HTMLElement>('[data-testid="tweetText"]')?.innerText,
-      tweetLink: (allLinks as string[])?.find(link => link.includes('/status/')) ?? null,
-      tweetImages: Array.from(node.querySelectorAll('img'))?.map(img => img?.src).filter(src => !src?.includes('/profile_images/') && !src?.includes('.svg')),
-      tweetVideos: Array.from(node.querySelectorAll('video'))?.map(video => video?.src || video.poster),
+    const allLinks = getAllHrefs(node as HTMLElement);
+    const tweetTexts = node.querySelectorAll<HTMLElement>('[data-testid="tweetText"]');
+
+    // Handle quoted tweets
+    const quoteElement = document.evaluate(".//*[text()='Quote']", node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)?.singleNodeValue as Element;
+    const isQuotedTweet = !!quoteElement && !quoteElement.closest('[data-testid="tweetText"]')
+    const quoteTweetElement = isQuotedTweet && quoteElement?.parentElement?.nextElementSibling;
+    //debugger
+    const quotedTweet = quoteTweetElement ? parseTweetNode(quoteTweetElement) : null;
+
+    // Handle retweets
+    const retweetAuthor = node.querySelector<HTMLElement>('[data-testid="socialContext"]')?.textContent?.split(' ')[0] || null;
+
+    // Handle tweet videos
+    const tweetVideoPosters = Array.from(node.querySelectorAll<HTMLVideoElement>('video')).map(video => {
+      if (quoteTweetElement && quoteTweetElement.contains(video)) {
+        return null;
+      }
+
+      return video?.poster;
+    }).filter(src => src !== null);
+
+    // Handle images
+    const tweetImages = Array.from(node.querySelectorAll<HTMLImageElement>('[data-testid="tweetPhoto"] img')).map(img => {
+      if (quoteTweetElement && quoteTweetElement.contains(img)) {
+        return null;
+      }
+
+      return img?.src;
+      // Sometimes tweet with videos has duplicate image of a poster
+    }).filter(src => src !== null).filter(src => !tweetVideoPosters.includes(src));
+
+    // Handle long text tweets
+    const showMoreElement = node.querySelector<HTMLElement>('[data-testid="tweet-text-show-more-link"]');
+    let hasShowMore = false;
+    if (showMoreElement) {
+      if (quoteTweetElement && quoteTweetElement.contains(showMoreElement)) {
+        hasShowMore = false;
+      } else {
+        hasShowMore = true;
+      }
+    }
+
+    // Handle link card
+    const linkCardLinkElement = node.querySelector<HTMLAnchorElement>('[data-testid="card.wrapper"] a');
+    const tweetLinkCard = linkCardLinkElement?.href ? {
+      linkCardUrl: linkCardLinkElement.href,
+      linkCardImage: linkCardLinkElement.querySelector<HTMLImageElement>('img')?.src,
+      linkCardLink: linkCardLinkElement.querySelector<HTMLAnchorElement>('a')?.href,
+      linkCardTitle: linkCardLinkElement.textContent || undefined,
+    } : undefined;
+
+    // Handle user details
+    const profileImage = node.querySelector<HTMLImageElement>('[data-testid="Tweet-User-Avatar"] img')?.src;
+    const profileElement = node.querySelector<HTMLElement>('[data-testid="User-Name"]');
+    const profileTextNodes = profileElement ? getAllTextNodes(profileElement) : null;
+    const profileName = profileTextNodes?.[0]?.textContent?.trim();
+    const profileTag = profileTextNodes?.[1]?.textContent?.trim();
+
+    const id = node.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || '');
+
+    if (id === '2024-09-26T03:00:13.000Zinteriorstellar') {
+      console.log("images", tweetImages);
+    }
+
+    const tweetData: TweetInterface = {
+      retweetAuthor,
+      hasShowMore,
+      tweetText: tweetTexts[0]?.textContent || undefined,
+      tweetLink: (allLinks as string[])?.find(link => link.includes('/status/')) ?? '',
+      tweetImages,
+      tweetVideoPosters,
+      tweetLinkCard,
+      quotedTweet,
       tweetTime,
-      profileName: allTextNodes[0]?.nodeType === Node.TEXT_NODE ? (allTextNodes[0] as Text).data : undefined,
-      profileTag: allTextNodes[1]?.nodeType === Node.TEXT_NODE ? (allTextNodes[1] as Text).data : undefined,
-      profileImage: Array.from(node.querySelectorAll('img'))?.map(img => img?.src).find(src => src?.includes('/profile_images/')),
-      id: node.querySelector<HTMLTimeElement>('time')?.dateTime + (node.textContent?.substring(0, 10) ?? '')
+      profileName,
+      profileTag,
+      profileImage,
+      id: node.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || ''),
+      debugData: {
+        nodeHtml: node.innerHTML,
+      }
     };
+
+    //console.log('tweetData', tweetData);
 
     return tweetData;
   } catch (error) {
@@ -88,13 +149,7 @@ function parseTweetNode(node: Element): Tweet | null {
   }
 }
 
-function getDefaultTweetsUntilData(): string {
-  const date = new Date();
-  date.setHours(date.getHours() - 24);
-  return date.toISOString();
-}
-
-function getUniqueTweets(tweets: Tweet[]): Tweet[] {
+function getUniqueTweets(tweets: TweetInterface[]): TweetInterface[] {
   const seen = new Set();
   return tweets.filter(item => {
     if (!seen.has(item.id)) {
@@ -111,18 +166,35 @@ function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   }
 }
 
+function updateTweetsWithoutDuplicates(prevTweets: TweetInterface[], newTweets: TweetInterface[]): TweetInterface[] {
+  const uniqueTweets = [...prevTweets];
+  const tweetIds = new Set(prevTweets.map(tweet => tweet.id));
+
+  newTweets.forEach(newTweet => {
+    const existingIndex = uniqueTweets.findIndex(tweet => tweet.id === newTweet.id);
+    if (existingIndex !== -1) {
+      uniqueTweets[existingIndex] = { ...newTweet };
+    } else if (!tweetIds.has(newTweet.id)) {
+      uniqueTweets.push({ ...newTweet });
+      tweetIds.add(newTweet.id);
+    }
+  });
+
+  return [...uniqueTweets]; // Return a new array reference
+}
+
 function App() {
-  const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
+  const [filteredTweets, setFilteredTweets] = useState<TweetInterface[]>([]);
   const [isLoadingTweets, setIsLoadingTweets] = useState<boolean>(false);
   const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
 
   function observeTimelineAndLoadTweets(timelineElement: HTMLElement) {
-    let observedTweets: Tweet[] = [];
+    let observedTweets: TweetInterface[] = [];
     const timelineTweetsObserver = new MutationObserver(async (mutations: MutationRecord[]) => {
       await new Promise(resolve => setTimeout(resolve, 300));
       await new Promise(resolve => requestAnimationFrame(resolve));
 
-      const newTweets = mutations.reduce<Tweet[]>((acc, mutation) => {
+      const newTweets = mutations.reduce<TweetInterface[]>((acc, mutation) => {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
           mutation.addedNodes.forEach((node: Node) => {
             if (node instanceof Element) {
@@ -144,6 +216,7 @@ function App() {
         setFilteredTweets(prevTweets => {
           const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAdd]);
           console.log('Observer added unique tweets to state', uniqueTweets);
+          console.log('filteredTweets', filteredTweets);
           return uniqueTweets;
         });
 
@@ -156,39 +229,57 @@ function App() {
     return timelineTweetsObserver;
   }
 
+  function loadTimelineTweets() {
+
+  }
+
   // Initialize chrome extension
   useEffect(() => {
     // Initialize timeLineObserver
     let timelineTweetsObserver: any | null = null;
-    const timelineElementDetectionIntervalId = setInterval(() => {
+    const timelineElement = getTimeLineElementNode();
+
+    function initializeExtension(timelineElement: HTMLElement) {
+      function preventScrollOnTimeline(e: WheelEvent) {
+        const { scrollTop, scrollHeight, clientHeight } = filteredTweetsContainerRef.current as HTMLElement;
+
+        // Check if user scrolling at the top or bottom of the scroll
+        if ((scrollTop <= 0 && (e as WheelEvent).deltaY < 0) || (Math.round(scrollTop + clientHeight) >= scrollHeight && (e as WheelEvent).deltaY > 0)) {
+          e.preventDefault();
+        }
+      }
+      document.addEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false });
+      (document.querySelector('#ai-reader-root') as HTMLElement)?.addEventListener('wheel', preventScrollOnTimeline, { passive: false });
+
+      // Set initial tweets
+      if (filteredTweets.length === 0) {
+        const initialTweets = Array.from(timelineElement.childNodes).map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
+        setFilteredTweets(initialTweets);
+      }
+
+      // Observe timeline for new tweets
+      //timelineTweetsObserver = observeTimelineAndLoadTweets(timelineElement);
+    }
+
+    function initializeExtensionRetryFunction() {
       const timelineElement = getTimeLineElementNode();
       if (timelineElement instanceof HTMLElement) {
         clearInterval(timelineElementDetectionIntervalId);
 
-        function preventScrollOnTimeline(e: WheelEvent) {
-          const { scrollTop, scrollHeight, clientHeight } = filteredTweetsContainerRef.current as HTMLElement;
+        initializeExtension(timelineElement);
 
-          // Check if user scrolling at the top or bottom of the scroll
-          if ((scrollTop <= 0 && (e as WheelEvent).deltaY < 0) || (Math.round(scrollTop + clientHeight) >= scrollHeight && (e as WheelEvent).deltaY > 0)) {
-            e.preventDefault();
-          }
-        }
-        document.addEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false });
-        (document.querySelector('#ai-reader-root') as HTMLElement)?.addEventListener('wheel', preventScrollOnTimeline, { passive: false });
-
-        // Set initial tweets
-        if (filteredTweets.length === 0) {
-          const initialTweets = Array.from(timelineElement.childNodes).map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
-          setFilteredTweets(initialTweets);
-        }
-
-        // Observe timeline for new tweets
-        timelineTweetsObserver = observeTimelineAndLoadTweets(timelineElement);
         console.log('Timeline element found and observation started');
       } else {
         console.log('Timeline element not found, retrying...');
       }
-    }, 500);
+    }
+
+    let timelineElementDetectionIntervalId: any | null = null;
+    if (timelineElement) {
+      initializeExtension(timelineElement as HTMLElement);
+    } else {
+      timelineElementDetectionIntervalId = setInterval(initializeExtensionRetryFunction, 300);
+    }
 
     return () => {
       console.log('unmounting');
@@ -204,7 +295,6 @@ function App() {
   // Load more tweets on scroll
   useEffect(() => {
     const handleScroll = () => {
-      console.log('scroll', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop)
       if (!filteredTweetsContainerRef.current || isLoadingTweets) {
         return;
       }
@@ -217,8 +307,9 @@ function App() {
       setIsLoadingTweets(true);
 
       let scrollIntervalId: any | null = null;
-      function loadMoreTweetsSetIntervalFunction() {
-        console.log('Load more tweets init', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop)
+      let tweetsToAdd: TweetInterface[] = [];
+      async function loadMoreTweetsSetIntervalFunction() {
+        console.log('------INITIALIZED FUNCTION TO LOAD TWEETS-------', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop)
         if (!filteredTweetsContainerRef.current) {
           setIsLoadingTweets(false);
           return clearInterval(scrollIntervalId);
@@ -229,10 +320,25 @@ function App() {
           return clearInterval(scrollIntervalId);
         }
 
-        console.log('Load more tweets scroll window')
-        window.scrollBy(0, window.innerHeight);
+        window.scrollBy(0, window.innerHeight); console.log('--Scrolling window');
+        await new Promise(resolve => setTimeout(resolve, 150));
+        //await new Promise(resolve => requestAnimationFrame(resolve));
+        const renderedTweets = Array.from(getTimeLineElementNode()?.childNodes || []).map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
+        const visibleTweets = renderedTweets.length > 12 ? renderedTweets.slice(3, -3) : renderedTweets;
+        tweetsToAdd = updateTweetsWithoutDuplicates(tweetsToAdd, visibleTweets); console.log('--Found after scroll', tweetsToAdd);
+        if (tweetsToAdd.length > 20) {
+          const tweetsToAddCopy = [...tweetsToAdd]; console.log('--Adding to state', tweetsToAddCopy);
+          setFilteredTweets(prevTweets => {
+            const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAddCopy]);
+            return uniqueTweets;
+          });
+          tweetsToAdd = [];
+        }
       }
-      scrollIntervalId = setInterval(loadMoreTweetsSetIntervalFunction, 350);
+      if (!scrollIntervalId) {
+        scrollIntervalId = setInterval(loadMoreTweetsSetIntervalFunction, 200);
+      }
+
     };
 
     const currentRef = filteredTweetsContainerRef.current;
@@ -250,90 +356,52 @@ function App() {
   }, [isLoadingTweets, filteredTweetsContainerRef]);
 
   return (
-    <div ref={filteredTweetsContainerRef} css={css`
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      z-index: 999999999;
-      background-color: rgba(0, 0, 0, 0.6); // 60% black overlay
-      backdrop-filter: blur(200px); // 200px blur
-      overflow-y: scroll;
-      padding: 20px;
-    `}>
-      <ul css={css`
-        list-style-type: none;
-        padding: 0;
+    <>
+      <Global styles={css`
+        ${emotionReset}
+
+        *, *::after, *::before {
+          box-sizing: border-box;
+          -moz-osx-font-smoothing: grayscale;
+          -webkit-font-smoothing: antialiased;
+          font-smoothing: antialiased;
+        }
+      `} />
+      <div ref={filteredTweetsContainerRef} css={css`
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
-        max-width: 600px;
-        color: black;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        z-index: 999999999;
+        background-color: rgba(0, 0, 0, 1); 
+        //backdrop-filter: blur(200px);
+        overflow-y: scroll;
+        padding: 20px;
+        font-family: 'TwitterChirp', sans-serif;
       `}>
-        {filteredTweets.map((tweet) => (
-          <li key={tweet.id} css={css`
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-          `}>
-            <div css={css`
-              display: flex;
-              align-items: center;
-              margin-bottom: 10px;
-            `}>
-              {tweet.profileImage && (
-                <img
-                  src={tweet.profileImage}
-                  alt="Profile"
-                  css={css`
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                  `}
-                />
-              )}
-              <div>
-                <strong>{tweet.profileName}</strong>
-                <span css={css`color: #657786; margin-left: 5px;`}>{tweet.profileTag}</span>
-              </div>
-            </div>
-            <p>{tweet.tweetText}</p>
-            {tweet.tweetImages.length > 0 && (
-              <div css={css`
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 10px;
-                margin-bottom: 10px;
-              `}>
-                {tweet.tweetImages.map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`Tweet image ${index + 1}`}
-                    css={css`
-                      width: 100%;
-                      height: auto;
-                      border-radius: 8px;
-                    `}
-                  />
-                ))}
-              </div>
-            )}
-            <p css={css`color: #657786; font-size: 0.9em;`}>
-              {new Date(tweet.tweetTime || '').toLocaleString()}
-            </p>
-            {tweet.tweetLink && (
-              <a href={tweet.tweetLink} target="_blank" rel="noopener noreferrer">View Tweet</a>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
+        <div css={css`
+          padding: 0; 
+          width: 646px;
+          max-width: 100%;
+          color: black;
+          border-left: 1px solid #2F3336;
+          border-right: 1px solid #2F3336;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+        `}>
+          {filteredTweets.map((tweet) => (
+            <Tweet key={tweet.id} tweet={tweet} isQuote={false} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -19,6 +19,12 @@ function injectApp() {
   appRoot.id = 'extension-app-root'
   shadowRoot.appendChild(appRoot)
 
+  const styleElement = document.createElement('style');
+  styleElement.textContent = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+  `;
+  shadowRoot.appendChild(styleElement);
+
   const emotionCache = createCache({
     key: 'extension-app',
     prepend: true,
