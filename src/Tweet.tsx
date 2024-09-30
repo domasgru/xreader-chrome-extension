@@ -76,6 +76,7 @@ const styles = {
     height: '20px',
     borderRadius: '50%',
     marginRight: '8px',
+    opacity: 0.7,
   } as const,
 
   contentContainer: {
