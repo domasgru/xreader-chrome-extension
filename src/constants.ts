@@ -1,0 +1,1 @@
+export const TIMELINE_WIDTH = 624;

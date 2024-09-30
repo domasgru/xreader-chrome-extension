@@ -18,7 +18,4 @@ export interface TweetInterface {
   profileImage: string | undefined;
   hasReplies: boolean;
   id: string;
-  debugData: {
-    nodeHtml: string;
-  }
 }

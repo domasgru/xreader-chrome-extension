@@ -22,6 +22,17 @@ function formatTweetDate(time: string): string {
   }
 }
 
+function getFullTweetTime(time: string): string {
+  const tweetDate = new Date(time);
+  return tweetDate.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 function setImageSizeToLarge(url: string): string {
   const urlObj = new URL(url);
   urlObj.searchParams.set('name', 'large');
@@ -216,8 +227,6 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
     window.open(tweet.tweetLink, '_blank', 'noopener,noreferrer');
   };
 
-  const debugData = isDevelopment ? JSON.stringify(tweet.debugData) : undefined;
-
   return (
     <div
       id={tweet.id}
@@ -227,13 +236,7 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
         ...(tweet.hasReplies && { borderBottom: 'none' })
       }}
       onClick={handleClick}
-      data-debug={debugData}
     >
-      {tweet.retweetAuthor && (
-        <div css={styles.retweetAuthor}>
-          {tweet.retweetAuthor} reposted
-        </div>
-      )}
       <div css={styles.profileContainer}>
         {!isQuote && (
           <img
@@ -253,8 +256,15 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
             )}
             <div css={styles.profileName}>
               {tweet.profileName}
+              {
+                tweet.retweetAuthor && (
+                  <span css={styles.retweetAuthor}>
+                    &nbsp;&nbsp;·&nbsp;&nbsp;{tweet.retweetAuthor} reposted
+                  </span>
+                )
+              }
             </div>
-            <span css={styles.tweetTime}>
+            <span css={styles.tweetTime} title={getFullTweetTime(tweet.tweetTime)}>
               {formatTweetDate(tweet.tweetTime)}
             </span>
           </div>
