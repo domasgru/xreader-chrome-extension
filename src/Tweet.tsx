@@ -230,7 +230,7 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
 
   return (
     <div
-      id={tweet.id}
+      id={`tweet-${tweet.id}`}
       css={{
         ...styles.tweetContainer,
         ...(isQuote && { padding: '16px', border: 'none' }),

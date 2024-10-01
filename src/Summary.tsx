@@ -6,7 +6,7 @@ interface SummaryProps {
   isLoading: boolean;
   summaryData: SummaryInterface | null;
   onGenerate: () => void;
-  onIdHover: (id: string) => void; // Add this new prop
+  setShowModal: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const loadingAnimation = keyframes`
@@ -129,15 +129,16 @@ const summaryStyles: Record<string, CSSObject> = {
   },
   idList: {
     display: 'inline',
-    color: '#4a90e2',
+    color: '#1D9BF0',
     marginLeft: '5px',
   },
   mediaSection: {
-    marginTop: '28px',
+    marginTop: '40px',
   },
   mediaDivider: {
     borderTop: '1px solid #71767A',
     marginTop: '8px',
+    marginBottom: '8px',
     textAlign: 'center',
     position: 'relative',
   },
@@ -150,21 +151,21 @@ const summaryStyles: Record<string, CSSObject> = {
     fontSize: '14px',
   },
   mediaItem: {
-    marginBottom: '24px',
+    marginBottom: '32px',
   },
   mediaAuthor: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '10px',
+    marginBottom: '16px',
     fontSize: '14px',
     color: '#a0a0a0',
   },
-  mediaAuthorDot: {
-    width: '8px',
-    height: '8px',
-    backgroundColor: '#a0a0a0',
+  mediaAuthorImage: {
+    width: '18px',
+    height: '18px',
     borderRadius: '50%',
     marginRight: '8px',
+    objectFit: 'cover',
   },
   mediaGrid: {
     display: 'grid',
@@ -189,7 +190,7 @@ const formatDate = (dateString: string): string => {
   return `${month} ${day}, ${hours}:${minutes}`;
 };
 
-const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, onIdHover }) => {
+const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, setShowModal }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
 
   // Handle scrolling
@@ -232,7 +233,7 @@ const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, o
         ...(!isLoading && summaryData && {
           padding: '24px 32px',
           height: '100%',
-          overflowY: 'auto', // Add this to enable scrolling within the Summary
+          overflowY: 'auto',
         })
       }}
     >
@@ -269,20 +270,22 @@ const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, o
                 {item.text}
                 <span css={summaryStyles.idList}>
                   [
-                  {item.ids.map((id, i) => (
-                    <span
-                      key={id}
-                      css={{
-                        cursor: 'pointer',
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        },
-                      }}
-                      onMouseEnter={() => onIdHover(id)}
-                    >
-                      {i + 1}
-                      {i < item.ids.length - 1 ? ', ' : ''}
-                    </span>
+                  {item.relatedTweets.map((relatedTweet, i) => (
+                    <React.Fragment key={relatedTweet.id}>
+                      {i > 0 && ' '}
+                      <span
+                        css={{
+                          cursor: 'pointer',
+                          padding: '0 4px',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      {i < item.relatedTweets.length - 1 && ','}
+                    </React.Fragment>
                   ))}
                   ]
                 </span>
@@ -294,14 +297,26 @@ const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, o
               <span css={summaryStyles.mediaDividerText}>MEDIA</span>
             </div>
             {summaryData?.media.map((mediaItem, index) => (
-              <div css={summaryStyles.mediaItem} key={index}>
+              <div onMouseLeave={() => setShowModal(null)} css={summaryStyles.mediaItem} key={index}>
                 <div css={summaryStyles.mediaAuthor}>
-                  <span css={summaryStyles.mediaAuthorDot}></span>
+                  {mediaItem.authorProfileImage && (
+                    <img
+                      src={mediaItem.authorProfileImage}
+                      alt={`${mediaItem.authorName || 'Author'}'s profile`}
+                      css={summaryStyles.mediaAuthorImage}
+                    />
+                  )}
                   {mediaItem.authorName}
                 </div>
                 <div css={summaryStyles.mediaGrid}>
                   {mediaItem.images.map((image, imgIndex) => (
-                    <img key={imgIndex} src={image} alt={`Image ${imgIndex + 1}`} css={summaryStyles.mediaImage} />
+                    <img
+                      key={imgIndex}
+                      src={image.imageUrl}
+                      alt={image.tweetText || `Image ${imgIndex + 1}`}
+                      onMouseEnter={() => setShowModal(image.imageUrl || null)}
+                      css={summaryStyles.mediaImage}
+                    />
                   ))}
                 </div>
               </div>

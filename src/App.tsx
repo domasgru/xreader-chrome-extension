@@ -1,14 +1,18 @@
 /// <reference types="chrome"/>
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Global, css } from '@emotion/react';
+import { Global, css, CSSObject } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 import Tweet from './Tweet';
 import { TweetInterface } from './TweetInterface';
+import { SummaryInterface } from './SummaryInterface';
 import OpenAI from 'openai';
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 import Summary from './Summary';
 import { TIMELINE_WIDTH } from './constants';
+
+const mockLoadTweets = true;
+const mockLoadSummary = true;
 
 interface UserPreferences {
   interests: string;
@@ -80,7 +84,6 @@ function parseTweetNode(node: Element): TweetInterface | null {
     const quoteElement = document.evaluate(".//*[text()='Quote']", clonedNode, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)?.singleNodeValue as Element;
     const isQuotedTweet = !!quoteElement && !quoteElement.closest('[data-testid="tweetText"]')
     const quoteTweetElement = isQuotedTweet && quoteElement?.parentElement?.nextElementSibling;
-    //debugger
     const quotedTweet = quoteTweetElement ? parseTweetNode(quoteTweetElement) : null;
 
     // Handle retweets
@@ -135,7 +138,8 @@ function parseTweetNode(node: Element): TweetInterface | null {
 
     const tweetText = tweetTexts[0]?.textContent || undefined;
 
-    const id = clonedNode.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || '') + tweetText?.slice(0, 5);
+    const tweetUniqueString = clonedNode.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || '') + tweetText?.slice(0, 5)?.trim();
+    const id = stringToId(tweetUniqueString);
 
     const tweetData: TweetInterface = {
       retweetAuthor,
@@ -153,8 +157,6 @@ function parseTweetNode(node: Element): TweetInterface | null {
       hasReplies,
       id,
     };
-
-    //console.log('tweetData', tweetData);
 
     return tweetData;
   } catch (error) {
@@ -180,23 +182,6 @@ function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   }
 }
 
-function updateTweetsWithoutDuplicates(prevTweets: TweetInterface[], newTweets: TweetInterface[]): TweetInterface[] {
-  const uniqueTweets = [...prevTweets];
-  const tweetIds = new Set(prevTweets.map(tweet => tweet.id));
-
-  newTweets.forEach(newTweet => {
-    const existingIndex = uniqueTweets.findIndex(tweet => tweet.id === newTweet.id);
-    if (existingIndex !== -1) {
-      uniqueTweets[existingIndex] = { ...newTweet };
-    } else if (!tweetIds.has(newTweet.id)) {
-      uniqueTweets.push({ ...newTweet });
-      tweetIds.add(newTweet.id);
-    }
-  });
-
-  return [...uniqueTweets]; // Return a new array reference
-}
-
 function cosineSimilarity(a: number[], b: number[]) {
   const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
   const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
@@ -204,7 +189,17 @@ function cosineSimilarity(a: number[], b: number[]) {
   return dotProduct / (magnitudeA * magnitudeB);
 };
 
-const styles = {
+function stringToId(str: string): string {
+  let hash: number = 0;
+  for (let i: number = 0; i < str.length; i++) {
+    const char: number = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+const styles: Record<string, CSSObject> = {
   filteredTweetsContainerStyle: {
     position: 'fixed',
     top: 0,
@@ -234,6 +229,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'start',
+    position: 'relative',
   },
   timeline: {
     width: `${TIMELINE_WIDTH}px`,
@@ -245,17 +241,42 @@ const styles = {
     alignItems: 'center',
     zIndex: 1,
   },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    zIndex: 1000,
+    width: '100%'
+  },
+  modalContent: {
+    position: 'sticky',
+    top: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100vh',
+  },
+  modalImage: {
+    maxWidth: '90%',
+    maxHeight: '90vh',
+    objectFit: 'contain',
+  },
 }
 
 function App() {
   const [filteredTweets, setFilteredTweets] = useState<TweetInterface[]>([]);
+  const filteredTweetsRef = useRef<TweetInterface[]>([]);
   const [isLoadingTweets, setIsLoadingTweets] = useState<boolean>(false);
   const [isLoadingSummary, setIsLoadingSummary] = useState<boolean>(false);
   const [summary, setSummary] = useState<any>(null);
+  const [showModal, setShowModal] = useState<string | null>(null);
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({ interests: 'design, products, technology, self improvement, breaking news', notInterests: 'jokes, memes, politics, religion, sports' });
   const [embeddingCache, setEmbeddingCache] = useState<EmbeddingCache>({});
   const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
-  const useMockData = false;
   const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
 
   const getCachedEmbedding = useCallback(async (text: string) => {
@@ -294,76 +315,85 @@ function App() {
 
   const loadMoreTweetsAbortController = useRef<AbortController | null>(null);
   const lastSavedTimelineElementChildNode = useRef<HTMLElement | null>(null);
-  async function loadMoreTweets(shouldContinueLoadingFunction: () => boolean) {
-    const functionID = Math.random().toString(36).substring(2, 15);
-    console.log(functionID, '------INITIALIZED FUNCTION TO LOAD TWEETS-------', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop);
-    if (useMockData) {
-      const mockTweets = await import('./exampleTweets.json');
-      setFilteredTweets(mockTweets.default as TweetInterface[]);
-      return;
-    }
+  async function loadMoreTweets(shouldStopLoadingFunction: () => boolean): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      const functionID = Math.random().toString(36).substring(2, 15);
+      console.log(functionID, '------INITIALIZED FUNCTION TO LOAD TWEETS-------', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop);
 
-    // If there is no timeline element
-    const timelineElement = getTimeLineElementNode();
-    if (!timelineElement) {
-      return;
-    }
-
-    // If another loadMoreTweets is running, abort it, and wait for it to completely finish
-    if (loadMoreTweetsAbortController.current) {
-      loadMoreTweetsAbortController.current.abort(); console.log(functionID, 'ABORTED PREVIOUS LOAD MORE TWEETS');
-
-      while (loadMoreTweetsAbortController.current) {
-        await new Promise(resolve => setTimeout(resolve, 50));
+      if (mockLoadTweets) {
+        const mockTweets = await import('./exampleTweets.json');
+        setFilteredTweets(mockTweets.default as TweetInterface[]);
+        return resolve();
       }
-    }
-    loadMoreTweetsAbortController.current = new AbortController();
-    setIsLoadingTweets(true);
 
-    let tweetsToAdd: TweetInterface[] = [];
+      // If there is no timeline element
+      const timelineElement = getTimeLineElementNode();
+      if (!timelineElement) {
+        return;
+      }
 
-    try {
-      while (shouldContinueLoadingFunction() && !loadMoreTweetsAbortController.current.signal.aborted) {
-        const isRunningFirstTime = !lastSavedTimelineElementChildNode.current;
-        if (lastSavedTimelineElementChildNode.current) {
-          lastSavedTimelineElementChildNode.current.scrollIntoView(); console.log(functionID, '--Scrolling window');
-          await new Promise(resolve => setTimeout(resolve, 200));
-        }
-
-        if (loadMoreTweetsAbortController.current.signal.aborted) {
-          console.log(functionID, 'ABORTED LOAD MORE TWEETS');
-          break
-        }
-
-        const renderedTweetsArray = Array.from(timelineElement.childNodes);
-        const parseFromIndex = lastSavedTimelineElementChildNode ? renderedTweetsArray.findIndex(node => node === (lastSavedTimelineElementChildNode.current)) + 1 : 0;
-        const parseToIndex = renderedTweetsArray.length;
-        const arrayToParse = renderedTweetsArray.slice(parseFromIndex, parseToIndex);
-        const parsedTweets = arrayToParse.map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
-        tweetsToAdd = [...tweetsToAdd, ...parsedTweets];
-        lastSavedTimelineElementChildNode.current = timelineElement.lastChild as HTMLElement; console.log(functionID, '--Observing tweets');
-
-        if (tweetsToAdd.length > 30 || isRunningFirstTime) {
-          const tweetsToAddCopy = [...tweetsToAdd]; console.log(functionID, '--Adding tweets to state', tweetsToAddCopy);
-
-          setFilteredTweets(prevTweets => {
-            const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAddCopy]);
-            return uniqueTweets;
-          });
-
-          tweetsToAdd = [];
+      // If another loadMoreTweets is running, abort it, and wait for it to completely finish
+      if (loadMoreTweetsAbortController.current) {
+        loadMoreTweetsAbortController.current.abort();
+        console.log(functionID, 'ABORTED PREVIOUS LOAD MORE TWEETS');
+        while (loadMoreTweetsAbortController.current) {
+          await new Promise(resolve => setTimeout(resolve, 50));
         }
       }
-    } catch (error) {
-      console.error('Error in loadMoreTweets:', error);
-    } finally {
-      loadMoreTweetsAbortController.current = null;
-      setIsLoadingTweets(false);
-    }
+
+      loadMoreTweetsAbortController.current = new AbortController();
+      setIsLoadingTweets(true);
+
+      try {
+        let tweetsToAdd: TweetInterface[] = [];
+
+        while (!shouldStopLoadingFunction() && !loadMoreTweetsAbortController.current.signal.aborted) {
+          const isRunningFirstTime = !lastSavedTimelineElementChildNode.current;
+          if (lastSavedTimelineElementChildNode.current) {
+            lastSavedTimelineElementChildNode.current.scrollIntoView();
+            console.log(functionID, '--Scrolling window');
+            await new Promise(resolve => setTimeout(resolve, 200));
+          }
+
+          if (loadMoreTweetsAbortController.current.signal.aborted) {
+            console.log(functionID, 'ABORTED LOAD MORE TWEETS');
+            break;
+          }
+
+          const renderedTweetsArray = Array.from(timelineElement.childNodes);
+          const parseFromIndex = lastSavedTimelineElementChildNode.current
+            ? renderedTweetsArray.findIndex(node => node === lastSavedTimelineElementChildNode.current) + 1
+            : 0;
+          const parseToIndex = renderedTweetsArray.length;
+          const arrayToParse = renderedTweetsArray.slice(parseFromIndex, parseToIndex);
+          const parsedTweets = arrayToParse.map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
+          tweetsToAdd = [...tweetsToAdd, ...parsedTweets];
+          lastSavedTimelineElementChildNode.current = timelineElement.lastChild as HTMLElement;
+          console.log(functionID, '--Observing tweets');
+
+          if (tweetsToAdd.length > 30 || isRunningFirstTime) {
+            const tweetsToAddCopy = [...tweetsToAdd];
+            console.log(functionID, '--Adding tweets to state', tweetsToAddCopy);
+
+            setFilteredTweets(prevTweets => {
+              const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAddCopy]);
+              return uniqueTweets;
+            });
+            tweetsToAdd = [];
+          }
+        }
+      } catch (error) {
+        console.error('Error in loadMoreTweets:', error);
+      } finally {
+        loadMoreTweetsAbortController.current = null;
+        setIsLoadingTweets(false);
+        resolve();
+      }
+    })
   }
 
-  async function generateSummary(tweets: TweetInterface[]) {
-    if (useMockData) {
+  async function generateSummary() {
+    if (mockLoadSummary) {
       const mockSummary = await import('./exampleSummary.json');
       setSummary(mockSummary.default);
       setIsLoadingSummary(false);
@@ -371,6 +401,21 @@ function App() {
     }
 
     setIsLoadingSummary(true);
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    await loadMoreTweets(() => {
+      console.log('--->', filteredTweetsRef.current)
+      const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
+        if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
+          console.log('--Reached target tweet', tweet);
+          return true;
+        }
+        return false;
+      });
+
+      return hasReachedTargetTweet;
+    })
+
+    const tweets = [...filteredTweetsRef.current];
 
     const processedTweets = tweets.map(({ id, tweetText, profileName }) => {
       if (tweetText) {
@@ -384,42 +429,69 @@ function App() {
       return null
     }).filter(tweet => tweet !== null);
 
-    const Summary = z.object({
-      summaryItems: z.array(z.object({
-        text: z.string(),
-        ids: z.array(z.string()),
-      }))
-    })
-
     const completion = await openai.beta.chat.completions.parse({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `You will be provided an array of tweets. Write bullet list type summary of the tweets in given structure. Respect user interests and not interests:
+          content: `You will be provided a list of tweets. Write a bullet-list type summary of these tweets, respecting user preferences:
           \nInterests: ${userPreferences.interests}
           \nNot interests: ${userPreferences.notInterests}
           `
         },
         { role: "user", content: JSON.stringify(processedTweets) },
       ],
-      response_format: zodResponseFormat(Summary, "summary_from_tweets"),
+      response_format: zodResponseFormat(
+        z.object({
+          summaryItems: z.array(z.object({
+            summaryItemText: z.string(),
+            relatedTweetsIds: z.array(z.string()),
+          }))
+        }),
+        "summary_from_tweets"
+      ),
     });
 
-    const writtenSummaryItems = completion.choices[0].message.parsed?.summaryItems;
+    const writtenSummaryItems = completion.choices[0].message.parsed?.summaryItems?.map(
+      (item) => {
+        return {
+          text: item.summaryItemText,
+          relatedTweets: item.relatedTweetsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
+        }
+      }
+    );
     const summaryTimeRangeFrom = tweets[0].tweetTime;
     const summaryTimeRangeTo = tweets[tweets.length - 1].tweetTime;
-    const media = tweets.reduce((acc: { author: string; images: string[] }[], tweet) => {
+    const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
       if (tweet.tweetImages && tweet.tweetImages.length > 0) {
-        const existingAuthor = acc.find(item => item.author === tweet.profileName);
+        const existingAuthor = acc.find(item => item.authorName === tweet.profileName);
         if (existingAuthor) {
-          existingAuthor.images.push(...tweet.tweetImages);
+          existingAuthor.images.push(
+            ...tweet.tweetImages.map(image => ({
+              imageUrl: image,
+              tweetText: tweet.tweetText,
+              tweetId: tweet.id,
+              tweetLink: tweet.tweetLink,
+            }))
+          );
         } else {
-          acc.push({ author: tweet.profileName || 'Unknown', images: [...tweet.tweetImages] });
+          acc.push({
+            authorName: tweet.profileName,
+            authorProfileImage: tweet.profileImage,
+            images: [
+              ...tweet.tweetImages.map(image => ({
+                imageUrl: image,
+                tweetText: tweet.tweetText,
+                tweetId: tweet.id,
+                tweetLink: tweet.tweetLink,
+              })),
+            ],
+          });
         }
       }
       return acc;
     }, []);
+
 
     const summary = {
       writtenSummaryItems,
@@ -427,8 +499,6 @@ function App() {
       timeTo: summaryTimeRangeTo,
       media,
     }
-
-    debugger
 
     setSummary(summary);
     setIsLoadingSummary(false);
@@ -457,7 +527,7 @@ function App() {
           return false;
         }
 
-        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop < 5000
+        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop > 5000
       });
     }
 
@@ -482,10 +552,13 @@ function App() {
     }
 
     return () => {
-      console.log('unmounting interval', timelineElementDetectionIntervalId);
+      console.log('UNMOUNTING APP, REMOVING EVENT LISTENERS');
       clearInterval(timelineElementDetectionIntervalId);
       document.removeEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false } as EventListenerOptions);
       (document.querySelector('#ai-reader-root') as HTMLElement)?.removeEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
+      if (loadMoreTweetsAbortController.current) {
+        loadMoreTweetsAbortController.current.abort();
+      }
     };
   }, []);
 
@@ -506,7 +579,7 @@ function App() {
           return false;
         }
 
-        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop < 5000
+        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop > 5000
       });
     };
 
@@ -524,12 +597,9 @@ function App() {
     };
   }, [isLoadingTweets, filteredTweetsContainerRef]);
 
-  const handleIdHover = useCallback((id: string) => {
-    const tweetElement = document.getElementById(`tweet-${id}`);
-    if (tweetElement) {
-      tweetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, []);
+  useEffect(() => {
+    filteredTweetsRef.current = filteredTweets;
+  }, [filteredTweets]);
 
   return (
     <>
@@ -554,6 +624,7 @@ function App() {
                 position: 'fixed',
                 bottom: '32px',
                 right: `calc(50% + ${TIMELINE_WIDTH / 2}px + 40px)`,
+                zIndex: 10
               }),
               ...(summary && {
                 position: 'sticky',
@@ -569,8 +640,8 @@ function App() {
             <Summary
               isLoading={isLoadingSummary}
               summaryData={summary}
-              onGenerate={() => generateSummary(filteredTweets)}
-              onIdHover={handleIdHover}
+              onGenerate={generateSummary}
+              setShowModal={setShowModal}
             />
           </div>
           <div css={styles.timelineContainer}>
@@ -583,6 +654,13 @@ function App() {
                 />
               ))}
             </div>
+            {showModal && (
+              <div css={styles.modalOverlay}>
+                <div css={styles.modalContent}>
+                  <img src={showModal} css={styles.modalImage} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div >

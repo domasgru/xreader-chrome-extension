@@ -1,402 +1,1209 @@
 {
   "writtenSummaryItems": [
     {
-      "text": "Exploring AI-generated designs that translate to physical products.",
-      "ids": [
-        "2024-09-27T04:59:00.000ZEv"
+      "text": "Podcast episode released featuring Tuomas Artman discussing startup MVP and technologies.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": "Julian Lehr",
+          "hasShowMore": false,
+          "tweetText": "Episode #15 is out.   \n\nTuomas Artman (@artman) on building Linear, sync engines, and rethinking the startup MVP",
+          "tweetLink": "https://x.com/localfirstfm/status/1841089464992403753",
+          "tweetImages": [],
+          "tweetVideoPosters": [
+            "https://pbs.twimg.com/amplify_video_thumb/1841031854377365504/img/B_Hym1L6QO8lTur-.jpg"
+          ],
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T12:15:08.000Z",
+          "profileName": "localfirst.fm Podcast",
+          "profileTag": "@localfirstfm",
+          "profileImage": "https://pbs.twimg.com/profile_images/1744054897216012288/F8ys52XS_x96.jpg",
+          "hasReplies": false,
+          "id": "3zoqyn"
+        }
       ]
     },
     {
-      "text": "The rollout of Advanced Voice for ChatGPT enhancing user interaction.",
-      "ids": [
-        "2024-09-24T19:30:49.000ZChase"
+      "text": "Received a limited edition copy of 'Order/Disorder' by Tyler Hobbs, which includes a relevant print.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": "Tyler Hobbs",
+          "hasShowMore": false,
+          "tweetText": "My LE copy of Order/Disorder by @tylerxhobbs came! Complete with a Fidenza #0 print. Nice touch including the print pouch in the back cover ",
+          "tweetLink": "https://x.com/pman555/status/1841097341727568226",
+          "tweetImages": [
+            "https://pbs.twimg.com/media/GYzkRf4XMAIcnig?format=jpg&name=medium"
+          ],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T12:46:26.000Z",
+          "profileName": "Perilous",
+          "profileTag": "@pman555",
+          "profileImage": "https://pbs.twimg.com/profile_images/1836767255264137216/XdK-f6WR_x96.jpg",
+          "hasReplies": false,
+          "id": "eesadq"
+        }
       ]
     },
     {
-      "text": "Mystic v2 AI generator that can create high-resolution images is now available.",
-      "ids": [
-        "2024-09-25T15:01:09.000ZChase"
+      "text": "Sharing insights on the long timeline of bringing a vision to life, particularly in technology.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": "David Hoang",
+          "hasShowMore": false,
+          "tweetText": "Today @davidhoang asked me an interesting question re: the ADS Vision timeline, which I'm sharing to show how long it takes a vision to come to life.\n\n 2020: The creation of ADS Values + Principles",
+          "tweetLink": "https://x.com/jenniesyip/status/1840993472473666036",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "tweetLinkCard": {
+            "linkCardUrl": "https://t.co/EcU5ua23vh",
+            "linkCardImage": "https://pbs.twimg.com/card_img/1839573468058402816/4lRr019J?format=jpg&name=medium",
+            "linkCardTitle": "Vision, values, and principles - Get started - Atlassian Design System"
+          },
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T05:53:42.000Z",
+          "profileName": "jennie § yip",
+          "profileTag": "@jenniesyip",
+          "profileImage": "https://pbs.twimg.com/profile_images/1676689245719908352/ZiDz5asW_x96.jpg",
+          "hasReplies": false,
+          "id": "vjt669"
+        }
       ]
     },
     {
-      "text": "Airlines adopting Starlink for improved service connectivity.",
-      "ids": [
-        "2024-09-27T01:57:32.000ZPaul"
+      "text": "Figma Slides highlighted as an impressive tool for design.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "Sidenode, Figma Slides is amazing.",
+          "tweetLink": "https://x.com/dannypostmaa/status/1841102332744122665",
+          "tweetImages": [
+            "https://pbs.twimg.com/media/GYzozy_bQAI4MJK?format=jpg&name=medium"
+          ],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T13:06:16.000Z",
+          "profileName": "Danny Postma",
+          "profileTag": "@dannypostmaa",
+          "profileImage": "https://pbs.twimg.com/profile_images/1587046912490090496/kuBUqNkb_x96.jpg",
+          "hasReplies": false,
+          "id": "9zsbp0"
+        }
       ]
     },
     {
-      "text": "Amidst doubts on product branding, the developer considers alternative names for 'PimpMySnap'.",
-      "ids": [
-        "2024-09-27T04:30:00.000ZErikasMališauskas",
-        "2024-09-27T04:30:08.000ZErikasMališauskas"
+      "text": "Announced a new company focused on a unified toolchain for JavaScript development.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": "Kia King Ishii",
+          "hasShowMore": true,
+          "tweetText": "Announcing @voidzerodev: a company building the next-generation unified toolchain for JavaScript.\n\nWe are the creators and core-contributors of Vite, Vitest, Rolldown and Oxc - and we will unite these projects under a coherent vision to power the next generation of web",
+          "tweetLink": "https://x.com/youyuxi/status/1841100770537849179",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T13:00:04.000Z",
+          "profileName": "Evan You",
+          "profileTag": "@youyuxi",
+          "profileImage": "https://pbs.twimg.com/profile_images/1630207820359700480/a3pHtm6T_x96.jpg",
+          "hasReplies": false,
+          "id": "kiwamb"
+        }
       ]
     },
     {
-      "text": "Notion's new animated AI assistant is a spectacle merging technology with art.",
-      "ids": [
-        "2024-09-26T06:36:22.000ZIvan"
+      "text": "Design inspiration sources recommended for 2024, including several websites.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "best places for design inspiration in 2024\n\n- http://cosmos.so\n- http://godly.website\n- http://mobbin.com\n- http://x.com/",
+          "tweetLink": "https://x.com/darylginn/status/1841031269536391473",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-10-01T08:23:54.000Z",
+          "profileName": "daryl ginn",
+          "profileTag": "@darylginn",
+          "profileImage": "https://pbs.twimg.com/profile_images/1826230257051111424/Gk4oGOWj_x96.jpg",
+          "hasReplies": false,
+          "id": "7o8xma"
+        }
       ]
     },
     {
-      "text": "Figma has new features enhancing design collaboration across platforms.",
-      "ids": [
-        "2024-09-26T21:53:10.000ZFigma",
-        "2024-09-26T21:53:39.000ZFigma"
+      "text": "Collaboration tools and effective design practices discussed, emphasizing landing pages as crucial components.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "a genuinely good design practice is making landing pages, even if for fun\n\nbonus points because it forces you to think about how to create a great first impression and sell something",
+          "tweetLink": "https://x.com/jsngr/status/1840829068721197295",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": {
+            "retweetAuthor": null,
+            "hasShowMore": false,
+            "tweetText": "Okay, here me out:\n\nWhat if Windows XP was released in 2024?",
+            "tweetLink": "https://x.com/TylerNickerson/status/1840753498004349101/photo/1",
+            "tweetImages": [
+              "https://pbs.twimg.com/media/GYurie_a8AAKyGu?format=jpg&name=medium"
+            ],
+            "tweetVideoPosters": [],
+            "quotedTweet": null,
+            "tweetTime": "2024-09-30T14:00:08.000Z",
+            "profileName": "Tyler @ Kojo Design",
+            "profileTag": "@TylerNickerson",
+            "profileImage": "https://pbs.twimg.com/profile_images/1677460809067409408/ZLAFqbRf_normal.jpg",
+            "hasReplies": false,
+            "id": "2fkl60"
+          },
+          "tweetTime": "2024-09-30T19:00:25.000Z",
+          "profileName": "Jordan Singer",
+          "profileTag": "@jsngr",
+          "profileImage": "https://pbs.twimg.com/profile_images/1532551445396037639/eoGesqdh_x96.jpg",
+          "hasReplies": true,
+          "id": "bbyx0"
+        },
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "think of your landing page as a portal to your product\n\ndress up the window to get people in the door",
+          "tweetLink": "https://x.com/jsngr/status/1840829865597063418",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-09-30T19:03:35.000Z",
+          "profileName": "Jordan Singer",
+          "profileTag": "@jsngr",
+          "profileImage": "https://pbs.twimg.com/profile_images/1532551445396037639/eoGesqdh_x96.jpg",
+          "hasReplies": false,
+          "id": "12khb5"
+        }
       ]
     },
     {
-      "text": "People discuss the importance of communication in solving workplace issues.",
-      "ids": [
-        "2024-09-26T16:18:42.000ZShreyasDoshi"
+      "text": "The importance of self-improvement in mental health and relationships stressed, with a focus on community.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "It’s no coincidence that the mental health revolution & rise of community-as-a-strategy are happening together. We don’t exist on our own, we exist in relation to other people.\n\nWe need good mental health for healthy relationships, & healthy relationships for good mental health.",
+          "tweetLink": "https://x.com/dremilyanhalt/status/1840748939038867506",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-09-30T13:42:01.000Z",
+          "profileName": "Dr. Emily Anhalt",
+          "profileTag": "@dremilyanhalt",
+          "profileImage": "https://pbs.twimg.com/profile_images/1491309120179224582/V05Loga6_x96.jpg",
+          "hasReplies": false,
+          "id": "ef5z70"
+        },
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "People who don't invest in their physical and mental health aren't serious about their long-term goals.",
+          "tweetLink": "https://x.com/orangebook_/status/1840688724331618375",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-09-30T09:42:44.000Z",
+          "profileName": "Orange Book",
+          "profileTag": "@orangebook_",
+          "profileImage": "https://pbs.twimg.com/profile_images/1211957929915629569/5woqqbsM_x96.jpg",
+          "hasReplies": false,
+          "id": "5l65gy"
+        }
       ]
     },
     {
-      "text": "Launching the new CMS Drafts feature in Ycode to manage content effectively.",
-      "ids": [
-        "2024-09-26T12:52:58.000Zycode.com"
+      "text": "Successful strategies in startups, emphasizing building over mere planning, shared experiences relevant to entrepreneurship.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "We started making money year 1, and hit profitability year 2 in to the business, and been in the green ever since.\n\nBest thing about profitability is the focus allows you, second is the leverage you have when it comes to fundraising.\n\nPG's essay from 2009 https://paulgraham.com/ramenprofitable.html…",
+          "tweetLink": "https://x.com/karrisaarinen/status/1840966778115026965",
+          "tweetImages": [
+            "https://pbs.twimg.com/media/GYxs4uZWQAYm3Nl?format=png&name=medium"
+          ],
+          "tweetVideoPosters": [],
+          "quotedTweet": {
+            "retweetAuthor": null,
+            "hasShowMore": false,
+            "tweetText": "Infrequent reminder that @indievc is not anti-fundraising, it’s pro-focus. \n\nWe couldn’t care less about how much or how often you raise but we care a lot about whether you HAVE to keep raising.",
+            "tweetLink": "",
+            "tweetImages": [],
+            "tweetVideoPosters": [],
+            "quotedTweet": null,
+            "tweetTime": "2024-09-29T22:05:40.000Z",
+            "profileName": "Bryce Roberts",
+            "profileTag": "@bryce",
+            "profileImage": "https://pbs.twimg.com/profile_images/1812672521738567680/JlNQ3PSJ_normal.jpg",
+            "hasReplies": false,
+            "id": "j7adhf"
+          },
+          "tweetTime": "2024-10-01T04:07:38.000Z",
+          "profileName": "Karri Saarinen",
+          "profileTag": "@karrisaarinen",
+          "profileImage": "https://pbs.twimg.com/profile_images/1755734420798259200/Y_94Rjjx_x96.jpg",
+          "hasReplies": false,
+          "id": "cemycp"
+        },
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "When I talk to students they often think that if they want to start a startup one day they should be learning about economics or finance. I tell them they should instead be learning how to build things. Building is the root.",
+          "tweetLink": "https://x.com/paulg/status/1840698085434884544",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": null,
+          "tweetTime": "2024-09-30T10:19:56.000Z",
+          "profileName": "Paul Graham",
+          "profileTag": "@paulg",
+          "profileImage": "https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_x96.jpg",
+          "hasReplies": false,
+          "id": "71nt40"
+        }
       ]
     },
     {
-      "text": "The 'Nosy' project explores humorous and creative design intersections.",
-      "ids": [
-        "2024-09-26T17:13:04.000ZRaphaelSchaad"
+      "text": "Recent advancements in AI tools for improving design and language learning highlighted.",
+      "relatedTweets": [
+        {
+          "retweetAuthor": null,
+          "hasShowMore": false,
+          "tweetText": "Great",
+          "tweetLink": "https://x.com/elonmusk/status/1841007433847545995",
+          "tweetImages": [],
+          "tweetVideoPosters": [],
+          "quotedTweet": {
+            "retweetAuthor": null,
+            "hasShowMore": true,
+            "tweetText": "BREAKING: The Babylon Bee is suing California. This is not a parody.\n\nThe Babylon Bee has initiated a lawsuit against California following Governor Gavin Newsom's approval of laws targeting \"deepfake\" content, which the Bee argues stifles satire and parody. \n\nFiled in the U.S.",
+            "tweetLink": "https://x.com/stillgray/status/1840767807383916726",
+            "tweetImages": [
+              "https://pbs.twimg.com/media/GYu4j8FWYAAAbtC?format=jpg&name=medium"
+            ],
+            "tweetVideoPosters": [],
+            "quotedTweet": null,
+            "tweetTime": "2024-09-30T14:56:59.000Z",
+            "profileName": "Ian Miles Cheong",
+            "profileTag": "@stillgray",
+            "profileImage": "https://pbs.twimg.com/profile_images/1758737917638508544/lmdvybKp_normal.jpg",
+            "hasReplies": false,
+            "id": "lgx7r1"
+          },
+          "tweetTime": "2024-10-01T06:49:11.000Z",
+          "profileName": "Elon Musk",
+          "profileTag": "@elonmusk",
+          "profileImage": "https://pbs.twimg.com/profile_images/1815749056821346304/jS8I28PL_x96.jpg",
+          "hasReplies": false,
+          "id": "x3vqwu"
+        }
       ]
     }
   ],
-  "timeFrom": "2024-09-27T09:27:39.000Z",
-  "timeTo": "2024-09-26T07:37:46.000Z",
+  "timeFrom": "2024-10-01T12:15:08.000Z",
+  "timeTo": "2024-09-30T08:16:54.000Z",
   "media": [
     {
-      "author": "Alec Stapp",
+      "authorName": "interiorstellar",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1793618442383245312/Nx8mXRCA_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYak7LGa8AAO5iC?format=png&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzuOH4WMAEtTzK?format=jpg&name=medium",
+          "tweetId": "s6qc7p",
+          "tweetLink": "https://x.com/interiorstellar/status/1841108286336094634"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwNYW2XEAASoYk?format=jpg&name=medium",
+          "tweetId": "5evwwd",
+          "tweetLink": "https://x.com/interiorstellar/status/1841100764032475541"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwNJ0EXoAE7bSt?format=jpg&name=medium",
+          "tweetId": "r7qvkg",
+          "tweetLink": "https://x.com/interiorstellar/status/1841085656967365045"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwOrncXYAA6af2?format=jpg&name=medium",
+          "tweetId": "8l90sy",
+          "tweetLink": "https://x.com/interiorstellar/status/1841078104992989380"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv2PN1XMAADNFa?format=jpg&name=medium",
+          "tweetId": "bqy0og",
+          "tweetLink": "https://x.com/interiorstellar/status/1841070561293967618"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwM6yuWIAA13Gg?format=jpg&name=medium",
+          "tweetId": "kbh51s",
+          "tweetLink": "https://x.com/interiorstellar/status/1841055462554550408"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwE4mtXcAAXYHj?format=jpg&name=medium",
+          "tweetId": "jzb588",
+          "tweetLink": "https://x.com/interiorstellar/status/1841040356244078878"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv6q3FXgAAVqoe?format=jpg&name=medium",
+          "tweetId": "j64alj",
+          "tweetLink": "https://x.com/interiorstellar/status/1841025265033756933"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv6iGbWMAAr0Lk?format=jpg&name=medium",
+          "tweetId": "dgihva",
+          "tweetLink": "https://x.com/interiorstellar/status/1841010156433551665"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv4eh2W4AAAD6j?format=jpg&name=medium",
+          "tweetId": "pi6edm",
+          "tweetLink": "https://x.com/interiorstellar/status/1840995063695802725"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv3gU2XkAEfFJW?format=jpg&name=medium",
+          "tweetId": "w0z1qk",
+          "tweetLink": "https://x.com/interiorstellar/status/1840964864065617990"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv3T5UW8AAYLiQ?format=jpg&name=medium",
+          "tweetId": "1g3zo",
+          "tweetLink": "https://x.com/interiorstellar/status/1840949766777119118"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv5_T9XsAE0xls?format=jpg&name=medium",
+          "tweetId": "i7knm4",
+          "tweetLink": "https://x.com/interiorstellar/status/1840942210272907394"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv2BfsXgAA-_7R?format=jpg&name=medium",
+          "tweetId": "q5a93j",
+          "tweetLink": "https://x.com/interiorstellar/status/1840904460727697681"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv1-LdXgAAkUgJ?format=jpg&name=medium",
+          "tweetId": "hpv76n",
+          "tweetLink": "https://x.com/interiorstellar/status/1840889366228463771"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv167UWsAAnBU_?format=jpg&name=medium",
+          "tweetId": "l235he",
+          "tweetLink": "https://x.com/interiorstellar/status/1840874267413479528"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv1n3cWEAAbIqR?format=jpg&name=medium",
+          "tweetId": "bdt3ek",
+          "tweetLink": "https://x.com/interiorstellar/status/1840859162663674019"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv1XxxXIAAon7j?format=jpg&name=medium",
+          "tweetId": "78orcy",
+          "tweetLink": "https://x.com/interiorstellar/status/1840851613004566847"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv99n7XUAAOGKB?format=jpg&name=medium",
+          "tweetId": "xkh7dw",
+          "tweetLink": "https://x.com/interiorstellar/status/1840844111273750673"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvmwBIXsAACcjI?format=jpg&name=medium",
+          "tweetId": "7ybuc8",
+          "tweetLink": "https://x.com/interiorstellar/status/1840836513615265880"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvwPLfWoAAyL2V?format=jpg&name=medium",
+          "tweetId": "yguty1",
+          "tweetLink": "https://x.com/interiorstellar/status/1840829019719110828"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvqUY8XIAAE4cw?format=jpg&name=medium",
+          "tweetId": "ej3hyc",
+          "tweetLink": "https://x.com/interiorstellar/status/1840822515222135031"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvkXZeW8AACQgB?format=jpg&name=medium",
+          "tweetId": "3860ar",
+          "tweetLink": "https://x.com/interiorstellar/status/1840815973290352688"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVKb9XkAAhjDe?format=jpg&name=medium",
+          "tweetId": "t0nv5n",
+          "tweetLink": "https://x.com/interiorstellar/status/1840799260607930626"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu5Y3xXQAAmUny?format=jpg&name=medium",
+          "tweetId": "bjh483",
+          "tweetLink": "https://x.com/interiorstellar/status/1840768714016252287"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYuzphCWkAAhRa1?format=jpg&name=medium",
+          "tweetId": "w687bw",
+          "tweetLink": "https://x.com/interiorstellar/status/1840762405480985063"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq_MYmXQAAKM3T?format=jpg&name=large",
+          "tweetId": "99p0ta",
+          "tweetLink": "https://x.com/interiorstellar/status/1840753475006636073"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYun-eXWkAAWx86?format=jpg&name=medium",
+          "tweetId": "bcqa1p",
+          "tweetLink": "https://x.com/interiorstellar/status/1840749570453631175"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq9DCuWUAAskyc?format=jpg&name=medium",
+          "tweetId": "mzgoht",
+          "tweetLink": "https://x.com/interiorstellar/status/1840738372912120190"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq7fDTWwAAih0b?format=jpg&name=medium",
+          "tweetId": "flr4ld",
+          "tweetLink": "https://x.com/interiorstellar/status/1840723271349645385"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqtQ-GWYAAfYvV?format=jpg&name=medium",
+          "tweetId": "y1ifs0",
+          "tweetLink": "https://x.com/interiorstellar/status/1840715716485369965"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq7-MTXwAADVJE?format=jpg&name=medium",
+          "tweetId": "ggo14v",
+          "tweetLink": "https://x.com/interiorstellar/status/1840708175672311811"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq5-6wW0AACgQn?format=jpg&name=medium",
+          "tweetId": "mbabj6",
+          "tweetLink": "https://x.com/interiorstellar/status/1840693077960446342"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYq4aQ9XEAA4HC-?format=jpg&name=medium",
+          "tweetId": "n0xeig",
+          "tweetLink": "https://x.com/interiorstellar/status/1840677976100225134"
+        }
       ]
     },
     {
-      "author": "Steve Stewart-Williams",
+      "authorName": "Perilous",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1836767255264137216/XdK-f6WR_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYcBSnWbcAAjhB6?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzkRf4XMAIcnig?format=jpg&name=medium",
+          "tweetText": "My LE copy of Order/Disorder by @tylerxhobbs came! Complete with a Fidenza #0 print. Nice touch including the print pouch in the back cover ",
+          "tweetId": "eesadq",
+          "tweetLink": "https://x.com/pman555/status/1841097341727568226"
+        }
       ]
     },
     {
-      "author": "Crémieux",
+      "authorName": "Danny Postma",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1587046912490090496/kuBUqNkb_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYa9yfYbEAANsXc?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWCXmBXIAAkpTn?format=png&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYznyRra0AA9q3d?format=jpg&name=medium",
+          "tweetText": "Recording first chapter tomorrow.\n\nLet's see if I can make it coherent, or swap to full chaos ADD style ",
+          "tweetId": "sjn81z",
+          "tweetLink": "https://x.com/dannypostmaa/status/1841101265973231684"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzozy_bQAI4MJK?format=jpg&name=medium",
+          "tweetText": "Sidenode, Figma Slides is amazing.",
+          "tweetId": "9zsbp0",
+          "tweetLink": "https://x.com/dannypostmaa/status/1841102332744122665"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYxyUulaUAAgjEQ?format=jpg&name=medium",
+          "tweetText": "Did you know no hurricane ever crossed the equator?",
+          "tweetId": "q39ajy",
+          "tweetLink": "https://x.com/dannypostmaa/status/1840972146262360441"
+        }
       ]
     },
     {
-      "author": "interiorstellar",
+      "authorName": "Amazing Maps",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/484851054228406272/2DbYHLBL_x96.jpeg",
       "images": [
-        "https://pbs.twimg.com/media/GYbv6uYakAAKVUy?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbve5NbkAAKUC8?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbvT1OacAA0iwa?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbvDY8asAAPqVA?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYdTLv5acAE8fzd?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbuZtoaUAAestO?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYc3t4oa4AA4Pzl?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbuNYPaIAA4-tX?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbuD2vbUAAp2oB?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbtruuaYAACmLn?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbty0rbMAAiGJx?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbtLduaEAAKqh7?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYblCUubkAAT4U_?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbS8fRbsAAGLRD?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbIl-IawAA4Xje?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYa6PHrbsAAmros?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYatPChawAEPvj-?format=jpg&name=large",
-        "https://pbs.twimg.com/media/GYaf7SibMAAjg7u?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaS-UiaMAYDprB?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWNhoJWEAAYAo2?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWMhAcWIAArqen?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWNTecWIAABq8z?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWNRUBWIAA2su-?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWIuOJXIAAs52f?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWIXM7WMAAIhi9?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWHPJAWMAAF-Pi?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYWG4mTWAAAsLJI?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzcjFSWwA4g6OF?format=jpg&name=medium",
+          "tweetText": "Map of the Iberian Penninsula in 125 AD",
+          "tweetId": "tq1vz8",
+          "tweetLink": "https://x.com/amazingmap/status/1841093959172464933"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvxZk2WsAAqip7?format=jpg&name=medium",
+          "tweetText": "Sunshine duration in hours per year. USA and Europe",
+          "tweetId": "sfyzwa",
+          "tweetLink": "https://x.com/amazingmap/status/1840830389390119240"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvqKDAWcAARY-b?format=png&name=900x900",
+          "tweetText": "1966 Map of British Honduras",
+          "tweetId": "mj7w1k",
+          "tweetLink": "https://x.com/amazingmap/status/1840822340768411693"
+        }
       ]
     },
     {
-      "author": "Erikas Mališauskas",
+      "authorName": "𝕞𝕒𝕩𝕧𝕠𝕝𝕥𝕒𝕣",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1552352518977585152/viIWqvVL_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYeGZycWMAE16EB?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYdMUVPboAAkPfy?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzYZQcXQAEkmS4?format=jpg&name=medium",
+          "tweetId": "ye7gnk",
+          "tweetLink": "https://x.com/maxvoltar/status/1841084280912408705"
+        }
       ]
     },
     {
-      "author": "Javi Lopez",
+      "authorName": "Ignas Lunėnas",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1576931813448159235/ynpnEmBl_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYVCcbIXoAAs3X8?format=jpg&name=900x900",
-        "https://pbs.twimg.com/media/GYVCda_WkAA2ii4?format=jpg&name=900x900",
-        "https://pbs.twimg.com/media/GYVCfxkXMAAYbxY?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYVChjTWgAAvLOi?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYyub1vXoAMypD-?format=jpg&name=medium",
+          "tweetText": "latest addition to @ycodedotcom templates. \n\n3d render by @gadzinski_",
+          "tweetId": "v08661",
+          "tweetLink": "https://x.com/ignas_lunenas/status/1841038213869121903"
+        }
       ]
     },
     {
-      "author": "alz",
+      "authorName": "The Public Domain Review",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1593541751196745728/Hpfl0u-j_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYb9Z04asAEVxUS?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzWqcoXoAMMBjm?format=jpg&name=medium",
+          "tweetText": "Socialist, theosophist + women's rights activist Annie Besant was born #onthisday 1847. Read @ResObscura on her book Thought-Forms (1901), an intriguing work grounded in the theory that ideas, emotions, and even events, can manifest as visible auras https://buff.ly/2XZdmnI #OTD",
+          "tweetId": "6l34ky",
+          "tweetLink": "https://x.com/PublicDomainRev/status/1841082374697763085"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv6upDWwAA753k?format=jpg&name=medium",
+          "tweetText": "Print from 1556 published by Hieronymus Cock , designed by Cornelis Floris II and engraved by Johannes or Lucas van Doetecum.\n\nMore of these highly elaborate ornament prints, mostly in the grotesque style, from the collection of the Rijksmuseum here: https://buff.ly/3Dv01TP",
+          "tweetId": "aj79fp",
+          "tweetLink": "https://x.com/PublicDomainRev/status/1840840554726236499"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYuvPZLXEAAIGdU?format=jpg&name=medium",
+          "tweetText": "#OnThisDay in 1791, the first performance of Mozart's The Magic Flute. Pictured here the magnificent set design for “The Hall of Stars” from Act 1, Scene 6, designed by the German architect Karl Friedrich Schinkel. (Buy a print of it here: https://buff.ly/3kHtdQO) #OTD",
+          "tweetId": "76p6ui",
+          "tweetLink": "https://x.com/PublicDomainRev/status/1840757553875013708"
+        }
       ]
     },
     {
-      "author": "Karri Saarinen",
+      "authorName": "OP",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1811012482741190657/dLEPLR_V_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYdRavFa0AAQ649?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYzMHhQbYAAidWx?format=jpg&name=medium",
+          "tweetId": "izb5lk",
+          "tweetLink": "https://x.com/openpurpose/status/1841070782367351000"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwLsmPacAAL6bA?format=jpg&name=medium",
+          "tweetId": "vlm920",
+          "tweetLink": "https://x.com/openpurpose/status/1840859215344386510"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu5ebwaYAABgeP?format=jpg&name=medium",
+          "tweetId": "ixsjy6",
+          "tweetLink": "https://x.com/openpurpose/status/1840768810640621646"
+        }
       ]
     },
     {
-      "author": "daryl ginn",
+      "authorName": "Jude",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1771610966062481410/KTGaS6w5_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaVfz5aMAAYffc?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaX4JuboAAg9V-?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYZAOVTXEAAq6Cz?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYZAPqAWoAAzNqp?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaVfz5aMAAYffc?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaX4JuboAAg9V-?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYZAOVTXEAAq6Cz?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYZAPqAWoAAzNqp?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYr08ChXgAAH77g?format=jpg&name=large",
+          "tweetText": "People will post this and then wonder why Amazon is running all the local stores out of business.",
+          "tweetId": "t8xz9c",
+          "tweetLink": "https://x.com/TopSecretNoam/status/1840552714041737395"
+        }
       ]
     },
     {
-      "author": "xAI",
+      "authorName": "Paul Graham",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1824002576/pg-railsconf_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYcoo-xaEAAKNjh?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYy6QOgXUAMxJtl?format=jpg&name=small",
+          "tweetText": "The amount of time young men spent gaming was not exactly low in 2019. Usually when you see dramatic growth it's from a low starting point, but this is dramatic growth from a high starting point.",
+          "tweetId": "o5hdld",
+          "tweetLink": "https://x.com/paulg/status/1841051183466647574"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYutvSvWkAEBmzG?format=jpg&name=medium",
+          "tweetText": "This is how good Aldus Manutius was. Printed in 1497.",
+          "tweetId": "vf56p3",
+          "tweetLink": "https://x.com/paulg/status/1840756162834112754"
+        }
       ]
     },
     {
-      "author": "Jeff Sheldon",
+      "authorName": "Batuhan Kara",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1816027770893262848/rCDXkJEv_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GWLHiySWwAAdWFo?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYykQtzXoAgE2ai?format=jpg&name=medium",
+          "tweetText": "I am working on a new collection  if you want to see the ready baked ones.\n\n→ Live: https://flowbase.co/components",
+          "tweetId": "bsou1q",
+          "tweetLink": "https://x.com/thebatukara/status/1841027665072939483"
+        }
       ]
     },
     {
-      "author": "Danny Postma",
+      "authorName": "DogeDesigner",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1498070100393754625/C2V-fbll_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYcahTTaIAAn5sE?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYxwAdiWQAQLobB?format=jpg&name=small",
+          "tweetText": "Voting without a valid ID should be illegal in every state across the U.S. ",
+          "tweetId": "br3bgq",
+          "tweetLink": "https://x.com/cb_doge/status/1840969503779266774"
+        }
       ]
     },
     {
-      "author": "Nikita Lyakhovoy",
+      "authorName": "Elon Musk",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1815749056821346304/jS8I28PL_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYa2WtSacAEufTM?format=jpg&name=900x900",
-        "https://pbs.twimg.com/media/GYa2WtJa4AA4Y_T?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYyfpL1XEAQUWUP?format=jpg&name=medium",
+          "tweetId": "hueegl",
+          "tweetLink": "https://x.com/elonmusk/status/1841021881509360126"
+        }
       ]
     },
     {
-      "author": "Elon Musk",
+      "authorName": "End Wokeness",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1563691268793946117/OedvhFeS_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYcIPorbIAAujcI?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvj9KSXwAAZKub?format=jpg&name=small",
+          "tweetText": "Trump flew directly to Valdosta to deliver critical supplies to the victims of Helene.\n\nBiden was at the beach all weekend.\n\nKamala staged a phone call photo.",
+          "tweetId": "h8o84g",
+          "tweetLink": "https://x.com/EndWokeness/status/1840817525078028552"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvj9K5WQAAk6wq?format=jpg&name=small",
+          "tweetText": "Trump flew directly to Valdosta to deliver critical supplies to the victims of Helene.\n\nBiden was at the beach all weekend.\n\nKamala staged a phone call photo.",
+          "tweetId": "h8o84g",
+          "tweetLink": "https://x.com/EndWokeness/status/1840817525078028552"
+        }
       ]
     },
     {
-      "author": "Andy Allen",
+      "authorName": "Richard H. Ebright",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/750862707071606784/QKnVZiPX_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYbzrhQacAAdzAL?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaeRW6bkAA1k_l?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaeSddboAE0ZrF?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaeURea4AAJ8d3?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYae-IQbkAAS-Nd?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqbqQIWcAApQ-X?format=png&name=360x360",
+          "tweetText": "\"Boris Johnson: \"The awful thing about the whole Covid catastrophe is that it appears to have been entirely man-made in all its aspects…It now looks overwhelmingly likely that the mutation was the result of [a] botched experiment in a Chinese lab.\"\n\nhttps://inews.co.uk/opinion/boris-johnsons-support-of-covid-lab-leak-theory-is-significant-3301159?ito=twitter_share_article-top…",
+          "tweetId": "um3i33",
+          "tweetLink": "https://x.com/R_H_Ebright/status/1840454607903793642"
+        }
       ]
     },
     {
-      "author": "mymind",
+      "authorName": "LogoArchive",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1251213757323317248/aMJngjaa_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYbzwpRaIAAs6sO?format=png&name=small",
-        "https://pbs.twimg.com/media/GYbKL0lbgAAzFAi?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYbAmLWbsAAoEvZ?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaKii4bwAAfBk_?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaGWa5aMAY2xOb?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaGXvCaMAQdX3g?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaGY0aaoAAM7D0?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaBTOPaMAQymMN?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqLJbfWIAA8J4S?format=jpg&name=small",
+          "tweetText": "People make for a great starting point for a logo. \nDiscover more logos, like these and better on the internet's largest library of historical logos at http://logo-archive.org",
+          "tweetId": "8yeve1",
+          "tweetLink": "https://x.com/LogoArchive/status/1840436439823024306"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqLKRdXUAECnrU?format=jpg&name=small",
+          "tweetText": "People make for a great starting point for a logo. \nDiscover more logos, like these and better on the internet's largest library of historical logos at http://logo-archive.org",
+          "tweetId": "8yeve1",
+          "tweetLink": "https://x.com/LogoArchive/status/1840436439823024306"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqLK-OWEAAbw02?format=jpg&name=small",
+          "tweetText": "People make for a great starting point for a logo. \nDiscover more logos, like these and better on the internet's largest library of historical logos at http://logo-archive.org",
+          "tweetId": "8yeve1",
+          "tweetLink": "https://x.com/LogoArchive/status/1840436439823024306"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqLLuZXgAAQuBh?format=jpg&name=small",
+          "tweetText": "People make for a great starting point for a logo. \nDiscover more logos, like these and better on the internet's largest library of historical logos at http://logo-archive.org",
+          "tweetId": "8yeve1",
+          "tweetLink": "https://x.com/LogoArchive/status/1840436439823024306"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVAZtWkAAHzW8?format=jpg&name=small",
+          "tweetText": "The sun has gone for us in London but these logos from the past remain radiant. Find thousands more logos at http://logo-archive.org",
+          "tweetId": "ubntwf",
+          "tweetLink": "https://x.com/LogoArchive/status/1840799113446576178"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVA_5XgAAlJGZ?format=jpg&name=small",
+          "tweetText": "The sun has gone for us in London but these logos from the past remain radiant. Find thousands more logos at http://logo-archive.org",
+          "tweetId": "ubntwf",
+          "tweetLink": "https://x.com/LogoArchive/status/1840799113446576178"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVBp4WsAERUpf?format=jpg&name=small",
+          "tweetText": "The sun has gone for us in London but these logos from the past remain radiant. Find thousands more logos at http://logo-archive.org",
+          "tweetId": "ubntwf",
+          "tweetLink": "https://x.com/LogoArchive/status/1840799113446576178"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVCQ5WIAAtrOR?format=jpg&name=small",
+          "tweetText": "The sun has gone for us in London but these logos from the past remain radiant. Find thousands more logos at http://logo-archive.org",
+          "tweetId": "ubntwf",
+          "tweetLink": "https://x.com/LogoArchive/status/1840799113446576178"
+        }
       ]
     },
     {
-      "author": "OP",
+      "authorName": "Erikas Mališauskas",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1583087346110664704/sMmqbgGJ_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYblcbSaQAEuAWU?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaXexebwAEXQk7?format=png&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYxyp-DbQAQ-Zrm?format=jpg&name=medium",
+          "tweetText": "This is gonna be soooo much better. Can't wait to launch new http://PimpMySnap.com version  Btw, we're bringing it to MacOS app next... \n\nThis is your last chance to grab the lifetime deal before our prices go up after the launch! ",
+          "tweetId": "9sndd",
+          "tweetLink": "https://x.com/malisauskasLT/status/1840972420255268902"
+        }
       ]
     },
     {
-      "author": "Sebastiaan de With",
+      "authorName": "Karri Saarinen",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1755734420798259200/Y_94Rjjx_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYbb0AiaAAAsExq?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYxs4uZWQAYm3Nl?format=png&name=medium",
+          "tweetText": "We started making money year 1, and hit profitability year 2 in to the business, and been in the green ever since.\n\nBest thing about profitability is the focus allows you, second is the leverage you have when it comes to fundraising.\n\nPG's essay from 2009 https://paulgraham.com/ramenprofitable.html…",
+          "tweetId": "cemycp",
+          "tweetLink": "https://x.com/karrisaarinen/status/1840966778115026965"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvhtJ2WEAAXrUW?format=jpg&name=medium",
+          "tweetText": "I was in @ycombinator back in summer 2012 with my first company.\n\nYC was really useful for me as a founder. While @jorilallo and I knew how to build things, we were quite clueless as founders and building companies. YC demystifies a lot of it, and brings this level of non-bs",
+          "tweetId": "6mkaf8",
+          "tweetLink": "https://x.com/karrisaarinen/status/1840814601807769922"
+        }
       ]
     },
     {
-      "author": "The Public Domain Review",
+      "authorName": "Brigitte Kratz",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1611906230913568770/GbZBFY9p_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYbUhr3aoAAcyNf?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYarZOjaoAAr6ux?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYaJBQEbcAAmt-Z?format=jpg&name=900x900",
-        "https://pbs.twimg.com/media/GYZmuImW4AAR-6R?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvIvItWMAALo_v?format=jpg&name=medium",
+          "tweetText": "Aligning, and not avoiding—\n\n(Clear Thinking, by Shane Parrish)",
+          "tweetId": "iat0jd",
+          "tweetLink": "https://x.com/BrigitteKratz/status/1840785590314221765"
+        }
       ]
     },
     {
-      "author": "Adam Wathan",
+      "authorName": "Riley",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1785041856151379969/zRjzEGio_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYbJWBra4AAFg-M?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYbJWA0acAATnZB?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvWH0qaIAA-Fw5?format=png&name=medium",
+          "tweetText": "I installed a box high up on a pole somewhere in the Mission. Inside is a crappy Android phone, set to Shazam constantly, 24 hours a day, 7 days a week. It's solar powered, and the mic is pointed down at the street below https://walzr.com/bop-spotter",
+          "tweetId": "rqdzxo",
+          "tweetLink": "https://x.com/rtwlz/status/1840800316004188382"
+        }
       ]
     },
     {
-      "author": "ellis",
+      "authorName": "tunafins.eth",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1592447255490875393/bbH1q_E2_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYa8TE7aMAErc3h?format=png&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwV8UYasAAnGM4?format=jpg&name=medium",
+          "tweetText": "Excited to finally receive Tyler Hobbs' long-awaited Collection Edition of Order/Disorder! The book and print are absolutely stunning. Congrats to @tylerxhobbs on this incredible release!",
+          "tweetId": "p53h0z",
+          "tweetLink": "https://x.com/tunafins_/status/1840870477474250936"
+        }
       ]
     },
     {
-      "author": "Adam Whitcroft",
+      "authorName": "basedbot",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1777914611221553152/UbwpLZjt_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaxuUGbIAA8J47?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwDjSVXgAAjedR?format=png&name=medium",
+          "tweetText": "based punk #4525 bought by 0xd9...fb96 for 1.3Ξ [$3,380]\n\n⤷ https://opensea.io/assets/base/0xcb28749c24af4797808364d71d71539bc01e76d4/4525…",
+          "tweetId": "89vt6x",
+          "tweetLink": "https://x.com/basedpunksbot/status/1840850255035724017"
+        }
       ]
     },
     {
-      "author": "tobi lutke",
+      "authorName": "saint laurent del rey",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1484240142743134210/9mrKbTuj_x96.png",
       "images": [
-        "https://pbs.twimg.com/media/GYZjmq1XMAAm6TL?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwi1SPbQAAX5oD?format=jpg&name=medium",
+          "tweetText": "my first fan cover art - for @billieeilish",
+          "tweetId": "bf657y",
+          "tweetLink": "https://x.com/laurentdelrey/status/1840887736569643149"
+        }
       ]
     },
     {
-      "author": "Fons Mans",
+      "authorName": "ellis",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1605995551085821952/YwDxjGKS_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYRHxC-akAAhhkX?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYYvkPeX0AAvGYy?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwNkJ9XMAAVuLe?format=jpg&name=medium",
+          "tweetText": "Timmy still hates the curse words",
+          "tweetId": "89a3m2",
+          "tweetLink": "https://x.com/hamburger/status/1840861265998000137"
+        }
       ]
     },
     {
-      "author": "Tobias van Schneider",
+      "authorName": "Kim-Mai Cutler",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1404253821870624769/HhbLZL8V_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaT0qybgAAlQF9?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwImVobQAI4Pfj?format=jpg&name=medium",
+          "tweetText": "Equity pay withholding for Big Tech is now >6% of California income tax withholding. https://lao.ca.gov/LAOEconTax/Article/Detail/789…",
+          "tweetId": "wxly5z",
+          "tweetLink": "https://x.com/kimmaicutler/status/1840855968248447330"
+        }
       ]
     },
     {
-      "author": "Emad",
+      "authorName": "mymind",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1737155428167856128/sBofGlY__x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaZ6-UaAAAH9WO?format=jpg&name=medium",
-        "https://pbs.twimg.com/media/GYaKP9XaMAMjoRf?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwIXuzXUAEiyZ7?format=jpg&name=medium",
+          "tweetText": "kitchen dreams\n\n*saved to mymind*",
+          "tweetId": "dkh9ju",
+          "tweetLink": "https://x.com/mymind/status/1840855633505165767"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwGs06WIAABwdz?format=jpg&name=medium",
+          "tweetId": "ilcbs",
+          "tweetLink": "https://x.com/mymind/status/1840853901324468706"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYwAEEeWgAAuFQM?format=jpg&name=medium",
+          "tweetText": "♡",
+          "tweetId": "wmwxhl",
+          "tweetLink": "https://x.com/mymind/status/1840846876322775322"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvVwiGXgAAktcv?format=jpg&name=medium",
+          "tweetText": "this was 23 years ago",
+          "tweetId": "8tn4z1",
+          "tweetLink": "https://x.com/mymind/status/1840800113033134132"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvEV_GXkAA6SeM?format=jpg&name=medium",
+          "tweetText": "kitchen mood \n\n*saved to mymind*",
+          "tweetId": "rb16td",
+          "tweetLink": "https://x.com/mymind/status/1840780813320757715"
+        }
       ]
     },
     {
-      "author": "WIRED.jp",
+      "authorName": "AI Grant",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/860006506548178944/S3N0OL3__x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYY5l73XwAA3kt1?format=jpg&name=900x900",
-        "https://pbs.twimg.com/media/GYY5l77XYAAY333?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvbrDdbYAAcy-n?format=png&name=small",
+          "tweetText": "We are excited to announce the startups accepted into the fourth batch of AI Grant!\n\nSee the thread below as well as http://aigrant.com to learn more",
+          "tweetId": "xc5oug",
+          "tweetLink": "https://x.com/aigrant/status/1840826250124017868"
+        }
       ]
     },
     {
-      "author": "Denys Lunov",
+      "authorName": "Jeff Sheldon",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1742284727669645312/J_k6uPcS_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GX6VzZSWoAANHiG?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GX6VzZYWoAAAltV?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GX6VzZTXEAA5OSw?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GX6VzZUWUAAopFk?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu28ziXMAA7VKx?format=jpg&name=small",
+          "tweetText": "My goals for how I designed Gather's packaging\n\n• Fully recyclable\n• Premium feel and unboxing\n• Protect the product\n• Consistent design language",
+          "tweetId": "fnclnq",
+          "tweetLink": "https://x.com/ugmonk/status/1840768302190076382"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu3DETWwAABoPI?format=jpg&name=medium",
+          "tweetText": "My goals for how I designed Gather's packaging\n\n• Fully recyclable\n• Premium feel and unboxing\n• Protect the product\n• Consistent design language",
+          "tweetId": "fnclnq",
+          "tweetLink": "https://x.com/ugmonk/status/1840768302190076382"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu3FAgXQAAwAhf?format=jpg&name=medium",
+          "tweetText": "My goals for how I designed Gather's packaging\n\n• Fully recyclable\n• Premium feel and unboxing\n• Protect the product\n• Consistent design language",
+          "tweetId": "fnclnq",
+          "tweetLink": "https://x.com/ugmonk/status/1840768302190076382"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu3HdyXcAA_Kmq?format=jpg&name=medium",
+          "tweetText": "My goals for how I designed Gather's packaging\n\n• Fully recyclable\n• Premium feel and unboxing\n• Protect the product\n• Consistent design language",
+          "tweetId": "fnclnq",
+          "tweetLink": "https://x.com/ugmonk/status/1840768302190076382"
+        }
       ]
     },
     {
-      "author": "Piri",
+      "authorName": "Layers",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1577584771231895552/SrsID2yC_x96.png",
       "images": [
-        "https://pbs.twimg.com/media/GYZ3mVwaMAEzQN0?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv-A5PWMAAZKD_?format=jpg&name=medium",
+          "tweetText": "travel APP all component Hossein Abedinzadeh \nMore at https://layers.to/layers/cm1nmuezw000kl10cqdlcoc8o…",
+          "tweetId": "mezkdj",
+          "tweetLink": "https://x.com/layers_to/status/1840844166672134268"
+        }
       ]
     },
     {
-      "author": "Tyler Hobbs",
+      "authorName": "飯田研人 Kento IIDA",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1228809270067527680/VtQ-u7xK_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaFGBVbkAAYIb1?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYv1gTrbQAAhGaW?format=jpg&name=medium",
+          "tweetId": "dabcmg",
+          "tweetLink": "https://x.com/kentoi/status/1840834816352420022"
+        }
       ]
     },
     {
-      "author": "Daniel Ek",
+      "authorName": "Reads with Ravi",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1560994238434889730/jhqZEwKm_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaGpOUaMAQkPR6?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYnCzC0WsAAtb33?format=jpg&name=medium",
+          "tweetId": "cebt6z",
+          "tweetLink": "https://x.com/readswithravi/status/1840216108491505761"
+        }
       ]
     },
     {
-      "author": "Raycast",
+      "authorName": "Lex Fridman",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/956331551435960322/OaqR8pAB_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaFTnpaAAA4Tn1?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvjNwVWEAAH9nd?format=jpg&name=medium",
+          "tweetText": "Here's the links for my conversation with Ed Barnhart:\nYouTube: https://youtube.com/watch?v=AzzE7GOvYz8…\nPodcast: https://lexfridman.com/podcast",
+          "tweetId": "ky1lpw",
+          "tweetLink": "https://x.com/lexfridman/status/1840832758823649482"
+        }
       ]
     },
     {
-      "author": "Jordan Singer",
+      "authorName": "被减数 Lessnoise",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1737013820110016512/ZO_qPAnh_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYaCkRXaMAIJORH?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYibAr8aMAAPU7R?format=jpg&name=medium",
+          "tweetText": "use @mymind  save my mind",
+          "tweetId": "9jjo6",
+          "tweetLink": "https://x.com/LessnoiseOb/status/1839891112183640410"
+        }
       ]
     },
     {
-      "author": "daylight",
+      "authorName": "!Boring",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1826661643427729408/o5NXdQg1_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZ_DDraMAcovU7?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvjerNbQAMZaOF?format=jpg&name=medium",
+          "tweetText": "Is there an award category for Best Moon Widget?",
+          "tweetId": "i6v51k",
+          "tweetLink": "https://x.com/notboring/status/1840815166591811745"
+        }
       ]
     },
     {
-      "author": "LogoArchive",
+      "authorName": "Mars Yuan",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1770260587882389504/rJzjHXZv_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZ4lsSaMAExOLI?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZ4mVxawAAHUpV?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZ4m7faMAIX1_f?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZ4ndIb0AAhUAN?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvi_zRbQAAUC7-?format=jpg&name=medium",
+          "tweetText": "accidental coffee spill upgraded my sketch",
+          "tweetId": "7uzir8",
+          "tweetLink": "https://x.com/jasonyuandesign/status/1840814462204592224"
+        }
       ]
     },
     {
-      "author": "Matt Perry",
+      "authorName": "Daily Stoic",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1272553610434338816/-pN7JIO6_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZqhpYW4AA7iiI?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvdAQkW8AA9OTg?format=jpg&name=medium",
+          "tweetText": "If you've ever thought about reading \"The Daily Stoic\", now is the time. The hardcover is currently over 50% off (that's the lowest price it will ever be)!\n\nGet it for yourself or gift it to a friend here: https://geni.us/FiwhW",
+          "tweetId": "2s698p",
+          "tweetLink": "https://x.com/dailystoic/status/1840808175408189647"
+        }
       ]
     },
     {
-      "author": "ycode.com",
+      "authorName": "David Hoang",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1811878378850385920/PLbEAGqQ_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZ1vSPaMAMdJ8p?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvc8xIWYAAp-KH?format=jpg&name=small",
+          "tweetText": "When someone suggests forming a Tiger Team at work this is literally what I imagine.",
+          "tweetId": "27weob",
+          "tweetLink": "https://x.com/davidhoang/status/1840807812881895582"
+        }
       ]
     },
     {
-      "author": "Design Community",
+      "authorName": "Emad",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1774915113922809856/6RXK1Yy0_x96.png",
       "images": [
-        "https://pbs.twimg.com/media/GYZJl_QXUAAlAZh?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYvbsspXcAA_8Vv?format=jpg&name=medium",
+          "tweetText": "Congrats to friends @LiquidAI_ , context length scaling is quite something, who needs transformers?\n\nHelped with some flops early days, looking forward to seeing the amazing team scale even further ",
+          "tweetId": "10vdbc",
+          "tweetLink": "https://x.com/EMostaque/status/1840806729052737579"
+        }
       ]
     },
     {
-      "author": "Akshay Kothari",
+      "authorName": "Ridd",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1345910398722125827/rt_vhp2A_x96.png",
       "images": [
-        "https://pbs.twimg.com/media/GYYfD7ZWMAA-xn0?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYYfErnW4AASaVd?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYYfFoyXkAAPB2F?format=jpg&name=900x900"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu6KvtWwAAS0xm?format=jpg&name=medium",
+          "tweetText": "Kicking off my week with @PixelJanitor and UI Engineering 101 https://maven.com/pixeljanitor/uiengineering-101-for-designers…",
+          "tweetId": "5ht3m7",
+          "tweetLink": "https://x.com/ridd_design/status/1840770117656883465"
+        }
       ]
     },
     {
-      "author": "Amazing Maps",
+      "authorName": "Mariana Castilho",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1718293423004807168/XS8lC6BN_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYWBg58WQAACpPp?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu-Mg3WsAACPbM?format=jpg&name=medium",
+          "tweetText": "From the archives: redesign I did for Vercel Marketplace.",
+          "tweetId": "ecaciu",
+          "tweetLink": "https://x.com/mrncst/status/1840774184659460237"
+        }
       ]
     },
     {
-      "author": "Retro To Go",
+      "authorName": "daylight",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1774795756526010368/WAK8Na4l_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZOTnyWcAAiSmF?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZOVTEWEAAj2po?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZOW3rWAAAOCJ5?format=jpg&name=small",
-        "https://pbs.twimg.com/media/GYZOXxdWMAAYOCp?format=jpg&name=small"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYu1tzRXAAA2bpv?format=jpg&name=medium",
+          "tweetText": "How about screens that don't demand your attention, don't destroy your health when you use them, and enable you to spend more time in the sun?\n\nH/t @papa_gorgeous for the pic",
+          "tweetId": "8tx267",
+          "tweetLink": "https://x.com/daylightco/status/1840764710846922890"
+        }
       ]
     },
     {
-      "author": "Carnivore Aurelius ©",
+      "authorName": "Shane Parrish",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1641264347916763137/_xdzak-e_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYU5b7UXwAAMaiu?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYusgeGWcAA2Gq0?format=jpg&name=medium",
+          "tweetText": "Mental Model Monday \n\n\"Inertia is the stubborn resistance of the universe to change. It’s the reason why objects at rest tend to stay at rest and objects in motion tend to stay in motion. You can think of inertia as the guardian of the status quo.\n\nAt its core, inertia is a",
+          "tweetId": "7funj2",
+          "tweetLink": "https://x.com/ShaneAParrish/status/1840754813639786914"
+        }
       ]
     },
     {
-      "author": "Paul Graham",
+      "authorName": "daryl ginn",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1826230257051111424/Gk4oGOWj_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZKVeqXgAARqg_?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYuXljqaYAA1UNw?format=jpg&name=medium",
+          "tweetText": "roasted  https://roasted.design",
+          "tweetId": "gqpkp6",
+          "tweetLink": "https://x.com/darylginn/status/1840742181432369238"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYuhOrKbkAAFHGg?format=jpg&name=medium",
+          "tweetText": "roasted  https://roasted.design",
+          "tweetId": "gqpkp6",
+          "tweetLink": "https://x.com/darylginn/status/1840742181432369238"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYt-b7Da4AA1tAO?format=jpg&name=medium",
+          "tweetText": "roasted  https://roasted.design",
+          "tweetId": "bsu18u",
+          "tweetLink": "https://x.com/darylginn/status/1840704032412696911"
+        },
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYt-doDasAAEzt4?format=jpg&name=medium",
+          "tweetText": "roasted  https://roasted.design",
+          "tweetId": "bsu18u",
+          "tweetLink": "https://x.com/darylginn/status/1840704032412696911"
+        }
       ]
     },
     {
-      "author": "yuhang",
+      "authorName": "TifaXMB",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1828879840348413952/dWWHv0ts_x96.jpg",
       "images": [
-        "https://pbs.twimg.com/media/GYZF6BXXIAAZEc5?format=jpg&name=medium"
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqpVjUWkAANCqI?format=jpg&name=small",
+          "tweetId": "msz1w2",
+          "tweetLink": "https://x.com/loltifa27/status/1840469589475430520"
+        }
+      ]
+    },
+    {
+      "authorName": "Mehdi @ Kuartz",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1781478823592140800/VbHVLiNi_x96.jpg",
+      "images": [
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYt4CXmbkAATJsU?format=jpg&name=medium",
+          "tweetText": "WE DID IT — 4,000+ Creatives! \n\nThank you for trusting and supporting me. I hope to give back as much as you have given me. The family is growing, and so is my backlog.\n\nI’m working on exciting things for you, can’t wait to share them soon! ",
+          "tweetId": "9cvidu",
+          "tweetLink": "https://x.com/stoitec/status/1840696858890719540"
+        }
+      ]
+    },
+    {
+      "authorName": "Fermat's Library",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/641822497457860608/zd6kUAag_x96.png",
+      "images": [
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYt2wF-WMAApgEG?format=jpg&name=medium",
+          "tweetText": "MIT Entrance Examination for 1869-1870",
+          "tweetId": "8loi4m",
+          "tweetLink": "https://x.com/fermatslibrary/status/1840695444420046898"
+        }
+      ]
+    },
+    {
+      "authorName": "Cybertruck",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1729225579277209600/DNnvovEG_x96.jpg",
+      "images": [
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYtVCIkXUAADA4i?format=jpg&name=small",
+          "tweetId": "ifkprx",
+          "tweetLink": "https://x.com/cybertruck/status/1840658372133101737"
+        }
+      ]
+    },
+    {
+      "authorName": "Payal Chandak",
+      "authorProfileImage": "https://pbs.twimg.com/profile_images/1593074194224484354/nDnZTz4E_x96.jpg",
+      "images": [
+        {
+          "imageUrl": "https://pbs.twimg.com/media/GYqHoIQXAAAKOQT?format=jpg&name=medium",
+          "tweetText": "Excited to share our new study in @NatureMedicine that @KexinHuang5 , @marinkazitnik, and I have been working on for the last four years! TxGNN is a graph-based foundation model for zero- shot drug repurposing that can find therapies for diseases with zero treatment options.",
+          "tweetId": "g51erz",
+          "tweetLink": "https://x.com/payal_chandak/status/1840436125095071853"
+        }
       ]
     }
   ]
