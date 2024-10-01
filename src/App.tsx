@@ -1,5 +1,5 @@
 /// <reference types="chrome"/>
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Global, css, CSSObject } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 import Tweet from './Tweet';
@@ -17,10 +17,6 @@ const mockLoadSummary = true;
 interface UserPreferences {
   interests: string;
   notInterests: string;
-}
-
-interface EmbeddingCache {
-  [key: string]: number[];
 }
 
 function getTimeLineElementNode() {
@@ -182,13 +178,6 @@ function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   }
 }
 
-function cosineSimilarity(a: number[], b: number[]) {
-  const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
-  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
-  return dotProduct / (magnitudeA * magnitudeB);
-};
-
 function stringToId(str: string): string {
   let hash: number = 0;
   for (let i: number = 0; i < str.length; i++) {
@@ -275,43 +264,8 @@ function App() {
   const [summary, setSummary] = useState<any>(null);
   const [showModal, setShowModal] = useState<string | null>(null);
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({ interests: 'design, products, technology, self improvement, breaking news', notInterests: 'jokes, memes, politics, religion, sports' });
-  const [embeddingCache, setEmbeddingCache] = useState<EmbeddingCache>({});
   const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
   const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
-
-  const getCachedEmbedding = useCallback(async (text: string) => {
-    if (embeddingCache[text]) {
-      return embeddingCache[text];
-    }
-    const response = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: text,
-    });
-    const embedding = response.data[0].embedding;
-    setEmbeddingCache(prev => ({ ...prev, [text]: embedding }));
-    return embedding;
-  }, [embeddingCache]);
-
-  const filterRelevantTweets = useCallback(async (tweets: TweetInterface[]) => {
-    const interestsEmbedding = await getCachedEmbedding(userPreferences.interests);
-    const notInterestsEmbedding = await getCachedEmbedding(userPreferences.notInterests);
-
-    const tweetTexts = tweets.map(tweet => tweet.tweetText || '');
-    const response = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: tweetTexts,
-    });
-
-    const tweetEmbeddings = response.data.map(item => item.embedding);
-
-    return tweets.filter((_, index) => {
-      const tweetEmbedding = tweetEmbeddings[index];
-      const interestsSimilarity = cosineSimilarity(tweetEmbedding, interestsEmbedding);
-      const notInterestsSimilarity = cosineSimilarity(tweetEmbedding, notInterestsEmbedding);
-      return interestsSimilarity > notInterestsSimilarity;
-    });
-  }, [userPreferences, getCachedEmbedding]);
-
 
   const loadMoreTweetsAbortController = useRef<AbortController | null>(null);
   const lastSavedTimelineElementChildNode = useRef<HTMLElement | null>(null);
