@@ -2,8 +2,6 @@ import React from 'react';
 import { CSSObject } from '@emotion/react';
 import { TweetInterface } from './TweetInterface';
 
-const isDevelopment = import.meta.env.MODE === 'development';
-
 function formatTweetDate(time: string): string {
   const tweetDate: Date = new Date(time);
   const now: Date = new Date();
@@ -39,6 +37,149 @@ function setImageSizeToLarge(url: string): string {
   urlObj.searchParams.set('name', 'large');
   return urlObj.toString();
 }
+
+const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, isQuote }) => {
+  const handleClick = () => {
+    window.open(tweet.tweetLink, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div
+      id={`tweet-${tweet.id}`}
+      css={{
+        ...styles.tweetContainer,
+        ...(isQuote && { padding: '16px', border: 'none' }),
+        ...(tweet.hasReplies && { borderBottom: 'none' })
+      }}
+      onClick={handleClick}
+    >
+      <div css={styles.profileContainer}>
+        {!isQuote && (
+          <img
+            src={tweet.profileImage}
+            alt={tweet.profileName}
+            css={styles.profileImage}
+          />
+        )}
+        <div css={styles.contentContainer}>
+          <div css={styles.headerContainer}>
+            {isQuote && (
+              <img
+                src={tweet.profileImage}
+                alt={tweet.profileName}
+                css={styles.quoteProfileImage}
+              />
+            )}
+            <div css={styles.profileName}>
+              {tweet.profileName}
+              {
+                tweet.retweetAuthor && (
+                  <span css={styles.retweetAuthor}>
+                    &nbsp;&nbsp;·&nbsp;&nbsp;{tweet.retweetAuthor} reposted
+                  </span>
+                )
+              }
+            </div>
+            <span css={styles.tweetTime} title={getFullTweetTime(tweet.tweetTime)}>
+              {formatTweetDate(tweet.tweetTime)}
+            </span>
+          </div>
+          <div css={{ ...styles.tweetContent, ...(isQuote && { padding: '0px' }) }}>
+            <p css={styles.tweetText}>
+              {tweet.tweetText}
+            </p>
+
+            {tweet.hasShowMore && (
+              <button
+                css={styles.showMoreButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Show more clicked");
+                }}
+              >
+                Show more
+              </button>
+            )}
+
+            {tweet.tweetLinkCard && (
+              <a
+                href={tweet.tweetLinkCard.linkCardLink || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                css={styles.linkCard}
+              >
+                {tweet.tweetLinkCard.linkCardImage && (
+                  <img
+                    src={tweet.tweetLinkCard.linkCardImage}
+                    alt={tweet.tweetLinkCard.linkCardTitle || 'Link Card'}
+                    css={styles.linkCardImage}
+                  />
+                )}
+                <div css={styles.linkCardTitle}>
+                  {tweet.tweetLinkCard.linkCardTitle}
+                </div>
+              </a>
+            )}
+
+            {tweet.tweetVideoPosters.length > 0 && (
+              <div
+                css={{
+                  ...styles.videoPostersContainer,
+                  gridTemplateColumns: tweet.tweetVideoPosters.length === 1 ? '1fr' : `repeat(${tweet.tweetVideoPosters.length}, 1fr)`,
+                }}
+              >
+                {tweet.tweetVideoPosters.map((poster, index) => (
+                  <div
+                    key={index}
+                    css={{
+                      ...styles.videoPoster,
+                      backgroundImage: `url(${poster})`,
+                    }}
+                  >
+                    <div css={styles.playButton}>
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 5v14l11-7L8 5z"
+                          fill="#000"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {tweet.tweetImages.length > 0 && (
+              <div
+                css={{
+                  ...styles.imagesContainer,
+                  gridTemplateColumns: tweet.tweetImages.length === 1 ? '1fr' : `repeat(${tweet.tweetImages.length}, 1fr)`,
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {tweet.tweetImages.map((img, index) => (
+                  <img key={index} src={setImageSizeToLarge(img)} alt={`Tweet image ${index + 1}`} css={styles.tweetImage} />
+                ))}
+              </div>
+            )}
+
+            {tweet.quotedTweet && (
+              <div css={styles.quotedTweet}>
+                <Tweet tweet={tweet.quotedTweet} isQuote={true} />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const styles: Record<string, CSSObject> = {
   tweetContainer: {
@@ -222,149 +363,6 @@ const styles: Record<string, CSSObject> = {
     border: '1px solid #2F3336',
     borderRadius: '12px',
   },
-};
-
-const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, isQuote }) => {
-  const handleClick = () => {
-    window.open(tweet.tweetLink, '_blank', 'noopener,noreferrer');
-  };
-
-  return (
-    <div
-      id={`tweet-${tweet.id}`}
-      css={{
-        ...styles.tweetContainer,
-        ...(isQuote && { padding: '16px', border: 'none' }),
-        ...(tweet.hasReplies && { borderBottom: 'none' })
-      }}
-      onClick={handleClick}
-    >
-      <div css={styles.profileContainer}>
-        {!isQuote && (
-          <img
-            src={tweet.profileImage}
-            alt={tweet.profileName}
-            css={styles.profileImage}
-          />
-        )}
-        <div css={styles.contentContainer}>
-          <div css={styles.headerContainer}>
-            {isQuote && (
-              <img
-                src={tweet.profileImage}
-                alt={tweet.profileName}
-                css={styles.quoteProfileImage}
-              />
-            )}
-            <div css={styles.profileName}>
-              {tweet.profileName}
-              {
-                tweet.retweetAuthor && (
-                  <span css={styles.retweetAuthor}>
-                    &nbsp;&nbsp;·&nbsp;&nbsp;{tweet.retweetAuthor} reposted
-                  </span>
-                )
-              }
-            </div>
-            <span css={styles.tweetTime} title={getFullTweetTime(tweet.tweetTime)}>
-              {formatTweetDate(tweet.tweetTime)}
-            </span>
-          </div>
-          <div css={{ ...styles.tweetContent, ...(isQuote && { padding: '0px' }) }}>
-            <p css={styles.tweetText}>
-              {tweet.tweetText}
-            </p>
-
-            {tweet.hasShowMore && (
-              <button
-                css={styles.showMoreButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("Show more clicked");
-                }}
-              >
-                Show more
-              </button>
-            )}
-
-            {tweet.tweetLinkCard && (
-              <a
-                href={tweet.tweetLinkCard.linkCardLink || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                css={styles.linkCard}
-              >
-                {tweet.tweetLinkCard.linkCardImage && (
-                  <img
-                    src={tweet.tweetLinkCard.linkCardImage}
-                    alt={tweet.tweetLinkCard.linkCardTitle || 'Link Card'}
-                    css={styles.linkCardImage}
-                  />
-                )}
-                <div css={styles.linkCardTitle}>
-                  {tweet.tweetLinkCard.linkCardTitle}
-                </div>
-              </a>
-            )}
-
-            {tweet.tweetVideoPosters.length > 0 && (
-              <div
-                css={{
-                  ...styles.videoPostersContainer,
-                  gridTemplateColumns: tweet.tweetVideoPosters.length === 1 ? '1fr' : `repeat(${tweet.tweetVideoPosters.length}, 1fr)`,
-                }}
-              >
-                {tweet.tweetVideoPosters.map((poster, index) => (
-                  <div
-                    key={index}
-                    css={{
-                      ...styles.videoPoster,
-                      backgroundImage: `url(${poster})`,
-                    }}
-                  >
-                    <div css={styles.playButton}>
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8 5v14l11-7L8 5z"
-                          fill="#000"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {tweet.tweetImages.length > 0 && (
-              <div
-                css={{
-                  ...styles.imagesContainer,
-                  gridTemplateColumns: tweet.tweetImages.length === 1 ? '1fr' : `repeat(${tweet.tweetImages.length}, 1fr)`,
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {tweet.tweetImages.map((img, index) => (
-                  <img key={index} src={setImageSizeToLarge(img)} alt={`Tweet image ${index + 1}`} css={styles.tweetImage} />
-                ))}
-              </div>
-            )}
-
-            {tweet.quotedTweet && (
-              <div css={styles.quotedTweet}>
-                <Tweet tweet={tweet.quotedTweet} isQuote={true} />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export default Tweet;

@@ -188,74 +188,6 @@ function stringToId(str: string): string {
   return Math.abs(hash).toString(36);
 }
 
-const styles: Record<string, CSSObject> = {
-  filteredTweetsContainerStyle: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'start',
-    zIndex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 1)',
-    overflowY: 'scroll',
-    fontFamily: "'TwitterChirp', sans-serif",
-  },
-  maxWidthContainer: {
-    position: 'relative',
-    width: '1500px',
-    maxWidth: '100%',
-    display: 'flex',
-    alignItems: 'start',
-  },
-  summaryContainer: {
-    width: `${TIMELINE_WIDTH}px`,
-  },
-  timelineContainer: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'start',
-    position: 'relative',
-  },
-  timeline: {
-    width: `${TIMELINE_WIDTH}px`,
-    borderTop: '1px solid #2F3336',
-    borderLeft: '1px solid #2F3336',
-    borderRight: '1px solid #2F3336',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    zIndex: 1000,
-    width: '100%'
-  },
-  modalContent: {
-    position: 'sticky',
-    top: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100vh',
-  },
-  modalImage: {
-    maxWidth: '90%',
-    maxHeight: '90vh',
-    objectFit: 'contain',
-  },
-}
-
 function App() {
   const [filteredTweets, setFilteredTweets] = useState<TweetInterface[]>([]);
   const filteredTweetsRef = useRef<TweetInterface[]>([]);
@@ -620,6 +552,74 @@ function App() {
       </div >
     </>
   );
+}
+
+const styles: Record<string, CSSObject> = {
+  filteredTweetsContainerStyle: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'start',
+    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+    overflowY: 'scroll',
+    fontFamily: "'TwitterChirp', sans-serif",
+  },
+  maxWidthContainer: {
+    position: 'relative',
+    width: '1500px',
+    maxWidth: '100%',
+    display: 'flex',
+    alignItems: 'start',
+  },
+  summaryContainer: {
+    width: `${TIMELINE_WIDTH}px`,
+  },
+  timelineContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'start',
+    position: 'relative',
+  },
+  timeline: {
+    width: `${TIMELINE_WIDTH}px`,
+    borderTop: '1px solid #2F3336',
+    borderLeft: '1px solid #2F3336',
+    borderRight: '1px solid #2F3336',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    zIndex: 1000,
+    width: '100%'
+  },
+  modalContent: {
+    position: 'sticky',
+    top: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100vh',
+  },
+  modalImage: {
+    maxWidth: '90%',
+    maxHeight: '90vh',
+    objectFit: 'contain',
+  },
 }
 
 export default App;

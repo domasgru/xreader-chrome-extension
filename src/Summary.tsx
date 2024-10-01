@@ -9,12 +9,161 @@ interface SummaryProps {
   setShowModal: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
+// Add this helper function at the top of the file, after the imports
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${month} ${day}, ${hours}:${minutes}`;
+};
+
+const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, setShowModal }) => {
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  // Handle scrolling
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (!summaryRef.current) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = summaryRef.current;
+      const isScrollingUp = e.deltaY < 0;
+      const isScrollingDown = e.deltaY > 0;
+
+      if (
+        (isScrollingUp && scrollTop <= 0) ||
+        (isScrollingDown && scrollTop + clientHeight >= scrollHeight)
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    const currentRef = summaryRef.current;
+    if (currentRef) {
+      currentRef.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      ref={summaryRef}
+      css={{
+        ...summaryStyles.container,
+        ...(isLoading && {
+          padding: '18px 20px',
+        }),
+        ...(!isLoading && summaryData && {
+          padding: '24px 32px',
+          height: '100%',
+          overflowY: 'auto',
+        })
+      }}
+    >
+      {isLoading && (
+        <div css={summaryStyles.loadingContainer}>
+          <div css={summaryStyles.loadingText}>
+            Generating summary
+            <div css={summaryStyles.loadingDots}>
+              <span css={summaryStyles.loadingDotsContent}>...</span>
+            </div>
+          </div>
+          <span css={summaryStyles.loadingSubtext}>Please keep this tab open until summary is generated.</span>
+        </div>
+      )}
+      {!isLoading && !summaryData && (
+        <button css={summaryStyles.generateButton} onClick={onGenerate}>
+          Generate summary
+        </button>
+      )}
+      {!isLoading && summaryData && (
+        <div css={summaryStyles.summaryPreviewContainer}>
+          <div css={summaryStyles.header}>
+            <div>
+              <h2 css={summaryStyles.title}>Summary</h2>
+              <p css={summaryStyles.subtitle}>
+                {formatDate(summaryData.timeFrom)} - {formatDate(summaryData.timeTo)}
+              </p>
+            </div>
+            <button css={summaryStyles.regenerateButton} onClick={onGenerate}>Regenerate</button>
+          </div>
+          <ul css={summaryStyles.summaryList}>
+            {summaryData?.writtenSummaryItems.map((item, index) => (
+              <li key={index} css={summaryStyles.summaryItem}>
+                {item.text}
+                <span css={summaryStyles.idList}>
+                  [
+                  {item.relatedTweets.map((relatedTweet, i) => (
+                    <React.Fragment key={relatedTweet.id}>
+                      {i > 0 && ' '}
+                      <span
+                        css={{
+                          cursor: 'pointer',
+                          padding: '0 4px',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      {i < item.relatedTweets.length - 1 && ','}
+                    </React.Fragment>
+                  ))}
+                  ]
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div css={summaryStyles.mediaSection}>
+            <div css={summaryStyles.mediaDivider}>
+              <span css={summaryStyles.mediaDividerText}>MEDIA</span>
+            </div>
+            {summaryData?.media.map((mediaItem, index) => (
+              <div onMouseLeave={() => setShowModal(null)} css={summaryStyles.mediaItem} key={index}>
+                <div css={summaryStyles.mediaAuthor}>
+                  {mediaItem.authorProfileImage && (
+                    <img
+                      src={mediaItem.authorProfileImage}
+                      alt={`${mediaItem.authorName || 'Author'}'s profile`}
+                      css={summaryStyles.mediaAuthorImage}
+                    />
+                  )}
+                  {mediaItem.authorName}
+                </div>
+                <div css={summaryStyles.mediaGrid}>
+                  {mediaItem.images.map((image, imgIndex) => (
+                    <img
+                      key={imgIndex}
+                      src={image.imageUrl}
+                      alt={image.tweetText || `Image ${imgIndex + 1}`}
+                      onMouseEnter={() => setShowModal(image.imageUrl || null)}
+                      css={summaryStyles.mediaImage}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const loadingAnimation = keyframes`
   0%, 24% { clip-path: inset(0 100% 0 0); }
   25%, 49% { clip-path: inset(0 66% 0 0); }
   50%, 74% { clip-path: inset(0 33% 0 0); }
   75%, 100% { clip-path: inset(0 0 0 0); }
 `;
+
 const summaryStyles: Record<string, CSSObject> = {
   summaryContainerStyleInline: {
     position: 'relative',
@@ -178,154 +327,6 @@ const summaryStyles: Record<string, CSSObject> = {
     aspectRatio: '1/1',
     objectFit: 'cover',
   },
-};
-
-// Add this helper function at the top of the file, after the imports
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const month = date.toLocaleString('default', { month: 'short' });
-  const day = date.getDate();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${month} ${day}, ${hours}:${minutes}`;
-};
-
-const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, setShowModal }) => {
-  const summaryRef = useRef<HTMLDivElement>(null);
-
-  // Handle scrolling
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (!summaryRef.current) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = summaryRef.current;
-      const isScrollingUp = e.deltaY < 0;
-      const isScrollingDown = e.deltaY > 0;
-
-      if (
-        (isScrollingUp && scrollTop <= 0) ||
-        (isScrollingDown && scrollTop + clientHeight >= scrollHeight)
-      ) {
-        e.preventDefault();
-      }
-    };
-
-    const currentRef = summaryRef.current;
-    if (currentRef) {
-      currentRef.addEventListener('wheel', handleWheel, { passive: false });
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener('wheel', handleWheel);
-      }
-    };
-  }, []);
-
-  return (
-    <div
-      ref={summaryRef}
-      css={{
-        ...summaryStyles.container,
-        ...(isLoading && {
-          padding: '18px 20px',
-        }),
-        ...(!isLoading && summaryData && {
-          padding: '24px 32px',
-          height: '100%',
-          overflowY: 'auto',
-        })
-      }}
-    >
-      {isLoading && (
-        <div css={summaryStyles.loadingContainer}>
-          <div css={summaryStyles.loadingText}>
-            Generating summary
-            <div css={summaryStyles.loadingDots}>
-              <span css={summaryStyles.loadingDotsContent}>...</span>
-            </div>
-          </div>
-          <span css={summaryStyles.loadingSubtext}>Please keep this tab open until summary is generated.</span>
-        </div>
-      )}
-      {!isLoading && !summaryData && (
-        <button css={summaryStyles.generateButton} onClick={onGenerate}>
-          Generate summary
-        </button>
-      )}
-      {!isLoading && summaryData && (
-        <div css={summaryStyles.summaryPreviewContainer}>
-          <div css={summaryStyles.header}>
-            <div>
-              <h2 css={summaryStyles.title}>Summary</h2>
-              <p css={summaryStyles.subtitle}>
-                {formatDate(summaryData.timeFrom)} - {formatDate(summaryData.timeTo)}
-              </p>
-            </div>
-            <button css={summaryStyles.regenerateButton} onClick={onGenerate}>Regenerate</button>
-          </div>
-          <ul css={summaryStyles.summaryList}>
-            {summaryData?.writtenSummaryItems.map((item, index) => (
-              <li key={index} css={summaryStyles.summaryItem}>
-                {item.text}
-                <span css={summaryStyles.idList}>
-                  [
-                  {item.relatedTweets.map((relatedTweet, i) => (
-                    <React.Fragment key={relatedTweet.id}>
-                      {i > 0 && ' '}
-                      <span
-                        css={{
-                          cursor: 'pointer',
-                          padding: '0 4px',
-                          '&:hover': {
-                            textDecoration: 'underline',
-                          },
-                        }}
-                      >
-                        {i + 1}
-                      </span>
-                      {i < item.relatedTweets.length - 1 && ','}
-                    </React.Fragment>
-                  ))}
-                  ]
-                </span>
-              </li>
-            ))}
-          </ul>
-          <div css={summaryStyles.mediaSection}>
-            <div css={summaryStyles.mediaDivider}>
-              <span css={summaryStyles.mediaDividerText}>MEDIA</span>
-            </div>
-            {summaryData?.media.map((mediaItem, index) => (
-              <div onMouseLeave={() => setShowModal(null)} css={summaryStyles.mediaItem} key={index}>
-                <div css={summaryStyles.mediaAuthor}>
-                  {mediaItem.authorProfileImage && (
-                    <img
-                      src={mediaItem.authorProfileImage}
-                      alt={`${mediaItem.authorName || 'Author'}'s profile`}
-                      css={summaryStyles.mediaAuthorImage}
-                    />
-                  )}
-                  {mediaItem.authorName}
-                </div>
-                <div css={summaryStyles.mediaGrid}>
-                  {mediaItem.images.map((image, imgIndex) => (
-                    <img
-                      key={imgIndex}
-                      src={image.imageUrl}
-                      alt={image.tweetText || `Image ${imgIndex + 1}`}
-                      onMouseEnter={() => setShowModal(image.imageUrl || null)}
-                      css={summaryStyles.mediaImage}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
 };
 
 export default Summary;
