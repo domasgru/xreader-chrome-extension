@@ -102,17 +102,22 @@ const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, s
                   {item.relatedTweets.map((relatedTweet, i) => (
                     <React.Fragment key={relatedTweet.id}>
                       {i > 0 && ' '}
-                      <span
+                      <a
+                        href={relatedTweet.tweetLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         css={{
                           cursor: 'pointer',
                           padding: '0 4px',
+                          color: 'inherit',
+                          textDecoration: 'none',
                           '&:hover': {
                             textDecoration: 'underline',
                           },
                         }}
                       >
                         {i + 1}
-                      </span>
+                      </a>
                       {i < item.relatedTweets.length - 1 && ','}
                     </React.Fragment>
                   ))}
@@ -139,12 +144,23 @@ const Summary: React.FC<SummaryProps> = ({ isLoading, summaryData, onGenerate, s
                 </div>
                 <div css={summaryStyles.mediaGrid}>
                   {mediaItem.images.map((image, imgIndex) => (
-                    <img
-                      key={imgIndex}
-                      src={image.imageUrl}
-                      alt={image.tweetText || `Image ${imgIndex + 1}`}
+                    <a
+                      href={image.tweetLink || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      css={[
+                        summaryStyles.mediaImageWrapper,
+                        {
+                          display: 'block',
+                          textDecoration: 'none',
+                          backgroundImage: `url(${image.imageUrl})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          cursor: 'pointer',
+                        }
+                      ]}
                       onMouseEnter={() => setShowModal(image.imageUrl || null)}
-                      css={summaryStyles.mediaImage}
+                      title={`View tweet for image ${imgIndex + 1}`}
                     />
                   ))}
                 </div>
@@ -319,13 +335,25 @@ const summaryStyles: Record<string, CSSObject> = {
   mediaGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '10px',
+    gap: '2px',
   },
-  mediaImage: {
+  mediaImageWrapper: {
+    position: 'relative',
     width: '100%',
-    height: 'auto',
     aspectRatio: '1/1',
-    objectFit: 'cover',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      border: '3px solid transparent',
+      pointerEvents: 'none',
+    },
+    '&:hover::after': {
+      borderColor: '#1D9BF0',
+    },
   },
 };
 

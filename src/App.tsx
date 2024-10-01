@@ -565,7 +565,8 @@ const styles: Record<string, CSSObject> = {
     justifyContent: 'center',
     alignItems: 'start',
     zIndex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 1)',
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+    backdropFilter: 'blur(10px)',
     overflowY: 'scroll',
     fontFamily: "'TwitterChirp', sans-serif",
   },
@@ -585,6 +586,7 @@ const styles: Record<string, CSSObject> = {
     justifyContent: 'center',
     alignItems: 'start',
     position: 'relative',
+    paddingTop: '32px'
   },
   timeline: {
     width: `${TIMELINE_WIDTH}px`,
