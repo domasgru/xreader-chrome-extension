@@ -1,4 +1,5 @@
 import React from 'react';
+import { CSSObject } from '@emotion/react';
 import { TweetInterface } from './TweetInterface';
 
 const isDevelopment = import.meta.env.MODE === 'development';
@@ -39,7 +40,7 @@ function setImageSizeToLarge(url: string): string {
   return urlObj.toString();
 }
 
-const styles = {
+const styles: Record<string, CSSObject> = {
   tweetContainer: {
     color: '#fff',
     padding: '20px 24px',
@@ -51,25 +52,25 @@ const styles = {
     fontSize: '16px',
     display: 'flex',
     flexDirection: 'column',
-  } as const,
+  },
 
   retweetAuthor: {
     color: '#71767A',
     marginBottom: '8px',
-  } as const,
+  },
 
   profileContainer: {
     width: '100%',
     gap: '10px',
     display: 'flex',
-  } as const,
+  },
 
   profileImage: {
     width: '32px',
     height: '32px',
     borderRadius: '50%',
     opacity: 0.7,
-  } as const,
+  },
 
   quoteProfileImage: {
     width: '20px',
@@ -77,7 +78,7 @@ const styles = {
     borderRadius: '50%',
     marginRight: '8px',
     opacity: 0.7,
-  } as const,
+  },
 
   contentContainer: {
     display: 'flex',
@@ -85,22 +86,22 @@ const styles = {
     flexGrow: 1,
     minWidth: 0, // Add this line
     overflowWrap: 'break-word', // Add this line
-  } as const,
+  },
 
   headerContainer: {
     display: 'flex',
     paddingRight: '4px',
     lineHeight: 1.125,
-  } as const,
+  },
 
   profileName: {
     marginRight: 'auto',
     color: '#71767A',
-  } as const,
+  },
 
   tweetTime: {
     color: '#71767A',
-  } as const,
+  },
 
   tweetContent: {
     display: 'flex',
@@ -108,13 +109,13 @@ const styles = {
     flexGrow: 1,
     marginTop: '4px',
     paddingRight: '40px',
-  } as const,
+  },
 
   tweetText: {
     whiteSpace: 'pre-wrap',
     color: '#C9CDCF',
     lineHeight: 1.5,
-  } as const,
+  },
 
   showMoreButton: {
     color: '#1D9BF0',
@@ -126,7 +127,7 @@ const styles = {
     outline: 'inherit',
     marginTop: '4px',
     textAlign: 'left',
-  } as const,
+  },
 
   linkCard: {
     display: 'block',
@@ -137,13 +138,13 @@ const styles = {
     overflow: 'hidden',
     textDecoration: 'none',
     color: 'inherit',
-  } as const,
+  },
 
   linkCardImage: {
     width: '100%',
     height: 'auto',
     display: 'block',
-  } as const,
+  },
 
   linkCardTitle: {
     position: 'absolute',
@@ -155,13 +156,13 @@ const styles = {
     color: '#fff',
     fontSize: '14px',
     textAlign: 'left',
-  } as const,
+  },
 
   videoPostersContainer: {
     display: 'grid',
     gap: '12px',
     marginTop: '16px',
-  } as const,
+  },
 
   videoPoster: {
     position: 'relative',
@@ -184,7 +185,7 @@ const styles = {
       height: '100%',
       background: 'rgba(0, 0, 0, 0.5)',
     },
-  } as const,
+  },
 
   playButton: {
     position: 'relative',
@@ -196,13 +197,13 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  } as const,
+  },
 
   imagesContainer: {
     display: 'grid',
     gap: '12px',
     marginTop: '16px',
-  } as const,
+  },
 
   tweetImage: {
     borderRadius: '0px',
@@ -214,13 +215,13 @@ const styles = {
     objectFit: 'contain',
     position: 'relative',
     marginBottom: '12px',
-  } as const,
+  },
 
   quotedTweet: {
     marginTop: '16px',
     border: '1px solid #2F3336',
     borderRadius: '12px',
-  } as const,
+  },
 };
 
 const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, isQuote }) => {
