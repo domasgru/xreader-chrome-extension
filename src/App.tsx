@@ -195,7 +195,7 @@ function App() {
   const [isLoadingSummary, setIsLoadingSummary] = useState<boolean>(false);
   const [summary, setSummary] = useState<any>(null);
   const [showModal, setShowModal] = useState<string | null>(null);
-  const [userPreferences, setUserPreferences] = useState<UserPreferences>({ interests: 'design, products, technology, self improvement, breaking news', notInterests: 'jokes, memes, politics, religion, sports' });
+  const [userPreferences, setUserPreferences] = useState<UserPreferences>({ interests: 'design, art, products, technology, self improvement, creating, building', notInterests: 'jokes, memes, politics, religion, sports' });
   const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
   const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
 
@@ -280,6 +280,8 @@ function App() {
 
   async function generateSummary() {
     if (mockLoadSummary) {
+      setIsLoadingSummary(true);
+      await new Promise(resolve => setTimeout(resolve, 5000));
       const mockSummary = await import('./exampleSummary.json');
       setSummary(mockSummary.default);
       setIsLoadingSummary(false);
@@ -303,46 +305,44 @@ function App() {
 
     const tweets = [...filteredTweetsRef.current];
 
-    const processedTweets = tweets.map(({ id, tweetText, profileName }) => {
-      if (tweetText) {
-        return {
-          id,
-          tweetText,
-          profileName,
-        }
-      }
+    const processedPosts = tweets
+      .filter(tweet => tweet.tweetText)
+      .map(({ id, tweetText, profileName }) => ({
+        postText: tweetText,
+        postAuthor: profileName,
+        postId: id,
+      }))
 
-      return null
-    }).filter(tweet => tweet !== null);
 
     const completion = await openai.beta.chat.completions.parse({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-2024-08-06",
       messages: [
         {
           role: "system",
-          content: `You will be provided a list of tweets. Write a bullet-list type summary of these tweets, respecting user preferences:
+          content: `You will be provided a list of posts. Filter out not relevant posts. List ALL relevant posts. Each post item should have a very short 3-5 words description mentioning its author in the begining and list of related post ids.
+          User preferences:
           \nInterests: ${userPreferences.interests}
           \nNot interests: ${userPreferences.notInterests}
           `
         },
-        { role: "user", content: JSON.stringify(processedTweets) },
+        { role: "user", content: JSON.stringify(processedPosts) },
       ],
       response_format: zodResponseFormat(
         z.object({
-          summaryItems: z.array(z.object({
-            summaryItemText: z.string(),
-            relatedTweetsIds: z.array(z.string()),
+          items: z.array(z.object({
+            description: z.string(),
+            relatedPostsIds: z.array(z.string()),
           }))
         }),
         "summary_from_tweets"
       ),
     });
 
-    const writtenSummaryItems = completion.choices[0].message.parsed?.summaryItems?.map(
+    const writtenSummaryItems = completion.choices[0].message.parsed?.items?.map(
       (item) => {
         return {
-          text: item.summaryItemText,
-          relatedTweets: item.relatedTweetsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
+          text: item.description,
+          relatedTweets: item.relatedPostsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
         }
       }
     );
@@ -385,7 +385,7 @@ function App() {
       timeTo: summaryTimeRangeTo,
       media,
     }
-
+    debugger
     setSummary(summary);
     setIsLoadingSummary(false);
   }
@@ -518,7 +518,9 @@ function App() {
                 left: '0',
                 height: '100vh',
                 width: '574px',
-                padding: '32px 0 32px 32px'
+                padding: '32px 0 32px 32px',
+                flex: '0 1 auto',
+                minWidth: '0'
               })
             }}
             onWheel={(e) => e.stopPropagation()}
@@ -586,10 +588,13 @@ const styles: Record<string, CSSObject> = {
     justifyContent: 'center',
     alignItems: 'start',
     position: 'relative',
-    paddingTop: '32px'
+    padding: '32px 32px 0 32px',
+    flex: '1 2 auto',
+    overflow: 'hidden',
   },
   timeline: {
     width: `${TIMELINE_WIDTH}px`,
+    maxWidth: '100%',
     borderTop: '1px solid #2F3336',
     borderLeft: '1px solid #2F3336',
     borderRight: '1px solid #2F3336',

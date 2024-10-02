@@ -201,8 +201,9 @@ const summaryStyles: Record<string, CSSObject> = {
     border: 'none',
     padding: '12px 20px',
     cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: 500
+    fontSize: '16px',
+    fontWeight: 500,
+    fontFamily: 'inherit',
   },
 
   // Loading
