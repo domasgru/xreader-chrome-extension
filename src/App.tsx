@@ -8,15 +8,34 @@ import { SummaryInterface } from './SummaryInterface';
 import OpenAI from 'openai';
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
-import Summary from './Summary';
+import GenerateSummaryButton from './GenerateSummaryButton';
 import { TIMELINE_WIDTH } from './constants';
+import IntroPopup from './IntroPopup';
+import { UserPreferences } from './UserPreferencesInterface';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const mockLoadTweets = true;
 const mockLoadSummary = true;
 
-interface UserPreferences {
-  interests: string;
-  notInterests: string;
+const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'xReaderUserPreferences';
+function getStoredUserPreferences(): UserPreferences {
+  const storedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+  if (storedPreferences) {
+    return JSON.parse(storedPreferences);
+  }
+  return {
+    interests: 'design, art, products, technology, self improvement, creating, building',
+    notInterests: 'jokes, memes, politics, religion, sports'
+  };
+}
+
+const LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY = 'xReaderShowIntroPopup';
+function getStoredShowIntroPopup(): boolean {
+  const storedShowIntroPopup = localStorage.getItem(LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY);
+  if (storedShowIntroPopup) {
+    return JSON.parse(storedShowIntroPopup);
+  }
+  return true;
 }
 
 function getTimeLineElementNode() {
@@ -195,7 +214,8 @@ function App() {
   const [isLoadingSummary, setIsLoadingSummary] = useState<boolean>(false);
   const [summary, setSummary] = useState<any>(null);
   const [showModal, setShowModal] = useState<string | null>(null);
-  const [userPreferences, setUserPreferences] = useState<UserPreferences>({ interests: 'design, art, products, technology, self improvement, creating, building', notInterests: 'jokes, memes, politics, religion, sports' });
+  const [showIntroPopup, setShowIntroPopup] = useState(getStoredShowIntroPopup);
+  const [userPreferences, setUserPreferences] = useState<UserPreferences>(getStoredUserPreferences);
   const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
   const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
 
@@ -281,7 +301,7 @@ function App() {
   async function generateSummary() {
     if (mockLoadSummary) {
       setIsLoadingSummary(true);
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       const mockSummary = await import('./exampleSummary.json');
       setSummary(mockSummary.default);
       setIsLoadingSummary(false);
@@ -334,7 +354,7 @@ function App() {
             relatedPostsIds: z.array(z.string()),
           }))
         }),
-        "summary_from_tweets"
+        "summary_from_posts"
       ),
     });
 
@@ -483,6 +503,18 @@ function App() {
     };
   }, [isLoadingTweets, filteredTweetsContainerRef]);
 
+  // Handle user preferences local storage
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(userPreferences));
+  }, [userPreferences]);
+
+  // Handle show intro popup local storage
+  useEffect(() => {
+    if (showIntroPopup === false) {
+      localStorage.setItem(LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY, JSON.stringify(showIntroPopup));
+    }
+  }, [showIntroPopup]);
+
   useEffect(() => {
     filteredTweetsRef.current = filteredTweets;
   }, [filteredTweets]);
@@ -491,47 +523,50 @@ function App() {
     <>
       <Global styles={css`
         ${emotionReset}
-
         *, *::after, *::before {
           box-sizing: border-box;
           -moz-osx-font-smoothing: grayscale;
           -webkit-font-smoothing: antialiased;
           font-smoothing: antialiased;
         }
+        button, input, textarea {
+          border: none;
+          outline: none;
+          background: none;
+          font-family: inherit;
+          padding: 0;
+          margin: 0;
+        }
       `} />
       <div ref={filteredTweetsContainerRef} css={styles.filteredTweetsContainerStyle}>
         <div css={styles.maxWidthContainer}>
-          <div
+          <motion.div
+            layout
+            layoutRoot
             css={{
+              ...styles.sideContainer,
               ...(isLoadingSummary && {
                 pointerEvents: 'none',
               }),
-              ...((isLoadingSummary || !summary) && {
-                position: 'fixed',
-                bottom: '32px',
-                right: `calc(50% + ${TIMELINE_WIDTH / 2}px + 40px)`,
-                zIndex: 10
-              }),
-              ...(summary && {
-                position: 'sticky',
-                top: '0',
-                left: '0',
-                height: '100vh',
-                width: '574px',
-                padding: '32px 0 32px 32px',
-                flex: '0 1 auto',
-                minWidth: '0'
-              })
             }}
             onWheel={(e) => e.stopPropagation()}
           >
-            <Summary
+            {showIntroPopup && (
+              <div css={styles.introPopupContainer}>
+                <IntroPopup
+                  userPreferences={userPreferences}
+                  setUserPreferences={setUserPreferences}
+                  onClose={() => setShowIntroPopup(false)}
+                />
+              </div>
+            )}
+            <GenerateSummaryButton
               isLoading={isLoadingSummary}
-              summaryData={summary}
               onGenerate={generateSummary}
-              setShowModal={setShowModal}
+              userPreferences={userPreferences}
+              setUserPreferences={setUserPreferences}
             />
-          </div>
+          </motion.div>
           <div css={styles.timelineContainer}>
             <div css={styles.timeline}>
               {filteredTweets.map((tweet) => (
@@ -542,14 +577,15 @@ function App() {
                 />
               ))}
             </div>
-            {showModal && (
-              <div css={styles.modalOverlay}>
-                <div css={styles.modalContent}>
-                  <img src={showModal} css={styles.modalImage} />
-                </div>
-              </div>
-            )}
           </div>
+          {showModal && (
+            <div css={styles.modalOverlay}>
+              <div css={styles.modalContent}>
+                <img src={showModal} css={styles.modalImage} />
+              </div>
+            </div>
+          )}
+          <div css={styles.sideContainer} />
         </div>
       </div >
     </>
@@ -574,7 +610,7 @@ const styles: Record<string, CSSObject> = {
   },
   maxWidthContainer: {
     position: 'relative',
-    width: '1500px',
+    width: '1400px',
     maxWidth: '100%',
     display: 'flex',
     alignItems: 'start',
@@ -582,19 +618,41 @@ const styles: Record<string, CSSObject> = {
   summaryContainer: {
     width: `${TIMELINE_WIDTH}px`,
   },
-  timelineContainer: {
-    flexGrow: 1,
+  introPopupContainer: {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    width: '100%',
+    height: '100%',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'start',
-    position: 'relative',
-    padding: '32px 32px 0 32px',
-    flex: '1 2 auto',
-    overflow: 'hidden',
+    alignItems: 'flex-end',
+    justifyContent: 'space-evenly',
+    zIndex: 1000,
+    padding: '32px 16px',
   },
-  timeline: {
+  sideContainer: {
+    position: 'sticky',
+    top: '0',
+    left: '0',
+    height: '100vh',
+    flex: '1 1 0px',
+    minWidth: '0px',
+    padding: '32px 16px',
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'space-evenly',
+    zIndex: 100,
+  },
+  timelineContainer: {
     width: `${TIMELINE_WIDTH}px`,
     maxWidth: '100%',
+    minWidth: '0px',
+    flex: '0 1 auto',
+    paddingTop: '20px'
+  },
+  timeline: {
+    width: '100%',
+    minWidth: '0px',
     borderTop: '1px solid #2F3336',
     borderLeft: '1px solid #2F3336',
     borderRight: '1px solid #2F3336',

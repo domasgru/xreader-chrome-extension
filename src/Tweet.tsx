@@ -92,10 +92,6 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
             {tweet.hasShowMore && (
               <button
                 css={styles.showMoreButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("Show more clicked");
-                }}
               >
                 Show more
               </button>
@@ -161,7 +157,6 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
                   ...styles.imagesContainer,
                   gridTemplateColumns: tweet.tweetImages.length === 1 ? '1fr' : `repeat(${tweet.tweetImages.length}, 1fr)`,
                 }}
-                onClick={(e) => e.stopPropagation()}
               >
                 {tweet.tweetImages.map((img, index) => (
                   <img key={index} src={setImageSizeToLarge(img)} alt={`Tweet image ${index + 1}`} css={styles.tweetImage} />
@@ -193,6 +188,9 @@ const styles: Record<string, CSSObject> = {
     fontSize: '16px',
     display: 'flex',
     flexDirection: 'column',
+    '&:hover': {
+      boxShadow: 'inset 0 0 10px 1px rgba(255, 255, 255, 0.16)',
+    }
   },
 
   retweetAuthor: {
@@ -352,7 +350,7 @@ const styles: Record<string, CSSObject> = {
     maxWidth: '100%',
     maxHeight: '504px',
     height: 'auto',
-    cursor: 'default',
+
     objectFit: 'contain',
     position: 'relative',
     marginBottom: '12px',
