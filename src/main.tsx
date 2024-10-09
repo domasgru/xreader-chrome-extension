@@ -6,11 +6,12 @@ import { CacheProvider } from '@emotion/react';
 
 let appRoot: HTMLElement | null = null;
 let reactRoot: ReturnType<typeof createRoot> | null = null;
+let shadowRootElement: HTMLDivElement | null = null;
 
 function injectApp() {
   if (appRoot) return;
 
-  const shadowRootElement = document.createElement('div')
+  shadowRootElement = document.createElement('div')
   shadowRootElement.id = 'ai-reader-root'
   const shadowRoot = shadowRootElement.attachShadow({ mode: 'open' })
   document.body.appendChild(shadowRootElement)
@@ -49,6 +50,7 @@ function removeApp() {
   }
   if (appRoot) {
     appRoot.remove();
+    shadowRootElement?.remove();
     appRoot = null;
   }
 }

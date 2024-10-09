@@ -1,12 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { CSSObject } from '@emotion/react';
 import { SummaryInterface } from './SummaryInterface';
+import CrossIcon from './assets/cross-large.svg?react';
+import { motion } from 'framer-motion';
+import SummaryToggleItem from './SummaryToggleItem';
+import SummaryImageModal from './SummaryImageModal';
 
 interface SummaryModalProps {
   summaryData: SummaryInterface | null;
-  onRemove: () => void;
-  onGenerate: () => void;
-  setShowModal: React.Dispatch<React.SetStateAction<string | null>>;
+  onClose: () => void;
 }
 
 const formatDate = (dateString: string): string => {
@@ -18,8 +20,10 @@ const formatDate = (dateString: string): string => {
   return `${month} ${day}, ${hours}:${minutes}`;
 };
 
-const SummaryModal: React.FC<SummaryModalProps> = ({ summaryData, onGenerate, onRemove, setShowModal }) => {
+const SummaryModal: React.FC<SummaryModalProps> = ({ summaryData, onClose }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
+  const [selectedImage, setSelectedImage] = useState<SummaryInterface['media'][0]['images'][0] | null>(null);
+
 
   // Handle scrolling
   useEffect(() => {
@@ -40,7 +44,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ summaryData, onGenerate, on
 
     const currentRef = summaryRef.current;
     if (currentRef) {
-      currentRef.addEventListener('wheel', handleWheel, { passive: false });
+      //currentRef.addEventListener('wheel', handleWheel, { passive: false });
     }
 
     return () => {
@@ -51,107 +55,106 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ summaryData, onGenerate, on
   }, []);
 
   return (
-    <div ref={summaryRef} css={summaryStyles.summaryPreviewContainer}>
-      <div css={summaryStyles.header}>
-        <div>
-          <h2 css={summaryStyles.title}>Summary</h2>
-          <p css={summaryStyles.subtitle}>
-            {formatDate(summaryData?.timeFrom || '')} - {formatDate(summaryData?.timeTo || '')}
-          </p>
-        </div>
-        <div css={summaryStyles.buttonGroup}>
-          <button css={summaryStyles.removeButton} onClick={onRemove}>Remove</button>
-          <button css={summaryStyles.regenerateButton} onClick={onGenerate}>Regenerate</button>
-        </div>
-      </div>
-      <ul css={summaryStyles.summaryList}>
-        {summaryData?.writtenSummaryItems.map((item, index) => (
-          <li key={index} css={summaryStyles.summaryItem}>
-            {item.text}
-            <span css={summaryStyles.idList}>
-              [
-              {item.relatedTweets.map((relatedTweet, i) => (
-                <React.Fragment key={relatedTweet.id}>
-                  {i > 0 && ' '}
-                  <a
-                    href={relatedTweet.tweetLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    css={{
-                      cursor: 'pointer',
-                      padding: '0 4px',
-                      color: 'inherit',
-                      textDecoration: 'none',
-                      '&:hover': {
-                        textDecoration: 'underline',
-                      },
-                    }}
-                  >
-                    {i + 1}
-                  </a>
-                  {i < item.relatedTweets.length - 1 && ','}
-                </React.Fragment>
-              ))}
-              ]
-            </span>
-          </li>
-        ))}
-      </ul>
-      <div css={summaryStyles.mediaSection}>
-        <div css={summaryStyles.mediaDivider}>
-          <span css={summaryStyles.mediaDividerText}>MEDIA</span>
-        </div>
-        {summaryData?.media.map((mediaItem, index) => (
-          <div onMouseLeave={() => setShowModal(null)} css={summaryStyles.mediaItem} key={index}>
-            <div css={summaryStyles.mediaAuthor}>
-              {mediaItem.authorProfileImage && (
-                <img
-                  src={mediaItem.authorProfileImage}
-                  alt={`${mediaItem.authorName || 'Author'}'s profile`}
-                  css={summaryStyles.mediaAuthorImage}
-                />
-              )}
-              {mediaItem.authorName}
-            </div>
-            <div css={summaryStyles.mediaGrid}>
-              {mediaItem.images.map((image, imgIndex) => (
-                <a
-                  href={image.tweetLink || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  css={[
-                    summaryStyles.mediaImageWrapper,
-                    {
-                      display: 'block',
-                      textDecoration: 'none',
-                      backgroundImage: `url(${image.imageUrl})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      cursor: 'pointer',
-                    }
-                  ]}
-                  onMouseEnter={() => setShowModal(image.imageUrl || null)}
-                  title={`View tweet for image ${imgIndex + 1}`}
-                />
-              ))}
-            </div>
+    <>
+      <div css={summaryStyles.modalOverlay} onClick={onClose} />
+      <motion.div layoutId='container' transition={{ type: 'spring', duration: 0.6, bounce: 0 }} ref={summaryRef} id="summary-preview-container" css={summaryStyles.summaryPreviewContainer}>
+        <div css={summaryStyles.header}>
+          <div>
+            <h2 css={summaryStyles.title}>Summary</h2>
+            <p css={summaryStyles.subtitle}>
+              {formatDate(summaryData?.timeFrom || '')} - {formatDate(summaryData?.timeTo || '')}
+            </p>
           </div>
-        ))}
-      </div>
-    </div>
+          <div css={summaryStyles.buttonGroup}>
+            <button css={summaryStyles.closeButton} onClick={onClose}>
+              <CrossIcon />
+            </button>
+          </div>
+        </div>
+        <ul css={summaryStyles.summaryList}>
+          {summaryData?.writtenSummaryItems.map((item, index) => (
+            <SummaryToggleItem key={index} item={item} />
+          ))}
+        </ul>
+        <div css={summaryStyles.mediaSection}>
+          <div css={summaryStyles.mediaDivider}>
+            <span css={summaryStyles.mediaDividerText}>ALL MEDIA</span>
+          </div>
+          {summaryData?.media.map((mediaItem, index) => (
+            <div css={summaryStyles.mediaItem} key={index}>
+              <div css={summaryStyles.mediaAuthor}>
+                {mediaItem.authorProfileImage && (
+                  <img
+                    src={mediaItem.authorProfileImage}
+                    alt={`${mediaItem.authorName || 'Author'}'s profile`}
+                    css={summaryStyles.mediaAuthorImage}
+                  />
+                )}
+                {mediaItem.authorName}
+              </div>
+              <div css={summaryStyles.mediaGrid}>
+                {mediaItem.images.map((image, imgIndex) => (
+                  <div
+                    key={imgIndex}
+                    css={[
+                      summaryStyles.mediaImageWrapper,
+                      {
+                        backgroundImage: `url(${image.imageUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        cursor: 'zoom-in',
+                      }
+                    ]}
+                    onClick={() => setSelectedImage(image)}
+                    title={`View larger image ${imgIndex + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+      {selectedImage && (
+        <SummaryImageModal
+          image={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
+    </>
   )
 }
 
 const summaryStyles: Record<string, CSSObject> = {
+  modalOverlay: {
+    position: 'fixed',
+    zIndex: 999,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backdropFilter: 'blur(3px)',
+  },
   // Summary preview
   summaryPreviewContainer: {
+    position: 'fixed',
+    zIndex: 1000,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    margin: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    width: '556px',
+    width: '650px',
     maxWidth: '100%',
     padding: '24px 32px',
-    height: '100%',
+    height: '95%',
     overflowY: 'auto',
+    backgroundColor: '#181A1D',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
+    boxShadow: 'inset 0 0 3px 1px rgba(255, 255, 255, 0.06)',
+    borderRadius: '8px',
   },
   header: {
     display: 'flex',
@@ -171,14 +174,21 @@ const summaryStyles: Record<string, CSSObject> = {
     color: '#71767A',
     margin: 0,
   },
-  regenerateButton: {
+  closeButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     color: '#71767A',
     border: '1px solid rgba(255, 255, 255, 0.12)',
-    padding: '12px 20px',
-    borderRadius: '7px',
-    cursor: 'pointer',
-    fontSize: '16px',
+    width: '42px',
+    height: '42px',
+    borderRadius: '100%',
+    cursor: 'default',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.12)',
+      color: '#C9CDCF',
+    },
   },
   summaryList: {
     listStyleType: 'none',
@@ -207,7 +217,7 @@ const summaryStyles: Record<string, CSSObject> = {
     position: 'relative',
   },
   mediaDividerText: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#181A1D',
     padding: '0 10px',
     position: 'relative',
     top: '-10px',
@@ -240,19 +250,6 @@ const summaryStyles: Record<string, CSSObject> = {
     position: 'relative',
     width: '100%',
     aspectRatio: '1/1',
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      border: '3px solid transparent',
-      pointerEvents: 'none',
-    },
-    '&:hover::after': {
-      borderColor: '#1D9BF0',
-    },
   }
 }
 

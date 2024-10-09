@@ -188,9 +188,6 @@ const styles: Record<string, CSSObject> = {
     fontSize: '16px',
     display: 'flex',
     flexDirection: 'column',
-    '&:hover': {
-      boxShadow: 'inset 0 0 10px 1px rgba(255, 255, 255, 0.16)',
-    }
   },
 
   retweetAuthor: {

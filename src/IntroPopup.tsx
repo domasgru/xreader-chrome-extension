@@ -1,7 +1,7 @@
 import React from 'react';
 import { CSSObject } from '@emotion/react';
 import { UserPreferences } from './UserPreferencesInterface';
-
+import { motion } from 'framer-motion';
 interface IntroPopupProps {
   userPreferences: UserPreferences;
   setUserPreferences: React.Dispatch<React.SetStateAction<UserPreferences>>;
@@ -10,13 +10,13 @@ interface IntroPopupProps {
 
 const IntroPopup: React.FC<IntroPopupProps> = ({ userPreferences, setUserPreferences, onClose }) => {
   return (
-    <div css={styles.introPopup}>
+    <motion.div layoutId='container' css={styles.introPopup}>
       <p css={styles.marginBottom16}>Welcome to xReader,</p>
       <p css={styles.marginBottom16}>
         It reads your X timeline and show you a cleaner version of it. On the right you see your exact X timeline - just without ads and with more minimal UI.
       </p>
       <div css={styles.marginBottom12}>
-        Above that, it write summaries for up to 3 days of your timeline content. Describe your interests to increase the quality of the summaries:
+        Also, it write summaries for up to 3 days of your timeline content. Describe your interests to increase the quality of the summaries:
       </div>
       <div css={styles.inputContainer}>
         <label css={styles.label} htmlFor="interests">INTERESTED:</label>
@@ -36,8 +36,8 @@ const IntroPopup: React.FC<IntroPopupProps> = ({ userPreferences, setUserPrefere
         value={userPreferences.notInterests}
         onChange={(e) => setUserPreferences(prev => ({ ...prev, notInterests: e.target.value }))}
       />
-      <button css={styles.button} onClick={onClose}>Continue</button>
-    </div>
+      <motion.button css={styles.button} onClick={onClose}>Continue</motion.button>
+    </motion.div>
   );
 };
 

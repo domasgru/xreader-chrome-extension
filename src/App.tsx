@@ -9,13 +9,14 @@ import OpenAI from 'openai';
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 import GenerateSummaryButton from './GenerateSummaryButton';
+import SummaryModal from './SummaryModal';
 import { TIMELINE_WIDTH } from './constants';
 import IntroPopup from './IntroPopup';
 import { UserPreferences } from './UserPreferencesInterface';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-const mockLoadTweets = true;
-const mockLoadSummary = true;
+const mockLoadTweets = false;
+const mockLoadSummary = false;
 
 const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'xReaderUserPreferences';
 function getStoredUserPreferences(): UserPreferences {
@@ -192,7 +193,9 @@ function getUniqueTweets(tweets: TweetInterface[]): TweetInterface[] {
 }
 
 function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
+  e.stopPropagation();
   if (!(e.target as HTMLElement)?.closest('#ai-reader-root')) {
+    console.log('scroll prevented 2')
     e.preventDefault();
   }
 }
@@ -213,22 +216,36 @@ function App() {
   const [isLoadingTweets, setIsLoadingTweets] = useState<boolean>(false);
   const [isLoadingSummary, setIsLoadingSummary] = useState<boolean>(false);
   const [summary, setSummary] = useState<any>(null);
-  const [showModal, setShowModal] = useState<string | null>(null);
   const [showIntroPopup, setShowIntroPopup] = useState(getStoredShowIntroPopup);
   const [userPreferences, setUserPreferences] = useState<UserPreferences>(getStoredUserPreferences);
-  const filteredTweetsContainerRef = useRef<HTMLDivElement>(null);
+  const appRootContainerRef = useRef<HTMLDivElement>(null);
   const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
 
   const loadMoreTweetsAbortController = useRef<AbortController | null>(null);
   const lastSavedTimelineElementChildNode = useRef<HTMLElement | null>(null);
+
+  const [isSummaryModalOpen, setIsSummaryModalOpen] = useState<boolean>(false);
+  const preservedScrollPosition = useRef<number | null>(null);
+  function openSummaryModal() {
+    preservedScrollPosition.current = window.scrollY;
+    document.body.style.overflow = 'hidden';
+    setIsSummaryModalOpen(true);
+  }
+  function closeSummaryModal() {
+    document.body.style.removeProperty('overflow');
+    window.scrollTo(0, preservedScrollPosition.current || 0);
+    preservedScrollPosition.current = null;
+    setIsSummaryModalOpen(false);
+  }
+
   async function loadMoreTweets(shouldStopLoadingFunction: () => boolean): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const functionID = Math.random().toString(36).substring(2, 15);
-      console.log(functionID, '------INITIALIZED FUNCTION TO LOAD TWEETS-------', filteredTweetsContainerRef.current?.scrollHeight, filteredTweetsContainerRef.current?.scrollTop);
+      //console.log(functionID, '------INITIALIZED FUNCTION TO LOAD TWEETS-------', appRootContainerRef.current?.scrollHeight, appRootContainerRef.current?.scrollTop);
 
       if (mockLoadTweets) {
         const mockTweets = await import('./exampleTweets.json');
-        setFilteredTweets(mockTweets.default as TweetInterface[]);
+        setFilteredTweets(mockTweets.default.slice(0, 10) as TweetInterface[]);
         return resolve();
       }
 
@@ -298,23 +315,27 @@ function App() {
     })
   }
 
-  async function generateSummary() {
+  async function generateSummary(forDays: number) {
     if (mockLoadSummary) {
       setIsLoadingSummary(true);
       await new Promise(resolve => setTimeout(resolve, 2000));
       const mockSummary = await import('./exampleSummary.json');
       setSummary(mockSummary.default);
       setIsLoadingSummary(false);
+      openSummaryModal();
       return;
     }
 
     setIsLoadingSummary(true);
-    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const timeNow = new Date();
+    const twentyFourHoursAgo = new Date(Date.now() - forDays * 24 * 60 * 60 * 1000);
     await loadMoreTweets(() => {
-      console.log('--->', filteredTweetsRef.current)
+      if (filteredTweetsRef.current.length > 1500) {
+        return true
+      }
+
       const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
         if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
-          console.log('--Reached target tweet', tweet);
           return true;
         }
         return false;
@@ -322,7 +343,7 @@ function App() {
 
       return hasReachedTargetTweet;
     })
-
+    debugger
     const tweets = [...filteredTweetsRef.current];
 
     const processedPosts = tweets
@@ -339,7 +360,7 @@ function App() {
       messages: [
         {
           role: "system",
-          content: `You will be provided a list of posts. Filter out not relevant posts. List ALL relevant posts. Each post item should have a very short 3-5 words description mentioning its author in the begining and list of related post ids.
+          content: `You will be provided a list of posts. Filter out not relevant posts. List ALL relevant posts. Each post item should have a brief 5-8 words description mentioning its author in the begining and list of related post ids.
           User preferences:
           \nInterests: ${userPreferences.interests}
           \nNot interests: ${userPreferences.notInterests}
@@ -366,7 +387,6 @@ function App() {
         }
       }
     );
-    const summaryTimeRangeFrom = tweets[0].tweetTime;
     const summaryTimeRangeTo = tweets[tweets.length - 1].tweetTime;
     const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
       if (tweet.tweetImages && tweet.tweetImages.length > 0) {
@@ -401,12 +421,13 @@ function App() {
 
     const summary = {
       writtenSummaryItems,
-      timeFrom: summaryTimeRangeFrom,
+      timeFrom: timeNow,
       timeTo: summaryTimeRangeTo,
       media,
     }
     debugger
     setSummary(summary);
+    openSummaryModal();
     setIsLoadingSummary(false);
   }
 
@@ -415,8 +436,11 @@ function App() {
     const timelineElement = getTimeLineElementNode();
 
     function preventScrollOnTimeline(e: WheelEvent) {
-      const { scrollTop, scrollHeight, clientHeight } = filteredTweetsContainerRef.current as HTMLElement;
+      const summaryPreviewContainer = appRootContainerRef.current?.querySelector('#summary-preview-container');
+      const scrollableElement = summaryPreviewContainer || appRootContainerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } = scrollableElement as HTMLElement;
 
+      console.log(scrollableElement, summaryPreviewContainer)
       // Check if user scrolling at the top or bottom of the scroll
       if ((scrollTop <= 0 && (e as WheelEvent).deltaY < 0) || (Math.round(scrollTop + clientHeight) >= scrollHeight && (e as WheelEvent).deltaY > 0)) {
         e.preventDefault();
@@ -429,11 +453,11 @@ function App() {
       (document.querySelector('#ai-reader-root') as HTMLElement)?.addEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
 
       loadMoreTweets(() => {
-        if (!filteredTweetsContainerRef.current) {
+        if (!appRootContainerRef.current) {
           return false;
         }
 
-        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop > 5000
+        return appRootContainerRef.current.scrollHeight - appRootContainerRef.current.scrollTop > 5000
       });
     }
 
@@ -471,25 +495,25 @@ function App() {
   // Load more tweets on scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (!filteredTweetsContainerRef.current || isLoadingTweets) {
+      if (!appRootContainerRef.current || isLoadingTweets) {
         return;
       }
 
-      const { scrollHeight, scrollTop } = filteredTweetsContainerRef.current;
+      const { scrollHeight, scrollTop } = appRootContainerRef.current;
       if (scrollHeight - scrollTop > 5000) {
         return;
       }
 
       loadMoreTweets(() => {
-        if (!filteredTweetsContainerRef.current) {
+        if (!appRootContainerRef.current) {
           return false;
         }
 
-        return filteredTweetsContainerRef.current.scrollHeight - filteredTweetsContainerRef.current.scrollTop > 5000
+        return appRootContainerRef.current.scrollHeight - appRootContainerRef.current.scrollTop > 5000
       });
     };
 
-    const currentRef = filteredTweetsContainerRef.current;
+    const currentRef = appRootContainerRef.current;
     if (currentRef) {
       currentRef.addEventListener('scroll', handleScroll);
     }
@@ -501,7 +525,7 @@ function App() {
         currentRef.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [isLoadingTweets, filteredTweetsContainerRef]);
+  }, [isLoadingTweets, appRootContainerRef]);
 
   // Handle user preferences local storage
   useEffect(() => {
@@ -520,7 +544,7 @@ function App() {
   }, [filteredTweets]);
 
   return (
-    <>
+    <div ref={appRootContainerRef} css={styles.filteredTweetsContainerStyle}>
       <Global styles={css`
         ${emotionReset}
         *, *::after, *::before {
@@ -528,6 +552,7 @@ function App() {
           -moz-osx-font-smoothing: grayscale;
           -webkit-font-smoothing: antialiased;
           font-smoothing: antialiased;
+          font-family: 'TwitterChirp', sans-serif;
         }
         button, input, textarea {
           border: none;
@@ -538,57 +563,59 @@ function App() {
           margin: 0;
         }
       `} />
-      <div ref={filteredTweetsContainerRef} css={styles.filteredTweetsContainerStyle}>
-        <div css={styles.maxWidthContainer}>
-          <motion.div
-            layout
-            layoutRoot
-            css={{
-              ...styles.sideContainer,
-              ...(isLoadingSummary && {
-                pointerEvents: 'none',
-              }),
-            }}
-            onWheel={(e) => e.stopPropagation()}
-          >
-            {showIntroPopup && (
-              <div css={styles.introPopupContainer}>
-                <IntroPopup
-                  userPreferences={userPreferences}
-                  setUserPreferences={setUserPreferences}
-                  onClose={() => setShowIntroPopup(false)}
-                />
-              </div>
-            )}
+
+      <div css={styles.maxWidthContainer}>
+        <motion.div
+          layout
+          layoutRoot
+          css={{
+            ...styles.sideContainer,
+            ...(isLoadingSummary && {
+              pointerEvents: 'none',
+            }),
+          }}
+          onWheel={(e) => e.stopPropagation()}
+        >
+          {showIntroPopup && (
+            <motion.div css={styles.introPopupContainer}>
+              <IntroPopup
+                userPreferences={userPreferences}
+                setUserPreferences={setUserPreferences}
+                onClose={() => setShowIntroPopup(false)}
+              />
+            </motion.div>
+          )}
+          {!showIntroPopup && (
             <GenerateSummaryButton
               isLoading={isLoadingSummary}
-              onGenerate={generateSummary}
+              onGenerate={() => generateSummary(1)}
               userPreferences={userPreferences}
               setUserPreferences={setUserPreferences}
             />
-          </motion.div>
-          <div css={styles.timelineContainer}>
-            <div css={styles.timeline}>
-              {filteredTweets.map((tweet) => (
-                <Tweet
-                  key={tweet.id}
-                  tweet={tweet}
-                  isQuote={false}
-                />
-              ))}
-            </div>
-          </div>
-          {showModal && (
-            <div css={styles.modalOverlay}>
-              <div css={styles.modalContent}>
-                <img src={showModal} css={styles.modalImage} />
-              </div>
-            </div>
           )}
-          <div css={styles.sideContainer} />
+        </motion.div>
+        <div css={styles.timelineContainer}>
+          <div css={styles.timeline}>
+            {filteredTweets.map((tweet) => (
+              <Tweet
+                key={tweet.id}
+                tweet={tweet}
+                isQuote={false}
+              />
+            ))}
+          </div>
         </div>
-      </div >
-    </>
+        <div css={styles.sideContainer} />
+      </div>
+
+      {isSummaryModalOpen && (
+        <SummaryModal
+          summaryData={summary}
+          onClose={closeSummaryModal}
+        />
+      )}
+
+    </div>
   );
 }
 
@@ -597,15 +624,17 @@ const styles: Record<string, CSSObject> = {
     position: 'fixed',
     top: 0,
     left: 0,
+    right: 0,
+    bottom: 0,
     width: '100%',
-    height: '100%',
+    height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'start',
     zIndex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    backdropFilter: 'blur(10px)',
-    overflowY: 'scroll',
+    backgroundColor: 'black',
+    overflowY: 'auto',
+    overflowX: 'hidden',
     fontFamily: "'TwitterChirp', sans-serif",
   },
   maxWidthContainer: {

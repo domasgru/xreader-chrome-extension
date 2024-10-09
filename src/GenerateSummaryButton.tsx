@@ -14,7 +14,7 @@ interface SummaryProps {
 
 const buttonTransition: Transition = {
   type: 'spring',
-  duration: 0.2,
+  duration: 0.3,
   bounce: 0,
 };
 
@@ -113,9 +113,9 @@ const GenerateSummaryButton: React.FC<SummaryProps> = ({ userPreferences, setUse
                   <motion.div
                     css={summaryStyles.popup}
                     style={{ originX: 0, originY: 1 }}
-                    initial={{ opacity: 0.5, scale: 0.3, x: -5, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.3, x: -5, y: 0 }}
                     animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-                    exit={{ opacity: 0.5, scale: 0.3, x: -5, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.3, x: -5, y: 0 }}
                     transition={{ duration: 0.15, type: 'spring', bounce: 0 }}
                   >
                     <div css={summaryStyles.marginBottom}>
