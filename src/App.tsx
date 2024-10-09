@@ -195,7 +195,6 @@ function getUniqueTweets(tweets: TweetInterface[]): TweetInterface[] {
 function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   e.stopPropagation();
   if (!(e.target as HTMLElement)?.closest('#ai-reader-root')) {
-    console.log('scroll prevented 2')
     e.preventDefault();
   }
 }
@@ -241,7 +240,6 @@ function App() {
   async function loadMoreTweets(shouldStopLoadingFunction: () => boolean): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const functionID = Math.random().toString(36).substring(2, 15);
-      //console.log(functionID, '------INITIALIZED FUNCTION TO LOAD TWEETS-------', appRootContainerRef.current?.scrollHeight, appRootContainerRef.current?.scrollTop);
 
       if (mockLoadTweets) {
         const mockTweets = await import('./exampleTweets.json');
@@ -258,7 +256,6 @@ function App() {
       // If another loadMoreTweets is running, abort it, and wait for it to completely finish
       if (loadMoreTweetsAbortController.current) {
         loadMoreTweetsAbortController.current.abort();
-        console.log(functionID, 'ABORTED PREVIOUS LOAD MORE TWEETS');
         while (loadMoreTweetsAbortController.current) {
           await new Promise(resolve => setTimeout(resolve, 50));
         }
@@ -274,12 +271,10 @@ function App() {
           const isRunningFirstTime = !lastSavedTimelineElementChildNode.current;
           if (lastSavedTimelineElementChildNode.current) {
             lastSavedTimelineElementChildNode.current.scrollIntoView();
-            console.log(functionID, '--Scrolling window');
             await new Promise(resolve => setTimeout(resolve, 200));
           }
 
           if (loadMoreTweetsAbortController.current.signal.aborted) {
-            console.log(functionID, 'ABORTED LOAD MORE TWEETS');
             break;
           }
 
@@ -292,11 +287,9 @@ function App() {
           const parsedTweets = arrayToParse.map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
           tweetsToAdd = [...tweetsToAdd, ...parsedTweets];
           lastSavedTimelineElementChildNode.current = timelineElement.lastChild as HTMLElement;
-          console.log(functionID, '--Observing tweets');
 
           if (tweetsToAdd.length > 30 || isRunningFirstTime) {
             const tweetsToAddCopy = [...tweetsToAdd];
-            console.log(functionID, '--Adding tweets to state', tweetsToAddCopy);
 
             setFilteredTweets(prevTweets => {
               const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAddCopy]);
@@ -343,7 +336,7 @@ function App() {
 
       return hasReachedTargetTweet;
     })
-    debugger
+
     const tweets = [...filteredTweetsRef.current];
 
     const processedPosts = tweets
@@ -425,7 +418,7 @@ function App() {
       timeTo: summaryTimeRangeTo,
       media,
     }
-    debugger
+
     setSummary(summary);
     openSummaryModal();
     setIsLoadingSummary(false);
@@ -440,7 +433,6 @@ function App() {
       const scrollableElement = summaryPreviewContainer || appRootContainerRef.current;
       const { scrollTop, scrollHeight, clientHeight } = scrollableElement as HTMLElement;
 
-      console.log(scrollableElement, summaryPreviewContainer)
       // Check if user scrolling at the top or bottom of the scroll
       if ((scrollTop <= 0 && (e as WheelEvent).deltaY < 0) || (Math.round(scrollTop + clientHeight) >= scrollHeight && (e as WheelEvent).deltaY > 0)) {
         e.preventDefault();
@@ -448,7 +440,6 @@ function App() {
     }
 
     function initializeExtension() {
-      console.log('initializeExtension');
       document.addEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false } as EventListenerOptions);
       (document.querySelector('#ai-reader-root') as HTMLElement)?.addEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
 
@@ -465,12 +456,7 @@ function App() {
       const timelineElement = getTimeLineElementNode();
       if (timelineElement instanceof HTMLElement) {
         clearInterval(timelineElementDetectionIntervalId);
-
         initializeExtension();
-
-        console.log('Timeline element found and observation started');
-      } else {
-        console.log('Timeline element not found, retrying...');
       }
     }
 
@@ -482,7 +468,6 @@ function App() {
     }
 
     return () => {
-      console.log('UNMOUNTING APP, REMOVING EVENT LISTENERS');
       clearInterval(timelineElementDetectionIntervalId);
       document.removeEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false } as EventListenerOptions);
       (document.querySelector('#ai-reader-root') as HTMLElement)?.removeEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
@@ -520,7 +505,6 @@ function App() {
 
     // Cleanup function
     return () => {
-      console.log('unmounting scroll', currentRef)
       if (currentRef) {
         currentRef.removeEventListener('scroll', handleScroll);
       }
