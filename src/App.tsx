@@ -5,18 +5,17 @@ import emotionReset from 'emotion-reset';
 import Tweet from './Tweet';
 import { TweetInterface } from './TweetInterface';
 import { SummaryInterface } from './SummaryInterface';
-import OpenAI from 'openai';
-import { z } from "zod";
-import { zodResponseFormat } from "openai/helpers/zod";
 import GenerateSummaryButton from './GenerateSummaryButton';
 import SummaryModal from './SummaryModal';
 import { TIMELINE_WIDTH } from './constants';
 import IntroPopup from './IntroPopup';
 import { UserPreferences } from './UserPreferencesInterface';
 import { motion } from 'framer-motion';
+import { SummaryItem } from './SummaryItemsInterface';
 
 const mockLoadTweets = false;
 const mockLoadSummary = false;
+const AI_API_URL = 'https://erfhso4jcqasm35n544gjalsbu0mqqrl.lambda-url.eu-west-2.on.aws';
 
 const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'xReaderUserPreferences';
 function getStoredUserPreferences(): UserPreferences {
@@ -218,7 +217,6 @@ function App() {
   const [showIntroPopup, setShowIntroPopup] = useState(getStoredShowIntroPopup);
   const [userPreferences, setUserPreferences] = useState<UserPreferences>(getStoredUserPreferences);
   const appRootContainerRef = useRef<HTMLDivElement>(null);
-  const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
 
   const loadMoreTweetsAbortController = useRef<AbortController | null>(null);
   const lastSavedTimelineElementChildNode = useRef<HTMLElement | null>(null);
@@ -239,8 +237,6 @@ function App() {
 
   async function loadMoreTweets(shouldStopLoadingFunction: () => boolean): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      const functionID = Math.random().toString(36).substring(2, 15);
-
       if (mockLoadTweets) {
         const mockTweets = await import('./exampleTweets.json');
         setFilteredTweets(mockTweets.default.slice(0, 10) as TweetInterface[]);
@@ -309,119 +305,113 @@ function App() {
   }
 
   async function generateSummary(forDays: number) {
-    if (mockLoadSummary) {
+    try {
+      if (mockLoadSummary) {
+        setIsLoadingSummary(true);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const mockSummary = await import('./exampleSummary.json');
+        setSummary(mockSummary.default);
+        setIsLoadingSummary(false);
+        openSummaryModal();
+        return;
+      }
+
       setIsLoadingSummary(true);
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const mockSummary = await import('./exampleSummary.json');
-      setSummary(mockSummary.default);
-      setIsLoadingSummary(false);
-      openSummaryModal();
-      return;
-    }
-
-    setIsLoadingSummary(true);
-    const timeNow = new Date();
-    const twentyFourHoursAgo = new Date(Date.now() - forDays * 24 * 60 * 60 * 1000);
-    await loadMoreTweets(() => {
-      if (filteredTweetsRef.current.length > 1500) {
-        return true
-      }
-
-      const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
-        if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
-          return true;
+      const timeNow = new Date();
+      const twentyFourHoursAgo = new Date(Date.now() - forDays * 24 * 60 * 60 * 1000);
+      await loadMoreTweets(() => {
+        if (filteredTweetsRef.current.length > 1500) {
+          return true
         }
-        return false;
-      });
 
-      return hasReachedTargetTweet;
-    })
+        const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
+          if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
+            return true;
+          }
+          return false;
+        });
 
-    const tweets = [...filteredTweetsRef.current];
+        return hasReachedTargetTweet;
+      })
 
-    const processedPosts = tweets
-      .filter(tweet => tweet.tweetText)
-      .map(({ id, tweetText, profileName }) => ({
-        postText: tweetText,
-        postAuthor: profileName,
-        postId: id,
-      }))
+      const tweets = [...filteredTweetsRef.current];
 
+      const processedPosts = tweets
+        .filter(tweet => tweet.tweetText)
+        .map(({ id, tweetText, profileName }) => ({
+          postText: tweetText,
+          postAuthor: profileName,
+          postId: id,
+        }))
 
-    const completion = await openai.beta.chat.completions.parse({
-      model: "gpt-4o-2024-08-06",
-      messages: [
-        {
-          role: "system",
-          content: `You will be provided a list of posts. Filter out not relevant posts. List ALL relevant posts. Each post item should have a brief 5-8 words description mentioning its author in the begining and list of related post ids.
-          User preferences:
-          \nInterests: ${userPreferences.interests}
-          \nNot interests: ${userPreferences.notInterests}
-          `
-        },
-        { role: "user", content: JSON.stringify(processedPosts) },
-      ],
-      response_format: zodResponseFormat(
-        z.object({
-          items: z.array(z.object({
-            description: z.string(),
-            relatedPostsIds: z.array(z.string()),
-          }))
+      const response = await fetch(AI_API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          interests: userPreferences.interests,
+          notInterests: userPreferences.notInterests,
+          stringifiedPosts: JSON.stringify(processedPosts),
         }),
-        "summary_from_posts"
-      ),
-    });
+      })
 
-    const writtenSummaryItems = completion.choices[0].message.parsed?.items?.map(
-      (item) => {
-        return {
-          text: item.description,
-          relatedTweets: item.relatedPostsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-    const summaryTimeRangeTo = tweets[tweets.length - 1].tweetTime;
-    const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
-      if (tweet.tweetImages && tweet.tweetImages.length > 0) {
-        const existingAuthor = acc.find(item => item.authorName === tweet.profileName);
-        if (existingAuthor) {
-          existingAuthor.images.push(
-            ...tweet.tweetImages.map(image => ({
-              imageUrl: image,
-              tweetText: tweet.tweetText,
-              tweetId: tweet.id,
-              tweetLink: tweet.tweetLink,
-            }))
-          );
-        } else {
-          acc.push({
-            authorName: tweet.profileName,
-            authorProfileImage: tweet.profileImage,
-            images: [
+
+      const summaryItems: SummaryItem[] = (await response.json()).response.items;
+      const writtenSummaryItems = summaryItems?.map(
+        (item) => {
+          return {
+            text: item.description,
+            relatedTweets: item.relatedPostsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
+          }
+        }
+      );
+      const summaryTimeRangeTo = tweets[tweets.length - 1].tweetTime;
+      const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
+        if (tweet.tweetImages && tweet.tweetImages.length > 0) {
+          const existingAuthor = acc.find(item => item.authorName === tweet.profileName);
+          if (existingAuthor) {
+            existingAuthor.images.push(
               ...tweet.tweetImages.map(image => ({
                 imageUrl: image,
                 tweetText: tweet.tweetText,
                 tweetId: tweet.id,
                 tweetLink: tweet.tweetLink,
-              })),
-            ],
-          });
+              }))
+            );
+          } else {
+            acc.push({
+              authorName: tweet.profileName,
+              authorProfileImage: tweet.profileImage,
+              images: [
+                ...tweet.tweetImages.map(image => ({
+                  imageUrl: image,
+                  tweetText: tweet.tweetText,
+                  tweetId: tweet.id,
+                  tweetLink: tweet.tweetLink,
+                })),
+              ],
+            });
+          }
         }
+        return acc;
+      }, []);
+
+
+      const summary = {
+        writtenSummaryItems,
+        timeFrom: timeNow,
+        timeTo: summaryTimeRangeTo,
+        media,
       }
-      return acc;
-    }, []);
 
-
-    const summary = {
-      writtenSummaryItems,
-      timeFrom: timeNow,
-      timeTo: summaryTimeRangeTo,
-      media,
+      setSummary(summary);
+      openSummaryModal();
+    } catch (e) {
+      console.error('Error generating summary:', e);
+    } finally {
+      setIsLoadingSummary(false);
     }
-
-    setSummary(summary);
-    openSummaryModal();
-    setIsLoadingSummary(false);
   }
 
   // Initialize chrome extension
