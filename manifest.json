@@ -3,8 +3,7 @@
   "name": "XReader",
   "version": "1.0.0",
   "action": {
-    "default_title": "Open XReader",
-    "default_icon": "xreader.png"
+    "default_title": "Open XReader"
   },
   "background": {
     "service_worker": "background.ts"

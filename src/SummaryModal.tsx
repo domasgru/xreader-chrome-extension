@@ -78,7 +78,7 @@ const SummaryModal: React.FC<SummaryModalProps> = ({ summaryData, onClose }) => 
         </ul>
         <div css={summaryStyles.mediaSection}>
           <div css={summaryStyles.mediaDivider}>
-            <span css={summaryStyles.mediaDividerText}>ALL MEDIA</span>
+            <span css={summaryStyles.mediaDividerText}>MEDIA</span>
           </div>
           {summaryData?.media.map((mediaItem, index) => (
             <div css={summaryStyles.mediaItem} key={index}>
