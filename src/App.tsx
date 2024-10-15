@@ -306,6 +306,13 @@ function App() {
 
   async function generateSummary(forDays: number) {
     try {
+      const isForYouTimeline = Array.from(document.getElementsByTagName('a'))
+        .some(link =>
+          link.textContent?.includes('For you')
+          && link.getAttribute('role') === 'tab'
+          && link.getAttribute('aria-selected') === 'true'
+        );
+      console.log('timelineMode: ', isForYouTimeline)
       if (mockLoadSummary) {
         setIsLoadingSummary(true);
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -324,14 +331,21 @@ function App() {
           return true
         }
 
-        const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
-          if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
-            return true;
+        if (isForYouTimeline) {
+          if (filteredTweetsRef.current.length > 300) {
+            return true
           }
-          return false;
-        });
+        } else {
+          const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
+            if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
+              return true;
+            }
+          });
 
-        return hasReachedTargetTweet;
+          return hasReachedTargetTweet
+        }
+
+        return false;
       })
 
       const tweets = [...filteredTweetsRef.current];
@@ -366,7 +380,6 @@ function App() {
           }
         }
       );
-      const summaryTimeRangeTo = tweets[tweets.length - 1].tweetTime;
       const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
         if (tweet.tweetImages && tweet.tweetImages.length > 0) {
           const existingAuthor = acc.find(item => item.authorName === tweet.profileName);
@@ -397,11 +410,17 @@ function App() {
         return acc;
       }, []);
 
+      // Calculate timeTo
+      const tweetsTimes = tweets
+        .filter(tweet => tweet.retweetAuthor === null && !tweet.hasReplies)
+        .map(tweet => tweet.tweetTime);
+      const oldestTweetTime = new Date(Math.min(...tweetsTimes.map(time => Date.parse(time))));
+      const timeTo = isForYouTimeline ? oldestTweetTime : twentyFourHoursAgo;
 
       const summary = {
         writtenSummaryItems,
         timeFrom: timeNow,
-        timeTo: summaryTimeRangeTo,
+        timeTo,
         media,
       }
 
