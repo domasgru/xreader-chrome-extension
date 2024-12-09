@@ -1,37 +1,42 @@
 /// <reference types="chrome"/>
-import { useState, useEffect, useRef } from 'react';
-import { Global, css, CSSObject } from '@emotion/react';
-import emotionReset from 'emotion-reset';
-import Tweet from './Tweet';
-import { TweetInterface } from './TweetInterface';
-import { SummaryInterface } from './SummaryInterface';
-import GenerateSummaryButton from './GenerateSummaryButton';
-import SummaryModal from './SummaryModal';
-import { TIMELINE_WIDTH } from './constants';
-import IntroPopup from './IntroPopup';
-import { UserPreferences } from './UserPreferencesInterface';
-import { motion } from 'framer-motion';
-import { SummaryItem } from './SummaryItemsInterface';
+import { useState, useEffect, useRef } from "react";
+import { Global, css, CSSObject } from "@emotion/react";
+import emotionReset from "emotion-reset";
+import Tweet from "./Tweet";
+import { TweetInterface } from "./TweetInterface";
+import { SummaryInterface } from "./SummaryInterface";
+import GenerateSummaryButton from "./GenerateSummaryButton";
+import SummaryModal from "./SummaryModal";
+import { TIMELINE_WIDTH } from "./constants";
+import IntroPopup from "./IntroPopup";
+import { UserPreferences } from "./UserPreferencesInterface";
+import { motion } from "framer-motion";
+import { SummaryItem } from "./SummaryItemsInterface";
 
 const mockLoadTweets = false;
 const mockLoadSummary = false;
-const AI_API_URL = 'https://erfhso4jcqasm35n544gjalsbu0mqqrl.lambda-url.eu-west-2.on.aws';
+const AI_API_URL = import.meta.env.VITE_AI_API_URL;
 
-const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'xReaderUserPreferences';
+const LOCAL_STORAGE_USER_PREFERENCES_KEY = "xReaderUserPreferences";
 function getStoredUserPreferences(): UserPreferences {
-  const storedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+  const storedPreferences = localStorage.getItem(
+    LOCAL_STORAGE_USER_PREFERENCES_KEY
+  );
   if (storedPreferences) {
     return JSON.parse(storedPreferences);
   }
   return {
-    interests: 'design, art, products, technology, self improvement, creating, building',
-    notInterests: 'jokes, memes, politics, religion, sports'
+    interests:
+      "design, art, products, technology, self improvement, creating, building",
+    notInterests: "jokes, memes, politics, religion, sports",
   };
 }
 
-const LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY = 'xReaderShowIntroPopup';
+const LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY = "xReaderShowIntroPopup";
 function getStoredShowIntroPopup(): boolean {
-  const storedShowIntroPopup = localStorage.getItem(LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY);
+  const storedShowIntroPopup = localStorage.getItem(
+    LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY
+  );
   if (storedShowIntroPopup) {
     return JSON.parse(storedShowIntroPopup);
   }
@@ -39,7 +44,9 @@ function getStoredShowIntroPopup(): boolean {
 }
 
 function getTimeLineElementNode() {
-  const timelineElement = document.querySelector<HTMLElement>('[aria-label="Timeline: Your Home Timeline"]');
+  const timelineElement = document.querySelector<HTMLElement>(
+    '[aria-label="Timeline: Your Home Timeline"]'
+  );
   if (timelineElement && timelineElement.firstChild instanceof Node) {
     return timelineElement.firstChild;
   }
@@ -49,24 +56,24 @@ function getTimeLineElementNode() {
 function getAllHrefs(node: Element) {
   try {
     const hrefs = new Set();
-    const anchors = node.querySelectorAll('a');  // Select all <a> tags within the provided node
+    const anchors = node.querySelectorAll("a"); // Select all <a> tags within the provided node
 
-    anchors.forEach(anchor => {
+    anchors.forEach((anchor) => {
       if (anchor.href) {
         hrefs.add(anchor.href);
       }
     });
 
-    return Array.from(hrefs);  // Convert Set to array
+    return Array.from(hrefs); // Convert Set to array
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 function getAllTextNodes(node: HTMLElement) {
   const textNodes = [];
   const xpathResult = document.evaluate(
-    './/text()[normalize-space()]',
+    ".//text()[normalize-space()]",
     node,
     null,
     XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
@@ -82,10 +89,15 @@ function getAllTextNodes(node: HTMLElement) {
 
 function parseTweetNode(node: Element): TweetInterface | null {
   try {
-    const hasReplies = window.getComputedStyle(node.firstChild as HTMLElement).borderBottomWidth === '0px' ? true : false;
+    const hasReplies =
+      window.getComputedStyle(node.firstChild as HTMLElement)
+        .borderBottomWidth === "0px"
+        ? true
+        : false;
     const clonedNode = node.cloneNode(true) as Element;
 
-    const tweetTime = clonedNode.querySelector<HTMLTimeElement>('time')?.dateTime;
+    const tweetTime =
+      clonedNode.querySelector<HTMLTimeElement>("time")?.dateTime;
 
     // Not a tweet element, but inside a timeline
     if (!tweetTime) {
@@ -93,39 +105,68 @@ function parseTweetNode(node: Element): TweetInterface | null {
     }
 
     const allLinks = getAllHrefs(clonedNode as HTMLElement);
-    const tweetTexts = clonedNode.querySelectorAll<HTMLElement>('[data-testid="tweetText"]');
+    const tweetTexts = clonedNode.querySelectorAll<HTMLElement>(
+      '[data-testid="tweetText"]'
+    );
 
     // Handle quoted tweets
-    const quoteElement = document.evaluate(".//*[text()='Quote']", clonedNode, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)?.singleNodeValue as Element;
-    const isQuotedTweet = !!quoteElement && !quoteElement.closest('[data-testid="tweetText"]')
-    const quoteTweetElement = isQuotedTweet && quoteElement?.parentElement?.nextElementSibling;
-    const quotedTweet = quoteTweetElement ? parseTweetNode(quoteTweetElement) : null;
+    const quoteElement = document.evaluate(
+      ".//*[text()='Quote']",
+      clonedNode,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    )?.singleNodeValue as Element;
+    const isQuotedTweet =
+      !!quoteElement && !quoteElement.closest('[data-testid="tweetText"]');
+    const quoteTweetElement =
+      isQuotedTweet && quoteElement?.parentElement?.nextElementSibling;
+    const quotedTweet = quoteTweetElement
+      ? parseTweetNode(quoteTweetElement)
+      : null;
 
     // Handle retweets
-    const retweetAuthorElement = clonedNode.querySelector<HTMLElement>('[data-testid="socialContext"]');
-    const retweetAuthor = retweetAuthorElement ? getAllTextNodes(retweetAuthorElement)?.[0]?.nodeValue || null : null
+    const retweetAuthorElement = clonedNode.querySelector<HTMLElement>(
+      '[data-testid="socialContext"]'
+    );
+    const retweetAuthor = retweetAuthorElement
+      ? getAllTextNodes(retweetAuthorElement)?.[0]?.nodeValue || null
+      : null;
 
     // Handle tweet videos
-    const tweetVideoPosters = Array.from(clonedNode.querySelectorAll<HTMLVideoElement>('video')).map(video => {
-      if (quoteTweetElement && quoteTweetElement.contains(video)) {
-        return null;
-      }
+    const tweetVideoPosters = Array.from(
+      clonedNode.querySelectorAll<HTMLVideoElement>("video")
+    )
+      .map((video) => {
+        if (quoteTweetElement && quoteTweetElement.contains(video)) {
+          return null;
+        }
 
-      return video?.poster;
-    }).filter(src => src !== null);
+        return video?.poster;
+      })
+      .filter((src) => src !== null);
 
     // Handle images
-    const tweetImages = Array.from(clonedNode.querySelectorAll<HTMLImageElement>('[data-testid="tweetPhoto"] img')).map(img => {
-      if (quoteTweetElement && quoteTweetElement.contains(img)) {
-        return null;
-      }
+    const tweetImages = Array.from(
+      clonedNode.querySelectorAll<HTMLImageElement>(
+        '[data-testid="tweetPhoto"] img'
+      )
+    )
+      .map((img) => {
+        if (quoteTweetElement && quoteTweetElement.contains(img)) {
+          return null;
+        }
 
-      return img?.src;
-      // Sometimes tweet with videos has duplicate image of a poster
-    }).filter(src => src !== null).filter(src => !tweetVideoPosters.includes(src));
+        return img?.src;
+        // Sometimes tweet with videos has duplicate image of a poster
+      })
+      .filter((src) => src !== null)
+      .filter((src) => !tweetVideoPosters.includes(src));
 
     // Handle long text tweets
-    const showMoreElement = clonedNode.querySelector<HTMLElement>('[data-testid="tweet-text-show-more-link"]');
+    const showMoreElement = clonedNode.querySelector<HTMLElement>(
+      '[data-testid="tweet-text-show-more-link"]'
+    );
     let hasShowMore = false;
     if (showMoreElement) {
       if (quoteTweetElement && quoteTweetElement.contains(showMoreElement)) {
@@ -136,31 +177,47 @@ function parseTweetNode(node: Element): TweetInterface | null {
     }
 
     // Handle link card
-    const linkCardLinkElement = clonedNode.querySelector<HTMLAnchorElement>('[data-testid="card.wrapper"] a');
-    const tweetLinkCard = linkCardLinkElement?.href ? {
-      linkCardUrl: linkCardLinkElement.href,
-      linkCardImage: linkCardLinkElement.querySelector<HTMLImageElement>('img')?.src,
-      linkCardLink: linkCardLinkElement.querySelector<HTMLAnchorElement>('a')?.href,
-      linkCardTitle: linkCardLinkElement.textContent || undefined,
-    } : undefined;
+    const linkCardLinkElement = clonedNode.querySelector<HTMLAnchorElement>(
+      '[data-testid="card.wrapper"] a'
+    );
+    const tweetLinkCard = linkCardLinkElement?.href
+      ? {
+          linkCardUrl: linkCardLinkElement.href,
+          linkCardImage:
+            linkCardLinkElement.querySelector<HTMLImageElement>("img")?.src,
+          linkCardLink:
+            linkCardLinkElement.querySelector<HTMLAnchorElement>("a")?.href,
+          linkCardTitle: linkCardLinkElement.textContent || undefined,
+        }
+      : undefined;
 
     // Handle user details
-    const profileImage = clonedNode.querySelector<HTMLImageElement>('[data-testid="Tweet-User-Avatar"] img')?.src;
-    const profileElement = clonedNode.querySelector<HTMLElement>('[data-testid="User-Name"]');
-    const profileTextNodes = profileElement ? getAllTextNodes(profileElement) : null;
+    const profileImage = clonedNode.querySelector<HTMLImageElement>(
+      '[data-testid="Tweet-User-Avatar"] img'
+    )?.src;
+    const profileElement = clonedNode.querySelector<HTMLElement>(
+      '[data-testid="User-Name"]'
+    );
+    const profileTextNodes = profileElement
+      ? getAllTextNodes(profileElement)
+      : null;
     const profileName = profileTextNodes?.[0]?.textContent?.trim();
     const profileTag = profileTextNodes?.[1]?.textContent?.trim();
 
     const tweetText = tweetTexts[0]?.textContent || undefined;
 
-    const tweetUniqueString = clonedNode.querySelector<HTMLTimeElement>('time')?.dateTime + ((retweetAuthor || profileName)?.split(' ').join('') || '') + tweetText?.slice(0, 5)?.trim();
+    const tweetUniqueString =
+      clonedNode.querySelector<HTMLTimeElement>("time")?.dateTime +
+      ((retweetAuthor || profileName)?.split(" ").join("") || "") +
+      tweetText?.slice(0, 5)?.trim();
     const id = stringToId(tweetUniqueString);
 
     const tweetData: TweetInterface = {
       retweetAuthor,
       hasShowMore,
       tweetText,
-      tweetLink: (allLinks as string[])?.find(link => link.includes('/status/')) ?? '',
+      tweetLink:
+        (allLinks as string[])?.find((link) => link.includes("/status/")) ?? "",
       tweetImages,
       tweetVideoPosters,
       tweetLinkCard,
@@ -175,14 +232,14 @@ function parseTweetNode(node: Element): TweetInterface | null {
 
     return tweetData;
   } catch (error) {
-    console.log('Error processing node', error);
+    console.log("Error processing node", error);
     return null;
   }
 }
 
 function getUniqueTweets(tweets: TweetInterface[]): TweetInterface[] {
   const seen = new Set();
-  return tweets.filter(item => {
+  return tweets.filter((item) => {
     if (!seen.has(item.id)) {
       seen.add(item.id);
       return true;
@@ -193,7 +250,7 @@ function getUniqueTweets(tweets: TweetInterface[]): TweetInterface[] {
 
 function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   e.stopPropagation();
-  if (!(e.target as HTMLElement)?.closest('#ai-reader-root')) {
+  if (!(e.target as HTMLElement)?.closest("#ai-reader-root")) {
     e.preventDefault();
   }
 }
@@ -202,7 +259,7 @@ function stringToId(str: string): string {
   let hash: number = 0;
   for (let i: number = 0; i < str.length; i++) {
     const char: number = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash;
   }
   return Math.abs(hash).toString(36);
@@ -215,7 +272,9 @@ function App() {
   const [isLoadingSummary, setIsLoadingSummary] = useState<boolean>(false);
   const [summary, setSummary] = useState<any>(null);
   const [showIntroPopup, setShowIntroPopup] = useState(getStoredShowIntroPopup);
-  const [userPreferences, setUserPreferences] = useState<UserPreferences>(getStoredUserPreferences);
+  const [userPreferences, setUserPreferences] = useState<UserPreferences>(
+    getStoredUserPreferences
+  );
   const appRootContainerRef = useRef<HTMLDivElement>(null);
 
   const loadMoreTweetsAbortController = useRef<AbortController | null>(null);
@@ -225,20 +284,22 @@ function App() {
   const preservedScrollPosition = useRef<number | null>(null);
   function openSummaryModal() {
     preservedScrollPosition.current = window.scrollY;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     setIsSummaryModalOpen(true);
   }
   function closeSummaryModal() {
-    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty("overflow");
     window.scrollTo(0, preservedScrollPosition.current || 0);
     preservedScrollPosition.current = null;
     setIsSummaryModalOpen(false);
   }
 
-  async function loadMoreTweets(shouldStopLoadingFunction: () => boolean): Promise<void> {
+  async function loadMoreTweets(
+    shouldStopLoadingFunction: () => boolean
+  ): Promise<void> {
     return new Promise<void>(async (resolve) => {
       if (mockLoadTweets) {
-        const mockTweets = await import('./exampleTweets.json');
+        const mockTweets = await import("./exampleTweets.json");
         setFilteredTweets(mockTweets.default.slice(0, 10) as TweetInterface[]);
         return resolve();
       }
@@ -253,7 +314,7 @@ function App() {
       if (loadMoreTweetsAbortController.current) {
         loadMoreTweetsAbortController.current.abort();
         while (loadMoreTweetsAbortController.current) {
-          await new Promise(resolve => setTimeout(resolve, 50));
+          await new Promise((resolve) => setTimeout(resolve, 50));
         }
       }
 
@@ -263,11 +324,14 @@ function App() {
       try {
         let tweetsToAdd: TweetInterface[] = [];
 
-        while (!shouldStopLoadingFunction() && !loadMoreTweetsAbortController.current.signal.aborted) {
+        while (
+          !shouldStopLoadingFunction() &&
+          !loadMoreTweetsAbortController.current.signal.aborted
+        ) {
           const isRunningFirstTime = !lastSavedTimelineElementChildNode.current;
           if (lastSavedTimelineElementChildNode.current) {
             lastSavedTimelineElementChildNode.current.scrollIntoView();
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise((resolve) => setTimeout(resolve, 200));
           }
 
           if (loadMoreTweetsAbortController.current.signal.aborted) {
@@ -276,47 +340,60 @@ function App() {
 
           const renderedTweetsArray = Array.from(timelineElement.childNodes);
           const parseFromIndex = lastSavedTimelineElementChildNode.current
-            ? renderedTweetsArray.findIndex(node => node === lastSavedTimelineElementChildNode.current) + 1
+            ? renderedTweetsArray.findIndex(
+                (node) => node === lastSavedTimelineElementChildNode.current
+              ) + 1
             : 0;
           const parseToIndex = renderedTweetsArray.length;
-          const arrayToParse = renderedTweetsArray.slice(parseFromIndex, parseToIndex);
-          const parsedTweets = arrayToParse.map(node => parseTweetNode(node as Element)).filter(tweet => tweet !== null);
+          const arrayToParse = renderedTweetsArray.slice(
+            parseFromIndex,
+            parseToIndex
+          );
+          const parsedTweets = arrayToParse
+            .map((node) => parseTweetNode(node as Element))
+            .filter((tweet) => tweet !== null);
           tweetsToAdd = [...tweetsToAdd, ...parsedTweets];
-          lastSavedTimelineElementChildNode.current = timelineElement.lastChild as HTMLElement;
+          lastSavedTimelineElementChildNode.current =
+            timelineElement.lastChild as HTMLElement;
 
           if (tweetsToAdd.length > 30 || isRunningFirstTime) {
             const tweetsToAddCopy = [...tweetsToAdd];
 
-            setFilteredTweets(prevTweets => {
-              const uniqueTweets = getUniqueTweets([...prevTweets, ...tweetsToAddCopy]);
+            setFilteredTweets((prevTweets) => {
+              const uniqueTweets = getUniqueTweets([
+                ...prevTweets,
+                ...tweetsToAddCopy,
+              ]);
               return uniqueTweets;
             });
             tweetsToAdd = [];
           }
         }
       } catch (error) {
-        console.error('Error in loadMoreTweets:', error);
+        console.error("Error in loadMoreTweets:", error);
       } finally {
         loadMoreTweetsAbortController.current = null;
         setIsLoadingTweets(false);
         resolve();
       }
-    })
+    });
   }
 
   async function generateSummary(forDays: number) {
     try {
-      const isForYouTimeline = Array.from(document.getElementsByTagName('a'))
-        .some(link =>
-          link.textContent?.includes('For you')
-          && link.getAttribute('role') === 'tab'
-          && link.getAttribute('aria-selected') === 'true'
-        );
-      console.log('timelineMode: ', isForYouTimeline)
+      const isForYouTimeline = Array.from(
+        document.getElementsByTagName("a")
+      ).some(
+        (link) =>
+          link.textContent?.includes("For you") &&
+          link.getAttribute("role") === "tab" &&
+          link.getAttribute("aria-selected") === "true"
+      );
+
       if (mockLoadSummary) {
         setIsLoadingSummary(true);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        const mockSummary = await import('./exampleSummary.json');
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const mockSummary = await import("./exampleSummary.json");
         setSummary(mockSummary.default);
         setIsLoadingSummary(false);
         openSummaryModal();
@@ -325,67 +402,78 @@ function App() {
 
       setIsLoadingSummary(true);
       const timeNow = new Date();
-      const twentyFourHoursAgo = new Date(Date.now() - forDays * 24 * 60 * 60 * 1000);
+      const twentyFourHoursAgo = new Date(
+        Date.now() - forDays * 24 * 60 * 60 * 1000
+      );
       await loadMoreTweets(() => {
         if (filteredTweetsRef.current.length > 1500) {
-          return true
+          return true;
         }
 
         if (isForYouTimeline) {
           if (filteredTweetsRef.current.length > 300) {
-            return true
+            return true;
           }
         } else {
-          const hasReachedTargetTweet = filteredTweetsRef.current.some(tweet => {
-            if (new Date(tweet.tweetTime) <= twentyFourHoursAgo && tweet.retweetAuthor === null && !tweet.hasReplies) {
-              return true;
+          const hasReachedTargetTweet = filteredTweetsRef.current.some(
+            (tweet) => {
+              if (
+                new Date(tweet.tweetTime) <= twentyFourHoursAgo &&
+                tweet.retweetAuthor === null &&
+                !tweet.hasReplies
+              ) {
+                return true;
+              }
             }
-          });
+          );
 
-          return hasReachedTargetTweet
+          return hasReachedTargetTweet;
         }
 
         return false;
-      })
+      });
 
       const tweets = [...filteredTweetsRef.current];
 
       const processedPosts = tweets
-        .filter(tweet => tweet.tweetText)
+        .filter((tweet) => tweet.tweetText)
         .map(({ id, tweetText, profileName }) => ({
           postText: tweetText,
           postAuthor: profileName,
           postId: id,
-        }))
+        }));
 
       const response = await fetch(AI_API_URL, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           interests: userPreferences.interests,
           notInterests: userPreferences.notInterests,
           stringifiedPosts: JSON.stringify(processedPosts),
         }),
-      })
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const summaryItems: SummaryItem[] = (await response.json()).response.items;
-      const writtenSummaryItems = summaryItems?.map(
-        (item) => {
-          return {
-            text: item.description,
-            relatedTweets: item.relatedPostsIds.map(id => tweets.find(tweet => tweet.id === id)).filter(tweet => tweet !== undefined),
-          }
-        }
-      );
-      const media = tweets.reduce((acc: SummaryInterface['media'], tweet) => {
+      const summaryItems: SummaryItem[] = (await response.json()).response
+        .items;
+      const writtenSummaryItems = summaryItems?.map((item) => {
+        return {
+          text: item.description,
+          relatedTweets: item.relatedPostsIds
+            .map((id) => tweets.find((tweet) => tweet.id === id))
+            .filter((tweet) => tweet !== undefined),
+        };
+      });
+      const media = tweets.reduce((acc: SummaryInterface["media"], tweet) => {
         if (tweet.tweetImages && tweet.tweetImages.length > 0) {
-          const existingAuthor = acc.find(item => item.authorName === tweet.profileName);
+          const existingAuthor = acc.find(
+            (item) => item.authorName === tweet.profileName
+          );
           if (existingAuthor) {
             existingAuthor.images.push(
-              ...tweet.tweetImages.map(image => ({
+              ...tweet.tweetImages.map((image) => ({
                 imageUrl: image,
                 tweetText: tweet.tweetText,
                 tweetId: tweet.id,
@@ -397,7 +485,7 @@ function App() {
               authorName: tweet.profileName,
               authorProfileImage: tweet.profileImage,
               images: [
-                ...tweet.tweetImages.map(image => ({
+                ...tweet.tweetImages.map((image) => ({
                   imageUrl: image,
                   tweetText: tweet.tweetText,
                   tweetId: tweet.id,
@@ -412,9 +500,11 @@ function App() {
 
       // Calculate timeTo
       const tweetsTimes = tweets
-        .filter(tweet => tweet.retweetAuthor === null && !tweet.hasReplies)
-        .map(tweet => tweet.tweetTime);
-      const oldestTweetTime = new Date(Math.min(...tweetsTimes.map(time => Date.parse(time))));
+        .filter((tweet) => tweet.retweetAuthor === null && !tweet.hasReplies)
+        .map((tweet) => tweet.tweetTime);
+      const oldestTweetTime = new Date(
+        Math.min(...tweetsTimes.map((time) => Date.parse(time)))
+      );
       const timeTo = isForYouTimeline ? oldestTweetTime : twentyFourHoursAgo;
 
       const summary = {
@@ -422,12 +512,12 @@ function App() {
         timeFrom: timeNow,
         timeTo,
         media,
-      }
+      };
 
       setSummary(summary);
       openSummaryModal();
     } catch (e) {
-      console.error('Error generating summary:', e);
+      console.error("Error generating summary:", e);
     } finally {
       setIsLoadingSummary(false);
     }
@@ -438,26 +528,47 @@ function App() {
     const timelineElement = getTimeLineElementNode();
 
     function preventScrollOnTimeline(e: WheelEvent) {
-      const summaryPreviewContainer = appRootContainerRef.current?.querySelector('#summary-preview-container');
-      const scrollableElement = summaryPreviewContainer || appRootContainerRef.current;
-      const { scrollTop, scrollHeight, clientHeight } = scrollableElement as HTMLElement;
+      const summaryPreviewContainer =
+        appRootContainerRef.current?.querySelector(
+          "#summary-preview-container"
+        );
+      const scrollableElement =
+        summaryPreviewContainer || appRootContainerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } =
+        scrollableElement as HTMLElement;
 
       // Check if user scrolling at the top or bottom of the scroll
-      if ((scrollTop <= 0 && (e as WheelEvent).deltaY < 0) || (Math.round(scrollTop + clientHeight) >= scrollHeight && (e as WheelEvent).deltaY > 0)) {
+      if (
+        (scrollTop <= 0 && (e as WheelEvent).deltaY < 0) ||
+        (Math.round(scrollTop + clientHeight) >= scrollHeight &&
+          (e as WheelEvent).deltaY > 0)
+      ) {
         e.preventDefault();
       }
     }
 
     function initializeExtension() {
-      document.addEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false } as EventListenerOptions);
-      (document.querySelector('#ai-reader-root') as HTMLElement)?.addEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
+      document.addEventListener(
+        "wheel",
+        preventScrollOutsideExtentionUIEventListener,
+        { passive: false } as EventListenerOptions
+      );
+      (
+        document.querySelector("#ai-reader-root") as HTMLElement
+      )?.addEventListener("wheel", preventScrollOnTimeline, {
+        passive: false,
+      } as EventListenerOptions);
 
       loadMoreTweets(() => {
         if (!appRootContainerRef.current) {
           return false;
         }
 
-        return appRootContainerRef.current.scrollHeight - appRootContainerRef.current.scrollTop > 5000
+        return (
+          appRootContainerRef.current.scrollHeight -
+            appRootContainerRef.current.scrollTop >
+          5000
+        );
       });
     }
 
@@ -473,13 +584,24 @@ function App() {
     if (timelineElement) {
       initializeExtension();
     } else {
-      timelineElementDetectionIntervalId = setInterval(initializeExtensionRetryFunction, 300);
+      timelineElementDetectionIntervalId = setInterval(
+        initializeExtensionRetryFunction,
+        300
+      );
     }
 
     return () => {
       clearInterval(timelineElementDetectionIntervalId);
-      document.removeEventListener('wheel', preventScrollOutsideExtentionUIEventListener, { passive: false } as EventListenerOptions);
-      (document.querySelector('#ai-reader-root') as HTMLElement)?.removeEventListener('wheel', preventScrollOnTimeline, { passive: false } as EventListenerOptions);
+      document.removeEventListener(
+        "wheel",
+        preventScrollOutsideExtentionUIEventListener,
+        { passive: false } as EventListenerOptions
+      );
+      (
+        document.querySelector("#ai-reader-root") as HTMLElement
+      )?.removeEventListener("wheel", preventScrollOnTimeline, {
+        passive: false,
+      } as EventListenerOptions);
       if (loadMoreTweetsAbortController.current) {
         loadMoreTweetsAbortController.current.abort();
       }
@@ -503,32 +625,42 @@ function App() {
           return false;
         }
 
-        return appRootContainerRef.current.scrollHeight - appRootContainerRef.current.scrollTop > 5000
+        return (
+          appRootContainerRef.current.scrollHeight -
+            appRootContainerRef.current.scrollTop >
+          5000
+        );
       });
     };
 
     const currentRef = appRootContainerRef.current;
     if (currentRef) {
-      currentRef.addEventListener('scroll', handleScroll);
+      currentRef.addEventListener("scroll", handleScroll);
     }
 
     // Cleanup function
     return () => {
       if (currentRef) {
-        currentRef.removeEventListener('scroll', handleScroll);
+        currentRef.removeEventListener("scroll", handleScroll);
       }
     };
   }, [isLoadingTweets, appRootContainerRef]);
 
   // Handle user preferences local storage
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(userPreferences));
+    localStorage.setItem(
+      LOCAL_STORAGE_USER_PREFERENCES_KEY,
+      JSON.stringify(userPreferences)
+    );
   }, [userPreferences]);
 
   // Handle show intro popup local storage
   useEffect(() => {
     if (showIntroPopup === false) {
-      localStorage.setItem(LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY, JSON.stringify(showIntroPopup));
+      localStorage.setItem(
+        LOCAL_STORAGE_SHOW_INTRO_POPUP_KEY,
+        JSON.stringify(showIntroPopup)
+      );
     }
   }, [showIntroPopup]);
 
@@ -538,24 +670,28 @@ function App() {
 
   return (
     <div ref={appRootContainerRef} css={styles.filteredTweetsContainerStyle}>
-      <Global styles={css`
-        ${emotionReset}
-        *, *::after, *::before {
-          box-sizing: border-box;
-          -moz-osx-font-smoothing: grayscale;
-          -webkit-font-smoothing: antialiased;
-          font-smoothing: antialiased;
-          font-family: 'TwitterChirp', sans-serif;
-        }
-        button, input, textarea {
-          border: none;
-          outline: none;
-          background: none;
-          font-family: inherit;
-          padding: 0;
-          margin: 0;
-        }
-      `} />
+      <Global
+        styles={css`
+          ${emotionReset}
+          *, *::after, *::before {
+            box-sizing: border-box;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+            font-family: "TwitterChirp", sans-serif;
+          }
+          button,
+          input,
+          textarea {
+            border: none;
+            outline: none;
+            background: none;
+            font-family: inherit;
+            padding: 0;
+            margin: 0;
+          }
+        `}
+      />
 
       <div css={styles.maxWidthContainer}>
         <motion.div
@@ -564,7 +700,7 @@ function App() {
           css={{
             ...styles.sideContainer,
             ...(isLoadingSummary && {
-              pointerEvents: 'none',
+              pointerEvents: "none",
             }),
           }}
           onWheel={(e) => e.stopPropagation()}
@@ -581,7 +717,7 @@ function App() {
           {!showIntroPopup && (
             <GenerateSummaryButton
               isLoading={isLoadingSummary}
-              onGenerate={() => generateSummary(1)}
+              onGenerate={() => generateSummary(3)}
               userPreferences={userPreferences}
               setUserPreferences={setUserPreferences}
             />
@@ -590,11 +726,7 @@ function App() {
         <div css={styles.timelineContainer}>
           <div css={styles.timeline}>
             {filteredTweets.map((tweet) => (
-              <Tweet
-                key={tweet.id}
-                tweet={tweet}
-                isQuote={false}
-              />
+              <Tweet key={tweet.id} tweet={tweet} isQuote={false} />
             ))}
           </div>
         </div>
@@ -602,111 +734,107 @@ function App() {
       </div>
 
       {isSummaryModalOpen && (
-        <SummaryModal
-          summaryData={summary}
-          onClose={closeSummaryModal}
-        />
+        <SummaryModal summaryData={summary} onClose={closeSummaryModal} />
       )}
-
     </div>
   );
 }
 
 const styles: Record<string, CSSObject> = {
   filteredTweetsContainerStyle: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    width: '100%',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'start',
+    width: "100%",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "start",
     zIndex: 1,
-    backgroundColor: 'black',
-    overflowY: 'auto',
-    overflowX: 'hidden',
+    backgroundColor: "black",
+    overflowY: "auto",
+    overflowX: "hidden",
     fontFamily: "'TwitterChirp', sans-serif",
   },
   maxWidthContainer: {
-    position: 'relative',
-    width: '1400px',
-    maxWidth: '100%',
-    display: 'flex',
-    alignItems: 'start',
+    position: "relative",
+    width: "1400px",
+    maxWidth: "100%",
+    display: "flex",
+    alignItems: "start",
   },
   summaryContainer: {
     width: `${TIMELINE_WIDTH}px`,
   },
   introPopupContainer: {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'space-evenly',
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-evenly",
     zIndex: 1000,
-    padding: '32px 16px',
+    padding: "32px 16px",
   },
   sideContainer: {
-    position: 'sticky',
-    top: '0',
-    left: '0',
-    height: '100vh',
-    flex: '1 1 0px',
-    minWidth: '0px',
-    padding: '32px 16px',
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'space-evenly',
+    position: "sticky",
+    top: "0",
+    left: "0",
+    height: "100vh",
+    flex: "1 1 0px",
+    minWidth: "0px",
+    padding: "32px 16px",
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-evenly",
     zIndex: 100,
   },
   timelineContainer: {
     width: `${TIMELINE_WIDTH}px`,
-    maxWidth: '100%',
-    minWidth: '0px',
-    flex: '0 1 auto',
-    paddingTop: '20px'
+    maxWidth: "100%",
+    minWidth: "0px",
+    flex: "0 1 auto",
+    paddingTop: "20px",
   },
   timeline: {
-    width: '100%',
-    minWidth: '0px',
-    borderTop: '1px solid #2F3336',
-    borderLeft: '1px solid #2F3336',
-    borderRight: '1px solid #2F3336',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    width: "100%",
+    minWidth: "0px",
+    borderTop: "1px solid #2F3336",
+    borderLeft: "1px solid #2F3336",
+    borderRight: "1px solid #2F3336",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     zIndex: 1,
   },
   modalOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     zIndex: 1000,
-    width: '100%'
+    width: "100%",
   },
   modalContent: {
-    position: 'sticky',
+    position: "sticky",
     top: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100vh',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100vh",
   },
   modalImage: {
-    maxWidth: '90%',
-    maxHeight: '90vh',
-    objectFit: 'contain',
+    maxWidth: "90%",
+    maxHeight: "90vh",
+    objectFit: "contain",
   },
-}
+};
 
 export default App;
