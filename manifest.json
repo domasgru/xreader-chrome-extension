@@ -8,22 +8,12 @@
   "background": {
     "service_worker": "background.ts"
   },
-  "permissions": [
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://x.com/*",
-    "https://twitter.com/*"
-  ],
+  "permissions": ["scripting"],
+  "host_permissions": ["https://x.com/*", "https://twitter.com/*"],
   "content_scripts": [
     {
-      "matches": [
-        "https://x.com/*",
-        "https://twitter.com/*"
-      ],
-      "js": [
-        "src/main.tsx"
-      ]
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["src/main.tsx"]
     }
   ]
 }
