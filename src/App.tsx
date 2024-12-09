@@ -717,7 +717,7 @@ function App() {
           {!showIntroPopup && (
             <GenerateSummaryButton
               isLoading={isLoadingSummary}
-              onGenerate={() => generateSummary(3)}
+              onGenerate={() => generateSummary(1)}
               userPreferences={userPreferences}
               setUserPreferences={setUserPreferences}
             />
