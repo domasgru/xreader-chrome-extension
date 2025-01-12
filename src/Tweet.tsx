@@ -1,6 +1,6 @@
-import React from 'react';
-import { CSSObject } from '@emotion/react';
-import { TweetInterface } from './TweetInterface';
+import React from "react";
+import { CSSObject } from "@emotion/react";
+import { TweetData } from "./types";
 
 function formatTweetDate(time: string): string {
   const tweetDate: Date = new Date(time);
@@ -10,37 +10,43 @@ function formatTweetDate(time: string): string {
   const diffInHours: number = diffInMinutes / 60;
 
   if (diffInMinutes < 1) {
-    return '1m';
+    return "1m";
   } else if (diffInMinutes < 60) {
     return `${Math.floor(diffInMinutes)}m`;
   } else if (diffInHours <= 24) {
     return `${Math.floor(diffInHours)}h`;
   } else {
-    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' };
-    return tweetDate.toLocaleDateString('en-US', options);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+    };
+    return tweetDate.toLocaleDateString("en-US", options);
   }
 }
 
 function getFullTweetTime(time: string): string {
   const tweetDate = new Date(time);
   return tweetDate.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
 function setImageSizeToLarge(url: string): string {
   const urlObj = new URL(url);
-  urlObj.searchParams.set('name', 'large');
+  urlObj.searchParams.set("name", "large");
   return urlObj.toString();
 }
 
-const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, isQuote }) => {
+const Tweet: React.FC<{ tweet: TweetData; isQuote: boolean }> = ({
+  tweet,
+  isQuote,
+}) => {
   const handleClick = () => {
-    window.open(tweet.tweetLink, '_blank', 'noopener,noreferrer');
+    window.open(tweet.url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -48,16 +54,16 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
       id={`tweet-${tweet.id}`}
       css={{
         ...styles.tweetContainer,
-        ...(isQuote && { padding: '16px', border: 'none' }),
-        ...(tweet.hasReplies && { borderBottom: 'none' })
+        ...(isQuote && { padding: "16px", border: "none" }),
+        ...(tweet.hasReplies && { borderBottom: "none" }),
       }}
       onClick={handleClick}
     >
       <div css={styles.profileContainer}>
         {!isQuote && (
           <img
-            src={tweet.profileImage}
-            alt={tweet.profileName}
+            src={tweet.authorProfileImage}
+            alt={tweet.authorName}
             css={styles.profileImage}
           />
         )}
@@ -65,66 +71,66 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
           <div css={styles.headerContainer}>
             {isQuote && (
               <img
-                src={tweet.profileImage}
-                alt={tweet.profileName}
+                src={tweet.authorProfileImage}
+                alt={tweet.authorName}
                 css={styles.quoteProfileImage}
               />
             )}
             <div css={styles.profileName}>
-              {tweet.profileName}
-              {
-                tweet.retweetAuthor && (
-                  <span css={styles.retweetAuthor}>
-                    &nbsp;&nbsp;·&nbsp;&nbsp;{tweet.retweetAuthor} reposted
-                  </span>
-                )
-              }
+              {tweet.authorName}
+              {tweet.retweetAuthor && (
+                <span css={styles.retweetAuthor}>
+                  &nbsp;&nbsp;·&nbsp;&nbsp;{tweet.retweetAuthor} reposted
+                </span>
+              )}
             </div>
-            <span css={styles.tweetTime} title={getFullTweetTime(tweet.tweetTime)}>
-              {formatTweetDate(tweet.tweetTime)}
+            <span
+              css={styles.tweetTime}
+              title={getFullTweetTime(tweet.createdAt)}
+            >
+              {formatTweetDate(tweet.createdAt)}
             </span>
           </div>
-          <div css={{ ...styles.tweetContent, ...(isQuote && { padding: '0px' }) }}>
-            <p css={styles.tweetText}>
-              {tweet.tweetText}
-            </p>
+          <div
+            css={{ ...styles.tweetContent, ...(isQuote && { padding: "0px" }) }}
+          >
+            <p css={styles.tweetText}>{tweet.textContent}</p>
 
             {tweet.hasShowMore && (
-              <button
-                css={styles.showMoreButton}
-              >
-                Show more
-              </button>
+              <button css={styles.showMoreButton}>Show more</button>
             )}
 
-            {tweet.tweetLinkCard && (
+            {tweet.linkCard && (
               <a
-                href={tweet.tweetLinkCard.linkCardLink || '#'}
+                href={tweet.linkCard?.linkCardLink || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 css={styles.linkCard}
               >
-                {tweet.tweetLinkCard.linkCardImage && (
+                {tweet.linkCard.linkCardImage && (
                   <img
-                    src={tweet.tweetLinkCard.linkCardImage}
-                    alt={tweet.tweetLinkCard.linkCardTitle || 'Link Card'}
+                    src={tweet.linkCard.linkCardImage}
+                    alt={tweet.linkCard.linkCardTitle || "Link Card"}
                     css={styles.linkCardImage}
                   />
                 )}
                 <div css={styles.linkCardTitle}>
-                  {tweet.tweetLinkCard.linkCardTitle}
+                  {tweet.linkCard.linkCardTitle}
                 </div>
               </a>
             )}
 
-            {tweet.tweetVideoPosters.length > 0 && (
+            {tweet.videos?.length > 0 && (
               <div
                 css={{
                   ...styles.videoPostersContainer,
-                  gridTemplateColumns: tweet.tweetVideoPosters.length === 1 ? '1fr' : `repeat(${tweet.tweetVideoPosters.length}, 1fr)`,
+                  gridTemplateColumns:
+                    tweet.videos.length === 1
+                      ? "1fr"
+                      : `repeat(${tweet.videos.length}, 1fr)`,
                 }}
               >
-                {tweet.tweetVideoPosters.map((poster, index) => (
+                {tweet.videos.map(({ poster }, index) => (
                   <div
                     key={index}
                     css={{
@@ -140,10 +146,7 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M8 5v14l11-7L8 5z"
-                          fill="#000"
-                        />
+                        <path d="M8 5v14l11-7L8 5z" fill="#000" />
                       </svg>
                     </div>
                   </div>
@@ -151,22 +154,30 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
               </div>
             )}
 
-            {tweet.tweetImages.length > 0 && (
+            {tweet.images.length > 0 && (
               <div
                 css={{
                   ...styles.imagesContainer,
-                  gridTemplateColumns: tweet.tweetImages.length === 1 ? '1fr' : `repeat(${tweet.tweetImages.length}, 1fr)`,
+                  gridTemplateColumns:
+                    tweet.images.length === 1
+                      ? "1fr"
+                      : `repeat(${tweet.images.length}, 1fr)`,
                 }}
               >
-                {tweet.tweetImages.map((img, index) => (
-                  <img key={index} src={setImageSizeToLarge(img)} alt={`Tweet image ${index + 1}`} css={styles.tweetImage} />
+                {tweet.images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={setImageSizeToLarge(img)}
+                    alt={`Tweet image ${index + 1}`}
+                    css={styles.tweetImage}
+                  />
                 ))}
               </div>
             )}
 
-            {tweet.quotedTweet && (
+            {tweet.tweetQuote && (
               <div css={styles.quotedTweet}>
-                <Tweet tweet={tweet.quotedTweet} isQuote={true} />
+                <Tweet tweet={tweet.tweetQuote} isQuote={true} />
               </div>
             )}
           </div>
@@ -178,185 +189,185 @@ const Tweet: React.FC<{ tweet: TweetInterface; isQuote: boolean }> = ({ tweet, i
 
 const styles: Record<string, CSSObject> = {
   tweetContainer: {
-    color: '#fff',
-    padding: '20px 24px',
+    color: "#fff",
+    padding: "20px 24px",
     borderRadius: 0,
-    width: '100%',
-    borderBottom: '1px solid #2F3336',
-    cursor: 'pointer',
-    gap: '8px',
-    fontSize: '16px',
-    display: 'flex',
-    flexDirection: 'column',
+    width: "100%",
+    borderBottom: "1px solid #2F3336",
+    cursor: "pointer",
+    gap: "8px",
+    fontSize: "16px",
+    display: "flex",
+    flexDirection: "column",
   },
 
   retweetAuthor: {
-    color: '#71767A',
-    marginBottom: '8px',
+    color: "#71767A",
+    marginBottom: "8px",
   },
 
   profileContainer: {
-    width: '100%',
-    gap: '10px',
-    display: 'flex',
+    width: "100%",
+    gap: "10px",
+    display: "flex",
   },
 
   profileImage: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
+    width: "32px",
+    height: "32px",
+    borderRadius: "50%",
     opacity: 0.7,
   },
 
   quoteProfileImage: {
-    width: '20px',
-    height: '20px',
-    borderRadius: '50%',
-    marginRight: '8px',
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    marginRight: "8px",
     opacity: 0.7,
   },
 
   contentContainer: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     flexGrow: 1,
     minWidth: 0, // Add this line
-    overflowWrap: 'break-word', // Add this line
+    overflowWrap: "break-word", // Add this line
   },
 
   headerContainer: {
-    display: 'flex',
-    paddingRight: '4px',
+    display: "flex",
+    paddingRight: "4px",
     lineHeight: 1.125,
   },
 
   profileName: {
-    marginRight: 'auto',
-    color: '#71767A',
+    marginRight: "auto",
+    color: "#71767A",
   },
 
   tweetTime: {
-    color: '#71767A',
+    color: "#71767A",
   },
 
   tweetContent: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     flexGrow: 1,
-    marginTop: '4px',
-    paddingRight: '40px',
+    marginTop: "4px",
+    paddingRight: "40px",
   },
 
   tweetText: {
-    whiteSpace: 'pre-wrap',
-    color: '#C9CDCF',
+    whiteSpace: "pre-wrap",
+    color: "#e4e6e7",
     lineHeight: 1.5,
   },
 
   showMoreButton: {
-    color: '#1D9BF0',
-    background: 'none',
-    border: 'none',
+    color: "#1D9BF0",
+    background: "none",
+    border: "none",
     padding: 0,
-    font: 'inherit',
-    cursor: 'pointer',
-    outline: 'inherit',
-    marginTop: '4px',
-    textAlign: 'left',
+    font: "inherit",
+    cursor: "pointer",
+    outline: "inherit",
+    marginTop: "4px",
+    textAlign: "left",
   },
 
   linkCard: {
-    display: 'block',
-    position: 'relative',
-    marginTop: '16px',
-    border: '1px solid #2F3336',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    textDecoration: 'none',
-    color: 'inherit',
+    display: "block",
+    position: "relative",
+    marginTop: "16px",
+    border: "1px solid #2F3336",
+    borderRadius: "8px",
+    overflow: "hidden",
+    textDecoration: "none",
+    color: "inherit",
   },
 
   linkCardImage: {
-    width: '100%',
-    height: 'auto',
-    display: 'block',
+    width: "100%",
+    height: "auto",
+    display: "block",
   },
 
   linkCardTitle: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
-    width: '100%',
-    padding: '8px',
-    background: 'rgba(0, 0, 0, 0.6)',
-    color: '#fff',
-    fontSize: '14px',
-    textAlign: 'left',
+    width: "100%",
+    padding: "8px",
+    background: "rgba(0, 0, 0, 0.6)",
+    color: "#fff",
+    fontSize: "14px",
+    textAlign: "left",
   },
 
   videoPostersContainer: {
-    display: 'grid',
-    gap: '12px',
-    marginTop: '16px',
+    display: "grid",
+    gap: "12px",
+    marginTop: "16px",
   },
 
   videoPoster: {
-    position: 'relative',
-    width: '100%',
-    maxHeight: '500px',
-    aspectRatio: '16/9',
-    backgroundSize: 'contain',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    '&:after': {
+    position: "relative",
+    width: "100%",
+    maxHeight: "500px",
+    aspectRatio: "16/9",
+    backgroundSize: "contain",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    "&:after": {
       content: '""',
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
-      background: 'rgba(0, 0, 0, 0.5)',
+      width: "100%",
+      height: "100%",
+      background: "rgba(0, 0, 0, 0.5)",
     },
   },
 
   playButton: {
-    position: 'relative',
+    position: "relative",
     zIndex: 1,
-    width: '60px',
-    height: '60px',
-    background: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "60px",
+    height: "60px",
+    background: "rgba(255, 255, 255, 0.8)",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   imagesContainer: {
-    display: 'grid',
-    gap: '12px',
-    marginTop: '16px',
+    display: "grid",
+    gap: "12px",
+    marginTop: "16px",
   },
 
   tweetImage: {
-    borderRadius: '0px',
-    width: 'auto',
-    maxWidth: '100%',
-    maxHeight: '504px',
-    height: 'auto',
+    borderRadius: "0px",
+    width: "auto",
+    maxWidth: "100%",
+    maxHeight: "504px",
+    height: "auto",
 
-    objectFit: 'contain',
-    position: 'relative',
-    marginBottom: '12px',
+    objectFit: "contain",
+    position: "relative",
+    marginBottom: "12px",
   },
 
   quotedTweet: {
-    marginTop: '16px',
-    border: '1px solid #2F3336',
-    borderRadius: '12px',
+    marginTop: "16px",
+    border: "1px solid #2F3336",
+    borderRadius: "12px",
   },
 };
 

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { SummaryInterface } from './SummaryInterface';
-import { CSSObject } from '@emotion/react';
-import ChevronDownIcon from './assets/chevron-down.svg?react';
-import Tweet from './Tweet';
+import React, { useState } from "react";
+import { SummaryInterface } from "./SummaryInterface";
+import { CSSObject } from "@emotion/react";
+import ChevronDownIcon from "./assets/chevron-down.svg?react";
+import Tweet from "./tweet";
 
 interface SummaryToggleItemProps {
-  item: SummaryInterface['writtenSummaryItems'][0];
+  item: SummaryInterface["writtenSummaryItems"][0];
 }
 
 const SummaryToggleItem: React.FC<SummaryToggleItemProps> = ({ item }) => {
@@ -13,15 +13,19 @@ const SummaryToggleItem: React.FC<SummaryToggleItemProps> = ({ item }) => {
 
   return (
     <li css={styles.summaryItem}>
-      <div css={styles.summaryItemHeader} onClick={() => setIsExpanded(!isExpanded)}>
+      <div
+        css={styles.summaryItemHeader}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         <div css={styles.chevronIconContainer}>
-          <ChevronDownIcon css={[styles.chevronIcon, isExpanded && styles.chevronIconExpanded]} />
+          <ChevronDownIcon
+            css={[styles.chevronIcon, isExpanded && styles.chevronIconExpanded]}
+          />
         </div>
         <span css={styles.summaryItemText}>{item.text}</span>
       </div>
       {isExpanded && (
         <div css={styles.summaryItemTextContainer}>
-
           <div css={styles.relatedTweets}>
             {item.relatedTweets.map((tweet) => (
               <div css={styles.quotedTweet}>
@@ -29,7 +33,6 @@ const SummaryToggleItem: React.FC<SummaryToggleItemProps> = ({ item }) => {
               </div>
             ))}
           </div>
-
         </div>
       )}
     </li>
@@ -38,46 +41,46 @@ const SummaryToggleItem: React.FC<SummaryToggleItemProps> = ({ item }) => {
 
 const styles: Record<string, CSSObject> = {
   summaryItem: {
-    fontSize: '16px',
-    lineHeight: '1.6',
+    fontSize: "16px",
+    lineHeight: "1.6",
   },
   summaryItemHeader: {
-    display: 'flex',
-    gap: '10px',
+    display: "flex",
+    gap: "10px",
   },
   summaryItemText: {
-    cursor: 'default',
-    userSelect: 'none',
+    cursor: "default",
+    userSelect: "none",
   },
   summaryItemTextContainer: {
-    marginTop: '8px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    paddingLeft: '28px',
+    marginTop: "8px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    paddingLeft: "28px",
   },
   chevronIconContainer: {
-    paddingTop: '2.5px',
-    display: 'flex',
+    paddingTop: "2.5px",
+    display: "flex",
   },
   chevronIcon: {
-    width: '18px',
-    height: '18px',
+    width: "18px",
+    height: "18px",
     flexShrink: 0,
-    transform: 'rotate(-90deg)',
+    transform: "rotate(-90deg)",
   },
   chevronIconExpanded: {
-    transform: 'rotate(0deg)',
+    transform: "rotate(0deg)",
   },
   relatedTweets: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
   },
   quotedTweet: {
-    border: '1px solid #2F3336',
-    borderRadius: '12px',
+    border: "1px solid #2F3336",
+    borderRadius: "12px",
   },
-}
+};
 
 export default SummaryToggleItem;
