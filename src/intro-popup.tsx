@@ -1,18 +1,14 @@
 import React from "react";
 import { CSSObject } from "@emotion/react";
-import { UserPreferences } from "./types";
+import { useUserPreferences } from "./hooks/use-user-preferences";
 import { motion } from "framer-motion";
 interface IntroPopupProps {
-  userPreferences: UserPreferences;
-  setUserPreferences: React.Dispatch<React.SetStateAction<UserPreferences>>;
   onClose: () => void;
 }
 
-const IntroPopup: React.FC<IntroPopupProps> = ({
-  userPreferences,
-  setUserPreferences,
-  onClose,
-}) => {
+const IntroPopup: React.FC<IntroPopupProps> = ({ onClose }) => {
+  const { userPreferences, setUserPreferences } = useUserPreferences();
+
   return (
     <motion.div layoutId="container" css={styles.introPopup}>
       <p css={styles.marginBottom16}>Welcome to xReader,</p>

@@ -11,12 +11,10 @@ import {
 } from "@floating-ui/react";
 import { CSSObject, keyframes } from "@emotion/react";
 import SlidersIcon from "./assets/sliders.svg?react";
-import { UserPreferences } from "./types";
+import { useUserPreferences } from "./hooks/use-user-preferences";
 import { motion, AnimatePresence, Transition } from "framer-motion";
 
 interface SummaryProps {
-  userPreferences: UserPreferences;
-  setUserPreferences: React.Dispatch<React.SetStateAction<UserPreferences>>;
   isLoading: boolean;
   onGenerate: () => void;
 }
@@ -28,12 +26,11 @@ const buttonTransition: Transition = {
 };
 
 const GenerateSummaryButton: React.FC<SummaryProps> = ({
-  userPreferences,
-  setUserPreferences,
   isLoading,
   onGenerate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { userPreferences, setUserPreferences } = useUserPreferences();
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import * as React from "react";
 
 function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
   e.stopPropagation();
@@ -10,7 +10,7 @@ function preventScrollOutsideExtentionUIEventListener(e: WheelEvent) {
 export function usePreventScrollOnTwitter(
   extensionRootRef: React.RefObject<HTMLElement>
 ) {
-  useEffect(() => {
+  React.useEffect(() => {
     function preventScrollOnTimeline(e: WheelEvent) {
       const summaryPreviewContainer = extensionRootRef.current?.querySelector(
         "#summary-preview-container"

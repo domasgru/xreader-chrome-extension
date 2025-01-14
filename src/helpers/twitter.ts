@@ -9,7 +9,6 @@ export function parseTweetElement(element: Element): TweetData | null {
         .borderBottomWidth === "0px"
         ? true
         : false;
-    console.log(hasReplies);
     const clonedNode = element.cloneNode(true) as Element;
 
     const createdAt = clonedNode.querySelector("time")?.dateTime;
