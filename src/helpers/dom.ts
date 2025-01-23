@@ -11,7 +11,7 @@ export function getAllHrefs(node: Element) {
 
     return Array.from(hrefs); // Convert Set to array
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

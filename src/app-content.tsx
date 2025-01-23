@@ -2,7 +2,6 @@ import * as React from "react";
 import { CSSObject } from "@emotion/react";
 import GenerateSummaryButton from "./generate-summary-button";
 import SummaryModal from "./summary-modal";
-import { TIMELINE_WIDTH } from "./constants";
 import IntroPopup from "./intro-popup";
 import { motion } from "framer-motion";
 import { useTweets } from "./context/tweets-context";
@@ -11,6 +10,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { usePreventScrollOnTwitter } from "./hooks/use-prevent-scroll-on-twitter";
 import { useLoadTweets } from "./hooks/use-load-tweets";
 import { useSummary } from "./hooks/use-summary";
+
+const TIMELINE_WIDTH = 624;
 
 export default function AppContent() {
   const { tweets } = useTweets();
@@ -93,9 +94,6 @@ const styles: Record<string, CSSObject> = {
     maxWidth: "100%",
     display: "flex",
     alignItems: "start",
-  },
-  summaryContainer: {
-    width: `${TIMELINE_WIDTH}px`,
   },
   introPopupContainer: {
     position: "absolute",

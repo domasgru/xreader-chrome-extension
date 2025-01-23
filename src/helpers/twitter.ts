@@ -4,13 +4,9 @@ import { stringToId } from "../utils/string-to-id";
 
 export function parseTweetElement(element: Element): TweetData | null {
   try {
-    const hasReplies =
-      window.getComputedStyle(element.firstChild as Element)
-        .borderBottomWidth === "0px"
-        ? true
-        : false;
     const clonedNode = element.cloneNode(true) as Element;
 
+    const hasReplies = !clonedNode.querySelector('[role="separator"]');
     const createdAt = clonedNode.querySelector("time")?.dateTime;
 
     // Not a tweet element
@@ -142,7 +138,7 @@ export function parseTweetElement(element: Element): TweetData | null {
 
     return tweetData;
   } catch (error) {
-    console.log("Error processing node", error);
+    console.error("Error processing node", error);
     return null;
   }
 }

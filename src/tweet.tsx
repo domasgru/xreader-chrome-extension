@@ -3,11 +3,11 @@ import { CSSObject } from "@emotion/react";
 import { TweetData } from "./types";
 
 function formatTweetDate(time: string): string {
-  const tweetDate: Date = new Date(time);
-  const now: Date = new Date();
-  const diffInMs: number = now.getTime() - tweetDate.getTime();
-  const diffInMinutes: number = diffInMs / (1000 * 60);
-  const diffInHours: number = diffInMinutes / 60;
+  const tweetDate = new Date(time);
+  const now = new Date();
+  const diffInMs = now.getTime() - tweetDate.getTime();
+  const diffInMinutes = diffInMs / (1000 * 60);
+  const diffInHours = diffInMinutes / 60;
 
   if (diffInMinutes < 1) {
     return "1m";

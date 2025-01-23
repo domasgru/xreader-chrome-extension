@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { SummaryInterface } from "./SummaryInterface";
+import { SummaryTextItemData } from "./types";
 import { CSSObject } from "@emotion/react";
 import ChevronDownIcon from "./assets/chevron-down.svg?react";
 import Tweet from "./tweet";
 
 interface SummaryToggleItemProps {
-  item: SummaryInterface["writtenSummaryItems"][0];
+  item: SummaryTextItemData;
 }
 
 const SummaryToggleItem: React.FC<SummaryToggleItemProps> = ({ item }) => {

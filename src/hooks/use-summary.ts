@@ -14,7 +14,7 @@ export function useSummary() {
   const [summary, setSummary] = React.useState<SummaryData | null>(null);
   const [isLoadingSummary, setIsLoadingSummary] = React.useState(false);
   const [isSummaryModalOpen, setIsSummaryModalOpen] = React.useState(false);
-  const { tweets, loadMoreTweets } = useTweets();
+  const { tweetsRef, loadMoreTweets } = useTweets();
 
   const preservedScrollPosition = React.useRef<number | null>(null);
   function openSummaryModal() {
@@ -55,20 +55,21 @@ export function useSummary() {
       const twentyFourHoursAgo = new Date(
         Date.now() - forDays * 24 * 60 * 60 * 1000
       );
+
       await loadMoreTweets(() => {
-        if (tweets.length > 1500) {
+        if (tweetsRef.current.length > 1500) {
           return true;
         }
 
         if (isForYouTimeline) {
-          if (tweets.length > 300) {
+          if (tweetsRef.current.length > 300) {
             return true;
           }
         } else {
-          const hasReachedTargetTweet = tweets.some((tweet) => {
+          const hasReachedTargetTweet = tweetsRef.current.some((tweet) => {
             if (
               new Date(tweet.createdAt) <= twentyFourHoursAgo &&
-              tweet.retweetAuthor === null &&
+              !tweet.retweetAuthor &&
               !tweet.hasReplies
             ) {
               return true;
@@ -81,7 +82,7 @@ export function useSummary() {
         return false;
       });
 
-      const tweetsSnapshot = [...tweets];
+      const tweetsSnapshot = [...tweetsRef.current];
 
       const processedPosts = tweetsSnapshot
         .filter((tweet) => tweet.textContent)
